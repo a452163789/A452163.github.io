@@ -1,0 +1,120 @@
+#a{
+    
+    color: #05fa15;
+    font-size: 16px;
+}
+#ab{
+
+    color: #05fa11;
+    font-size: 16px;
+}
+#abc{
+
+    color: #05fa11;
+    font-size: 16px;
+}
+#abcd{
+ 
+    color: #05fa11;
+    font-size: 16px;
+}
+#abcde{
+
+    color: #05fa11;
+    font-size: 16px;
+}
+#abcdef{
+ 
+    color: #05fa15;
+    font-size: 16px;
+}
+/* 边框 */
+.a{
+
+
+    box-shadow:inset 0 0 0 0.05px #000;
+    /* 背景渐变色 */
+    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab,#3e05fa, #ee5252, #e73c7e, #23a6d5, #23d5ab,#3e05fa, #ee5252, #e73c7e, #23a6d5, #23d5ab,#3e05fa);
+    /* 背景尺寸 */
+    background-size: 1000% 1000%;
+    /* 循环动画 */
+    animation: gradientBG 5s ease infinite;
+
+    -webkit-transition:width 2s;
+    -webkit-transition: width 2s, height 2s, -webkit-transform 2s; /* For Safari 3.1 to 6.0 */
+    transition: width 1.5s, height 1.5s, transform 1.5s,background-color 2s;
+    border-radius: 25px;
+    border: 2px solid #8AC007;
+    padding: 20px;
+    width: 725px;
+    height: 250px;
+
+}
+/* 鼠标悬浮时 */
+.a:hover{
+    
+    width: 300px;
+    height: 250px;
+    background-color: rgb(255, 255, 255);
+    -webkit-transform: rotate(-360deg); /* Chrome, Safari, Opera */
+    transform: rotate(-360deg);
+
+}
+
+
+
+
+
+
+
+
+  /* 动画，控制背景 background-position */
+  @keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+  }
+
+
+  
+
+  * {
+    cursor: none;
+  }
+    
+
+
+  
+#demo1{
+    border-radius: 15px 15px 0px 0px;
+    position:absolute;
+    display:block;
+    left: 7.7px;
+    top: 301px;
+    width: 769px;
+    height: 450px;
+}
+
+
+#demo2{
+    border-radius: 15px 15px 0px 0px;
+    position:absolute;
+    left: 878.5px;
+    top: 301px;
+    display:block;
+    width: 769px;
+    height: 450px;
+}
+
+
+
+
+
+
+

@@ -1,0 +1,65 @@
+
+
+
+
+
+
+
+.b{
+    position:absolute;
+    left: 878.5px;
+    top: 7px;
+
+    box-shadow:inset 0 0 0 0.05px #000;
+    /* 背景渐变色 */
+    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab,#3e05fa, #ee5252, #e73c7e, #23a6d5, #23d5ab,#3e05fa, #ee5252, #e73c7e, #23a6d5, #23d5ab,#3e05fa);
+    /* 背景尺寸 */
+    background-size: 1000% 1000%;
+    /* 循环动画 */
+    animation: gradientBG 5s ease infinite;
+
+    -webkit-transition:width 2s;
+    -webkit-transition: width 2s, height 2s, -webkit-transform 2s; /* For Safari 3.1 to 6.0 */
+    transition: width 1.5s, height 1.5s, transform 1.5s,background-color 2s;
+    border-radius: 25px;
+    border: 2px solid #8AC007;
+    padding: 20px;
+    width: 725px;
+    height: 250px;
+
+}
+/* 鼠标悬浮时 */
+.b:hover{
+    width: 300px;
+    height: 250px;
+    background-color: rgb(255, 255, 255);
+    -webkit-transform: rotate(-360deg); /* Chrome, Safari, Opera */
+    transform: rotate(-360deg);
+
+}
+
+
+
+
+
+
+
+
+  /* 动画，控制背景 background-position */
+  @keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+  }
+
+
+
+
+
+
