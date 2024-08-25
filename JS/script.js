@@ -1,64 +1,53 @@
-// 创建音频上下文（若需使用Web Audio API，则保留此行代码，否则可移除）
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-
-// 初始化音频播放器并设置循环播放
+// 初始化音频播放器
 const audios = [
-  { file: 'AUTOMOTIVO BAYSIDE.mp3', elementId: 'demo1' },
-  { file: 'ONCE UPON A TIME.mp3', elementId: 'demo2' },
-  { file: 'AUTOMOTIVO BAYSIDE 2.0.mp3', elementId: 'demo3' },
-  { file: 'AUTOMOTIVO BAYSIDE 3.0.mp3', elementId: 'demo4' }
+  { file: 'AUTOMOTIVO BAYSIDE.mp3', containerId: 'container1' },
+  { file: 'ONCE UPON A TIME.mp3', containerId: 'container2' },
+  { file: 'AUTOMOTIVO BAYSIDE 2.0.mp3', containerId: 'container3' },
+  { file: 'AUTOMOTIVO BAYSIDE 3.0.mp3', containerId: 'container4' }
 ].map(audioInfo => {
   const audio = new Audio(audioInfo.file);
-  audio.loop = true;
-  return { audio, element: document.querySelector(`#${audioInfo.elementId}`) };
+  audio.loop = false;
+  return { audio, container: document.querySelector(`#${audioInfo.containerId}`) };
 });
-
-// 点击事件处理函数
-function handleAudioClick(containerId, { audio, element }) {
-  const container = document.querySelector(containerId);
-  if (container) {
-    container.addEventListener('click', function() {
-      pauseAllExcept(audio);
-      togglePlayPause(audio);
-      if (element) toggleDisplay(element);
-    });
-  }
-}
 
 // 绑定点击事件
-audios.forEach(({ audio, element }, index) => {
-  handleAudioClick(`#container${index + 1}`, { audio, element });
-});
+function bindAudioClickEvents(audios) {
+  audios.forEach(({ audio, container }) => {
+    if (container) {
+      container.addEventListener('click', function() {
+        // 缓存其他音频对象
+        const others = audios.filter(other => other.audio !== audio);
+        others.forEach(other => other.audio.pause());
 
-// 定义 togglePlayPause 函数
-function togglePlayPause(audio) {
-  if (audio.paused) {
-    audio.play();
-  } else {
-    audio.pause();
-  }
-}
-
-// 定义 toggleDisplay 函数
-function toggleDisplay(element) {
-  element.style.display = element.style.display === 'none' ? 'block' : 'none';
-}
-
-// 定义 pauseAllExcept 函数
-function pauseAllExcept(currentAudio) {
-  audios.forEach(({ audio }) => {
-    if (audio !== currentAudio) {
-      audio.pause();
+        if (audio.paused) {
+          audio.currentTime = 0;
+          audio.play();
+        } else {
+          audio.pause();
+        }
+      });
     }
   });
 }
 
-// 确保在DOM加载完成后绑定点击事件
+// 在DOM加载完成后执行
 document.addEventListener('DOMContentLoaded', function() {
-  var container2 = document.getElementById('container2');
+  bindAudioClickEvents(audios);
+
+  // 如果还有其他DOM相关的初始化代码，可以放在这里
+  const container2 = document.getElementById('container2');
   if (container2) {
-    container2.addEventListener('click', showCanvas);
+    container2.addEventListener('click', function() {
+      console.log('Container 2 clicked!');
+      // 假设有一个与container2关联的显示/隐藏操作
+      // toggleDisplay(document.querySelector('#someElementId'));
+    });
   }
 });
 
-// 省略了其他未修改的函数...
+// 定义一个通用的显示/隐藏函数
+function toggleDisplay(element) {
+  if (element) {
+    element.style.display = element.style.display === 'none' ? 'block' : 'none';
+  }
+}
