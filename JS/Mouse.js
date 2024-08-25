@@ -1,6 +1,6 @@
 function init() {
 	// 创建一个 div 元素
-	var div = document.createElement('div');
+	const div = document.createElement('div');
 	div.className = 'curzr-arrow-pointer';
 	div.hidden = true;  // 根据需要，这里可以设置为 false 来显示元素
 	// 设置 div 的内部 HTML
@@ -12,10 +12,11 @@ function init() {
 `;
 	// 将 div 添加到 body 的末尾
 	document.body.appendChild(div);
+
 	class ArrowPointer {
 		constructor() {
-			this.root = document.body
-			this.cursor = document.querySelector(".curzr-arrow-pointer")
+			this.root = document.body;
+			this.cursor = document.querySelector(".curzr-arrow-pointer");
 
 			this.position = {
 				distanceX: 0,
@@ -23,14 +24,14 @@ function init() {
 				distance: 0,
 				pointerX: 0,
 				pointerY: 0,
-			},
-				this.previousPointerX = 0
-			this.previousPointerY = 0
-			this.angle = 0
-			this.previousAngle = 0
-			this.angleDisplace = 0
-			this.degrees = 57.296
-			this.cursorSize = 20
+			};
+			this.previousPointerX = 0;
+			this.previousPointerY = 0;
+			this.angle = 0;
+			this.previousAngle = 0;
+			this.angleDisplace = 0;
+			this.degrees = 57.296;
+			this.cursorSize = 20;
 
 			this.cursorStyle = {
 				boxSizing: 'border-box',
@@ -44,99 +45,87 @@ function init() {
 				transition: '250ms, transform 100ms',
 				userSelect: 'none',
 				pointerEvents: 'none'
-			}
+			};
 
-			this.init(this.cursor, this.cursorStyle)
+			this.init(this.cursor, this.cursorStyle);
 		}
 
 		init(el, style) {
-			Object.assign(el.style, style)
+			Object.assign(el.style, style);
 			setTimeout(() => {
-				this.cursor.removeAttribute("hidden")
-			}, 500)
-			this.cursor.style.opacity = 1
+				this.cursor.removeAttribute("hidden");
+			}, 500);
+			this.cursor.style.opacity = 1;
 		}
 
 		move(event) {
-			this.previousPointerX = this.position.pointerX
-			this.previousPointerY = this.position.pointerY
-			this.position.pointerX = event.pageX + this.root.getBoundingClientRect().x
-			this.position.pointerY = event.pageY + this.root.getBoundingClientRect().y
-			this.position.distanceX = this.previousPointerX - this.position.pointerX
-			this.position.distanceY = this.previousPointerY - this.position.pointerY
-			this.distance = Math.sqrt(this.position.distanceY ** 2 + this.position.distanceX ** 2)
+			this.previousPointerX = this.position.pointerX;
+			this.previousPointerY = this.position.pointerY;
+			this.position.pointerX = event.pageX + this.root.getBoundingClientRect().x;
+			this.position.pointerY = event.pageY + this.root.getBoundingClientRect().y;
+			this.position.distanceX = this.previousPointerX - this.position.pointerX;
+			this.position.distanceY = this.previousPointerY - this.position.pointerY;
+			this.distance = Math.sqrt(this.position.distanceY ** 2 + this.position.distanceX ** 2);
 
-			this.cursor.style.transform = `translate3d(${this.position.pointerX}px, ${this.position.pointerY}px, 0)`
+			this.cursor.style.transform = `translate3d(${this.position.pointerX}px, ${this.position.pointerY}px, 0)`;
 
 			if (this.distance > 1) {
-				this.rotate(this.position)
+				this.rotate(this.position);
 			} else {
-				this.cursor.style.transform += ` rotate(${this.angleDisplace}deg)`
+				this.cursor.style.transform += ` rotate(${this.angleDisplace}deg)`;
 			}
 		}
 
 		rotate(position) {
-			let unsortedAngle = Math.atan(Math.abs(position.distanceY) / Math.abs(position.distanceX)) * this.degrees
-			let modAngle
-			const style = this.cursor.style
-			this.previousAngle = this.angle
+			let unsortedAngle = Math.atan(Math.abs(position.distanceY) / Math.abs(position.distanceX)) * this.degrees;
+			this.previousAngle = this.angle;
 
 			if (position.distanceX <= 0 && position.distanceY >= 0) {
-				this.angle = 90 - unsortedAngle + 0
+				this.angle = 90 - unsortedAngle + 0;
 			} else if (position.distanceX < 0 && position.distanceY < 0) {
-				this.angle = unsortedAngle + 90
+				this.angle = unsortedAngle + 90;
 			} else if (position.distanceX >= 0 && position.distanceY <= 0) {
-				this.angle = 90 - unsortedAngle + 180
+				this.angle = 90 - unsortedAngle + 180;
 			} else if (position.distanceX > 0 && position.distanceY > 0) {
-				this.angle = unsortedAngle + 270
+				this.angle = unsortedAngle + 270;
 			}
 
 			if (isNaN(this.angle)) {
-				this.angle = this.previousAngle
+				this.angle = this.previousAngle;
 			} else {
 				if (this.angle - this.previousAngle <= -270) {
-					this.angleDisplace += 360 + this.angle - this.previousAngle
+					this.angleDisplace += 360 + this.angle - this.previousAngle;
 				} else if (this.angle - this.previousAngle >= 270) {
-					this.angleDisplace += this.angle - this.previousAngle - 360
+					this.angleDisplace += this.angle - this.previousAngle - 360;
 				} else {
-					this.angleDisplace += this.angle - this.previousAngle
+					this.angleDisplace += this.angle - this.previousAngle;
 				}
 			}
-			style.left = `${-this.cursorSize / 2}px`
-			style.top = `${0}px`
-			style.transform += ` rotate(${this.angleDisplace}deg)`
+			this.cursor.style.left = `${-this.cursorSize / 2}px`;
+			this.cursor.style.top = `${0}px`;
+			this.cursor.style.transform += ` rotate(${this.angleDisplace}deg)`;
 		}
 
 		hidden() {
-			this.cursor.style.opacity = 0
+			this.cursor.style.opacity = 0;
 			setTimeout(() => {
-				this.cursor.setAttribute("hidden", "hidden")
-			}, 500)
+				this.cursor.setAttribute("hidden", "hidden");
+			}, 500);
 		}
 	}
-	let cursor = new ArrowPointer()
-	document.onmousemove = function (event) {
-		cursor.move(event)
-	}
-	document.ontouchmove = function (event) {
-		cursor.move(event.touches[0])
-	}
-	document.onclick = function () {
-		if (typeof cursor.click === 'function') {
-			cursor.click()
-		}
-	}
-}
-// document.addEventListener('DOMContentLoaded', function(){
-// 	console.log(111);
-// 	init();
-// });
 
-// init()
+	const cursor = new ArrowPointer();
+	document.onmousemove = (event) => cursor.move(event);
+	document.ontouchmove = (event) => cursor.move(event.touches[0]);
+	document.onclick = () => {
+		if (typeof cursor.click === 'function') {
+			cursor.click();
+		}
+	};
+}
 
 if (document.readyState === 'loading') {
 	document.addEventListener('DOMContentLoaded', init);
-} 
-else {
-	init() // DOMContentLoaded 已经发生
+} else {
+	init(); // DOMContentLoaded 已经发生
 }
