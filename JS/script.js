@@ -97,3 +97,16 @@ handleAudioClick('#container1', audio1, demo1);
 handleAudioClick('#container2', audio2);
 handleAudioClick('#container3', audio3);
 handleAudioClick('#container4', audio4);
+
+
+
+function showCanvas() {
+  var canvas = document.querySelector('.fullscreen-canvas.YES');
+  canvas.style.opacity = 1; // 改变canvas的opacity来触发过渡效果
+}
+
+// 确保在DOM加载完成后绑定点击事件
+document.addEventListener('DOMContentLoaded', function() {
+  var container2 = document.getElementById('container2');
+  container2.addEventListener('click', showCanvas);
+});

@@ -145,12 +145,24 @@
 
 
 
-.fullscreen-canvas {
-    position: fixed; /* 或 absolute，取决于你的具体需求，但fixed通常用于全屏 */
+.fullscreen-background {
+    position: fixed;
     top: 0;
     left: 0;
-    width: 100vw; /* 视窗宽度 */
-    height: 100vh; /* 视窗高度 */
-    z-index: -1; /* 确保它位于其他内容之下 */
-    pointer-events: none; /* 如果不需要在canvas上捕获鼠标事件，可以添加这个属性 */
+    width: 100vw;
+    height: 100vh;
+    background-color: black; /* 纯黑色背景 */
+    z-index: -2; /* 确保它在canvas和其他内容之下 */
 }
+
+.fullscreen-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* 仍然在背景之上，但低于其他可能的内容 */
+    /* 其他canvas样式... */
+}
+
+/* ... 其他CSS规则 ... */
