@@ -7,33 +7,51 @@ var demo1 = document.querySelector('#demo1');
 var audio2 = new Audio('ONCE UPON A TIME.mp3');
 audio2.loop = true;
 
-// 点击 #container1 时的处理
-document.querySelector('#container1').addEventListener('click', function() {
-  if (audio1.paused) {
-    // 如果audio1是暂停的，则播放它并停止audio2
-    if (!audio2.paused) {
-      audio2.pause();
-    }
-    audio1.currentTime = 0;
-    audio1.play().catch(error => console.error('Error playing audio1:', error));
-  } else {
-    audio1.pause();
-  }
-  demo1.style.display = demo1.style.display === 'none' ? 'block' : 'none';
-});
+// 音频播放器3
+var audio3 = new Audio('AUTOMOTIVO BAYSIDE 2.0.mp3');
+audio3.loop = true;
 
-// 点击 #container2 时的处理
-document.querySelector('#container2').addEventListener('click', function() {
-  if (audio2.paused) {
-    // 如果audio2是暂停的，则播放它并停止audio1
-    if (!audio1.paused) {
-      audio1.pause();
-    }
-    audio2.currentTime = 0;
-    audio2.play().catch(error => console.error('Error playing audio2:', error));
+// 音频播放器4
+var audio4 = new Audio('AUTOMOTIVO BAYSIDE 3.0.mp3');
+audio4.loop = true;
+
+// 点击事件处理函数
+function handleAudioClick(containerId, audio, toggleElement) {
+  document.querySelector(containerId).addEventListener('click', function() {
+    pauseAllExcept(audio);
+    togglePlayPause(audio);
+    toggleDisplay(toggleElement);
+  });
+}
+
+// 处理音频播放和暂停
+function togglePlayPause(audio) {
+  if (audio.paused) {
+    audio.currentTime = 0;
+    audio.play().catch(error => console.error(`Error playing ${audio.src}:`, error));
   } else {
-    audio2.pause();
+    audio.pause();
   }
-  // 注意：这里没有与audio2相关联的canvas元素需要切换
-  // 如果将来有，请在此处添加逻辑
-});
+}
+
+// 暂停除了指定音频之外的所有音频
+function pauseAllExcept(audioToPlay) {
+  [audio1, audio2, audio3, audio4].forEach(audio => {
+    if (audio !== audioToPlay && !audio.paused) {
+      audio.pause();
+    }
+  });
+}
+
+// 切换DOM元素的显示状态
+function toggleDisplay(element) {
+  if (element) {
+    element.style.display = element.style.display === 'none' ? 'block' : 'none';
+  }
+}
+
+// 绑定点击事件
+handleAudioClick('#container1', audio1, demo1);
+handleAudioClick('#container2', audio2);
+handleAudioClick('#container3', audio3);
+handleAudioClick('#container4', audio4);
