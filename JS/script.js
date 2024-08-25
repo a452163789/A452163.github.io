@@ -1,14 +1,11 @@
 // 初始化音频播放器
-const audios = [
-  { file: 'AUTOMOTIVO BAYSIDE.mp3', containerId: 'container1' },
-  { file: 'ONCE UPON A TIME.mp3', containerId: 'container2' },
-  { file: 'AUTOMOTIVO BAYSIDE 2.0.mp3', containerId: 'container3' },
-  { file: 'AUTOMOTIVO BAYSIDE 3.0.mp3', containerId: 'container4' }
-].map(audioInfo => {
-  const audio = new Audio(audioInfo.file);
-  audio.loop = false;
-  return { audio, container: document.querySelector(`#${audioInfo.containerId}`) };
-});
+function initializeAudios(audioConfigs) {
+  return audioConfigs.map(audioInfo => {
+    const audio = new Audio(audioInfo.file);
+    audio.loop = false;
+    return { audio, container: document.querySelector(`#${audioInfo.containerId}`) };
+  });
+}
 
 // 绑定点击事件
 function bindAudioClickEvents(audios) {
@@ -26,12 +23,26 @@ function bindAudioClickEvents(audios) {
           audio.pause();
         }
       });
+
+      // 在音频播放结束后重复播放
+      audio.addEventListener('ended', function() {
+        audio.currentTime = 0;
+        audio.play();
+      });
     }
   });
 }
 
 // 在DOM加载完成后执行
 document.addEventListener('DOMContentLoaded', function() {
+  const audios = initializeAudios([
+    { file: 'AUTOMOTIVO BAYSIDE.mp3', containerId: 'container1' },
+    { file: 'ONCE UPON A TIME.mp3', containerId: 'container2' },
+    { file: 'AUTOMOTIVO BAYSIDE 2.0.mp3', containerId: 'container3' },
+    { file: 'AUTOMOTIVO BAYSIDE 3.0.mp3', containerId: 'container4' },
+    { file: 'ROMANCE GARBAGE.mp3', containerId: 'container5' } // 添加新的音频文件和容器ID
+  ]);
+
   bindAudioClickEvents(audios);
 
   // 如果还有其他DOM相关的初始化代码，可以放在这里

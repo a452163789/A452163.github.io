@@ -100,8 +100,30 @@
     background-color: rgb(255, 255, 255);
     transform: rotate(-10deg); /* 修改为更小的角度 */
 }
-.NO{    width: 0px;
-    height: 1000px;}
+.e {
+    position: absolute;
+    left: 878.5px; /* 考虑使用百分比或vw单位 */
+    top: 310px;
+    box-shadow: inset 0 0 0 0.05px #000;
+    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa); /* 简化颜色 */
+    background-size: 1000% 1000%;
+    animation: gradientBG 5s ease infinite;
+    transition: width 1.5s, height 1.5s, transform 1.5s, background-color 2s;
+    border-radius: 25px;
+    border: 2px solid #8AC007;
+    padding: 20px;
+    width: 725px;
+    height: 250px;
+}
+
+.e:hover {
+    width: 300px;
+    height: 250px;
+    background-color: rgb(255, 255, 255);
+    transform: rotate(-10deg); /* 修改为更小的角度 */
+}
+.NO{    width: px;
+    height: 14px;}
 
 /* 动画定义 */
 @keyframes gradientBG {
@@ -143,127 +165,4 @@
     height: 450px;
 }
 
-
-
-.fullscreen-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: black; /* 纯黑色背景 */
-    z-index: -2; /* 确保它在canvas和其他内容之下 */
-}
-
-.fullscreen-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1; /* 仍然在背景之上，但低于其他可能的内容 */
-    /* 其他canvas样式... */
-}
-
-/* ... 其他CSS规则 ... *//* 文本颜色和字体大小的设置 */
-#a, #abcdef {
-    color: #05fa15;
-    font-size: 16px;
-}
-
-.title {
-    color: #05fa11;
-    font-size: 16px;
-}
-
-/* 公共样式类 */
-.common-style {
-    position: absolute;
-    box-shadow: inset 0 0 0 0.05px #000;
-    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa);
-    background-size: 1000% 1000%;
-    animation: gradientBG 5s ease infinite;
-    transition: width 1.5s, height 1.5s, transform 1.5s, background-color 2s;
-    border-radius: 25px;
-    border: 2px solid #8AC007;
-    padding: 20px;
-    width: 725px;
-    height: 250px;
-}
-
-/* 边框和交互效果（.a, .b, .c, .d 类） */
-
-
-.a {
-    left: 8px; /* 保留原样，但建议优化 */
-    top: 7px;
-}
-
-.b {
-    left: 878.5px; /* 考虑优化 */
-    top: 7px;
-}
-
-.c {
-    left: 8px; /* 考虑优化 */
-    top: 310px;
-}
-
-.d {
-    left: 8px; /* 考虑优化 */
-    top: 614px;
-}
-
-.a:hover, .b:hover, .c:hover, .d:hover {
-    width: 300px;
-    height: 250px;
-    background-color: #fff;
-    transform: rotate(-10deg);
-}
-
-/* 其他代码... */
-
-/* 动画定义、全局光标设置等保持不变，但需注意全局光标设置可能带来的问题 */
-
-/* demo1 和 demo2 的样式 */
-#demo1, #demo2 {
-    border-radius: 15px 15px 0 0;
-    position: absolute;
-    display: block;
-}
-
-#demo1 {
-    left: 7.7px; /* 建议优化 */
-    top: 301px;
-    width: 769px;
-    height: 450px;
-}
-
-#demo2 {
-    left: 878.5px; /* 建议优化 */
-    top: 301px;
-    width: 769px;
-    height: 450px;
-}
-
-/* 全屏背景和画布样式 */
-.fullscreen-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: black;
-    z-index: -2;
-}
-
-.fullscreen-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1;
-}
-
-/* ... 其他CSS规则 ... */
+/* ... 其他CSS规则 ... 
