@@ -1,3 +1,4 @@
+
 * {
   margin: 0;
   padding: 0;
@@ -11,16 +12,6 @@
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: auto;
-}
-
-.background {
-  position: absolute;
-  height: 100vh;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 0;
-  background-color: black;
+  z-index: 0; /* 使用 z-index: 0 以确保背景位于其他内容之后（如果需要的话） */
+  background-color: black; /* 添加了背景颜色 */
 }
