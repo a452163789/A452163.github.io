@@ -1,75 +1,64 @@
-#a{
-    
+/* 文本颜色和字体大小的设置 */
+#a, #abcdef {
     color: #05fa15;
     font-size: 16px;
 }
-#ab{
 
+.title {
     color: #05fa11;
     font-size: 16px;
 }
-#abc{
 
-    color: #05fa11;
-    font-size: 16px;
-}
-#abcd{
- 
-    color: #05fa11;
-    font-size: 16px;
-}
-#abcde{
-
-    color: #05fa11;
-    font-size: 16px;
-}
-#abcdef{
- 
-    color: #05fa15;
-    font-size: 16px;
-}
-/* 边框 */
-.a{
-
-
-    box-shadow:inset 0 0 0 0.05px #000;
-    /* 背景渐变色 */
-    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab,#3e05fa, #ee5252, #e73c7e, #23a6d5, #23d5ab,#3e05fa, #ee5252, #e73c7e, #23a6d5, #23d5ab,#3e05fa);
-    /* 背景尺寸 */
+/* 边框和交互效果（.a 类） */
+.a {
+    position: absolute;
+    left: 8px; /* 考虑使用vw/vh或百分比，但这里保持原样 */
+    top: 7px;
+    box-shadow: inset 0 0 0 0.05px #000;
+    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa);
     background-size: 1000% 1000%;
-    /* 循环动画 */
     animation: gradientBG 5s ease infinite;
-
-    -webkit-transition:width 2s;
-    -webkit-transition: width 2s, height 2s, -webkit-transform 2s; /* For Safari 3.1 to 6.0 */
-    transition: width 1.5s, height 1.5s, transform 1.5s,background-color 2s;
+    transition: width 1.5s, height 1.5s, transform 1.5s, background-color 2s;
     border-radius: 25px;
     border: 2px solid #8AC007;
     padding: 20px;
     width: 725px;
     height: 250px;
-
 }
-/* 鼠标悬浮时 */
-.a:hover{
-    
+
+.a:hover {
+    width: 300px;
+    height: 250px;
+    background-color: #fff; /* 使用简写形式 */
+    transform: rotate(-10deg);
+}
+
+/* 边框和交互效果（.b 类） */
+.b {
+    position: absolute;
+    left: 878.5px; /* 考虑使用百分比或vw单位 */
+    top: 7px;
+    box-shadow: inset 0 0 0 0.05px #000;
+    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa); /* 简化颜色 */
+    background-size: 1000% 1000%;
+    animation: gradientBG 5s ease infinite;
+    transition: width 1.5s, height 1.5s, transform 1.5s, background-color 2s;
+    border-radius: 25px;
+    border: 2px solid #8AC007;
+    padding: 20px;
+    width: 725px;
+    height: 250px;
+}
+
+.b:hover {
     width: 300px;
     height: 250px;
     background-color: rgb(255, 255, 255);
-    -webkit-transform: rotate(-360deg); /* Chrome, Safari, Opera */
-    transform: rotate(-360deg);
-
+    transform: rotate(-10deg); /* 修改为更小的角度 */
 }
 
-
-
-
-
-
-
-
-  /* 动画，控制背景 background-position */
-  @keyframes gradientBG {
+/* 动画定义 */
+@keyframes gradientBG {
     0% {
         background-position: 0% 50%;
     }
@@ -79,42 +68,31 @@
     100% {
         background-position: 0% 50%;
     }
-  }
+}
 
+/* 全局光标设置 */
 
-  
-
-  * {
+* {
     cursor: none;
-  }
-    
+}
 
+/* demo1 和 demo2 的样式 */
+#demo1, #demo2 {
+    border-radius: 15px 15px 0 0; /* 简写border-radius */
+    position: absolute;
+    display: block;
+}
 
-  
-#demo1{
-    border-radius: 15px 15px 0px 0px;
-    position:absolute;
-    display:block;
-    left: 7.7px;
+#demo1 {
+    left: 7.7px; /* 如果可能，考虑使用em、rem或vw/vh */
     top: 301px;
     width: 769px;
     height: 450px;
 }
 
-
-#demo2{
-    border-radius: 15px 15px 0px 0px;
-    position:absolute;
-    left: 878.5px;
+#demo2 {
+    left: 878.5px; /* 同样，考虑使用更灵活的单位 */
     top: 301px;
-    display:block;
     width: 769px;
     height: 450px;
 }
-
-
-
-
-
-
-

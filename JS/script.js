@@ -1,56 +1,27 @@
+// 音频播放器1
 var audio1 = new Audio('⟪牢大の小曲⟫.mp3');
-var isPlaying1 = false;
-var container1 = document.querySelector('#container1');
+audio1.loop = true;
 var demo1 = document.querySelector('#demo1');
-
-container1.addEventListener('click', function() {
-  isPlaying1 = false;
+document.querySelector('#container1').addEventListener('click', function() {
   if (audio1.paused) {
     audio1.currentTime = 0;
-    audio1.play();
-    isPlaying1 = true;
+    audio1.play().catch(error => console.error('Error playing audio1:', error));
   } else {
     audio1.pause();
   }
-  // Toggle the display of the canvas element
-  demo1.style.display = (demo1.style.display === 'none') ? 'block' : 'none';
+  demo1.style.display = demo1.style.display === 'none' ? 'block' : 'none';
 });
 
-audio1.addEventListener('loadedmetadata', function() {
-  audio1.loop = true;
-});
-
-
+// 音频播放器2
 var audio2 = new Audio('ONCE UPON A TIME.mp3');
-var isPlaying2 = false;
-
-var container2 = document.querySelector('#container2');
-container2.addEventListener('click', function() {
-    isPlaying2 = false;
-    if (audio2.paused) {
-        audio2.currentTime = 0;
-        audio2.play();
-        isPlaying2 = true;
-    } else {
-        audio2.pause();
-    }
+audio2.loop = true;
+document.querySelector('#container2').addEventListener('click', function() {
+  if (audio2.paused) {
+    audio2.currentTime = 0;
+    audio2.play().catch(error => console.error('Error playing audio2:', error));
+  } else {
+    audio2.pause();
+  }
+  // 注意：这里没有与audio2相关联的canvas元素需要切换
+  // 如果将来有，请在此处添加逻辑
 });
-
-audio2.addEventListener('loadedmetadata', function() {
-    audio2.loop = true;
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

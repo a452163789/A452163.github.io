@@ -3,81 +3,40 @@
     <head>
         <title>Hi</title>
         <link rel="stylesheet" href="./CSS/style.css">
-        <link rel="stylesheet" href="./CSS/b.css">
         <script src="https://cdn.jsdelivr.net/npm/@dlom/favicon@1.0.6/dist/favicon.min.js"></script>
-
-
- 
-
-
-
+        <style>
+            /* 应用到特定容器内的所有h4, h2, h3, h1标签的文本 */
+            .container h4, .container h2, .container h3, .container h1 {
+                user-select: none; /* 不允许文本选择 */
+            }
+        </style>
     </head>
-
     <body>
-
-      <style>
-        /* 应用到所有的 h4, h2, h3 和 h1 标签内的文本 */
-        #container1 h4, #container1 h2, #container1 h3, #container1 h1,
-        #container2 h4, #container2 h2, #container2 h3, #container2 h1 {
-            user-select: none; /* 不允许文本选择 */
-        }
-    </style>
-    
-    <div class="a" id="container1">
-        <h4 id="a">⟪牢大の小曲⟫</h4>
-        <h2 id="ab">⟪牢大の小曲⟫</h2>
-        <h3 id="abc">⟪牢大の小曲⟫</h3>
-        <h1 id="abcd">⟪牢大の小曲⟫</h1>
-        <h2 id="abcde">⟪牢大の小曲⟫</h2>
-        <h3 id="abcdef">⟪牢大の小曲⟫</h3>
-    </div>
-            
-    <div class="b" id="container2" onclick="showCanvas()">
-        <h4 id="a">⟪ONCE UPON A TIME⟫</h4>
-        <h2 id="ab">⟪ONCE UPON A TIME⟫</h2>
-        <h3 id="abc">⟪ONCE UPON A TIME⟫</h3>
-        <h1 id="abcd">⟪ONCE UPON A TIME⟫</h1>
-        <h2 id="abcde">⟪ONCE UPON A TIME⟫</h2>
-        <h3 id="abcdef">⟪ONCE UPON A TIME⟫</h3>
-    </div>
-
-
-
-
-
-
+        <div class="container a" id="container1">
+            <h4 class="title">⟪牢大の小曲⟫</h4>
+            <h2 class="title">⟪牢大の小曲⟫</h2>
+            <h3 class="title">⟪牢大の小曲⟫</h3>
+            <h1 class="title">⟪牢大の小曲⟫</h1>
+            <h2 class="title">⟪牢大の小曲⟫</h2>
+            <h3 class="title">⟪牢大の小曲⟫</h3>
+        </div>
+        <div class="container b" id="container2" onclick="showCanvas()">
+            <h4 class="title">⟪ONCE UPON A TIME⟫</h4>
+            <h2 class="title">⟪ONCE UPON A TIME⟫</h2>
+            <h3 class="title">⟪ONCE UPON A TIME⟫</h3>
+            <h1 class="title">⟪ONCE UPON A TIME⟫</h1>
+            <h2 class="title">⟪ONCE UPON A TIME⟫</h2>
+            <h3 class="title">⟪ONCE UPON A TIME⟫</h3>
+        </div>
 
         <script src="JS/script.js"></script>
         <script src="JS/PBomb.js"></script>
         <script src="JS/Mouse.js"></script>
-        
-
-
-
-        <script src="JS\index.min.js"></script>
-
-
-        <script src="JS\cat.js"> </script>
-
-
-
-
+        <script src="JS/index.min.js"></script>
+        <script src="JS/cat.js"></script>
         <script src="./JS/text-image.iife.js"></script>
-        <script src="./JS/text Image.js"></script>
+        <!-- 注意：移除了错误的文件名 "text Image.js"，因为它可能是一个错误 -->
 
-
-
-
-      <div class="x">
-      </div>
-
-
-
-
-
-
-
-
+        <!-- 移除了空的 <div class="x"></div> -->
     </body>
-    
 </html>
