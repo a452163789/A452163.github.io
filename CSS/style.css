@@ -142,3 +142,15 @@
     width: 769px;
     height: 450px;
 }
+
+
+
+.fullscreen-canvas {
+    position: fixed; /* 或 absolute，取决于你的具体需求，但fixed通常用于全屏 */
+    top: 0;
+    left: 0;
+    width: 100vw; /* 视窗宽度 */
+    height: 100vh; /* 视窗高度 */
+    z-index: -1; /* 确保它位于其他内容之下 */
+    pointer-events: none; /* 如果不需要在canvas上捕获鼠标事件，可以添加这个属性 */
+}
