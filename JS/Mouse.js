@@ -60,8 +60,12 @@ function init() {
 		move(event) {
 			this.previousPointerX = this.position.pointerX
 			this.previousPointerY = this.position.pointerY
-			this.position.pointerX = event.pageX + this.root.getBoundingClientRect().x
-			this.position.pointerY = event.pageY + this.root.getBoundingClientRect().y
+			// 获取页面的滚动偏移量
+			let scrollX = window.scrollX || window.pageXOffset
+			let scrollY = window.scrollY || window.pageYOffset
+			// 计算鼠标位置时加上滚动偏移量
+			this.position.pointerX = event.pageX + scrollX
+			this.position.pointerY = event.pageY + scrollY
 			this.position.distanceX = this.previousPointerX - this.position.pointerX
 			this.position.distanceY = this.previousPointerY - this.position.pointerY
 			this.distance = Math.sqrt(this.position.distanceY ** 2 + this.position.distanceX ** 2)
@@ -127,12 +131,6 @@ function init() {
 		}
 	}
 }
-// document.addEventListener('DOMContentLoaded', function(){
-// 	console.log(111);
-// 	init();
-// });
-
-// init()
 
 if (document.readyState === 'loading') {
 	document.addEventListener('DOMContentLoaded', init);
