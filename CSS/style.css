@@ -145,7 +145,7 @@
     width: 100%;
     height: 100%;
     background-color: black; /* 设置背景颜色为黑色 */
-    z-index: -1; /* 确保它在所有其他元素之下 */
+    z-index: -2; /* 确保它在所有其他元素之下 */
 }
 
 /* 全局光标设置 */
@@ -178,10 +178,10 @@
 #audioVisualization {
     position: fixed;
     bottom: 0;
-    left: 0;
-    width: 100%;
+    left: 777.666625px;
+    width: 53%;
     height: 100%; /* 确保这个高度与你的canvas高度一致 */
-    z-index: 5; /* 确保canvas位于其他元素之上 */
+    z-index: -1; /* 确保canvas位于其他元素之上 */
     pointer-events: none;
 }
 

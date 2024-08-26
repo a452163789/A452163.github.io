@@ -1,7 +1,7 @@
 // 创建音频上下文和分析器
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 const analyser = audioContext.createAnalyser();
-analyser.fftSize = 4096; // FFT大小，决定频率的分辨率
+analyser.fftSize = 512; // FFT大小，决定频率的分辨率
 const bufferLength = analyser.frequencyBinCount;
 const dataArray = new Uint8Array(bufferLength);
 
@@ -17,9 +17,6 @@ canvas.height = canvasHeight;
 let frameId;
 let lastDataArray = new Uint8Array(bufferLength);
 let barWidth = (canvasWidth / bufferLength) * 2.5; // 只计算一次
-
-// 增加线条数量的倍数
-const increaseFactor = 2; // 例如，增加2倍
 
 function drawAudioVisualization() {
     analyser.getByteFrequencyData(dataArray);
@@ -38,9 +35,8 @@ function drawAudioVisualization() {
 
         let x = 0;
 
-        for (let i = 0; i < bufferLength * increaseFactor; i++) {
-            let originalIndex = Math.floor(i / increaseFactor);
-            let barHeight = dataArray[originalIndex] * 2; // 应用放大因子
+        for (let i = 0; i < bufferLength; i++) {
+            let barHeight = dataArray[i] * 1; // 应用放大因子
 
             // 创建渐变颜色
             let gradient = ctx.createLinearGradient(x, canvasHeight, x, canvasHeight - barHeight);
@@ -53,9 +49,9 @@ function drawAudioVisualization() {
 
             // 绘制条形
             ctx.fillStyle = gradient;
-            ctx.fillRect(x, canvasHeight - barHeight, barWidth / increaseFactor, barHeight);
+            ctx.fillRect(x, canvasHeight - barHeight, barWidth, barHeight);
 
-            x += (barWidth / increaseFactor) + 1;
+            x += barWidth + 1;
         }
 
         // 更新lastDataArray
