@@ -36,16 +36,16 @@ function drawAudioVisualization() {
         let x = 0;
 
         for (let i = 0; i < bufferLength; i++) {
-            let barHeight = dataArray[i] * 1.5; // 应用放大因子
+            let barHeight = dataArray[i] * 1; // 应用放大因子
 
             // 创建渐变颜色
             let gradient = ctx.createLinearGradient(x, canvasHeight, x, canvasHeight - barHeight);
-            gradient.addColorStop(0, `rgb(0,255,255)`); // 修改后的颜色值
-            gradient.addColorStop(1, `rgb(124,252,0)`);
+            gradient.addColorStop(0, `rgb(255,255,255)`); // 修改后的颜色值
+            gradient.addColorStop(1, `rgb(255,255,0)`);
 
             // 设置阴影
             ctx.shadowBlur = 15;
-            ctx.shadowColor = `rgb(0,255,255)`; // 设置为每个线条自身的颜色
+            ctx.shadowColor = `rgb(255,255,255)`; // 设置为每个线条自身的颜色
 
             // 绘制条形
             ctx.fillStyle = gradient;
