@@ -36,7 +36,7 @@ function drawAudioVisualization() {
         let x = 0;
 
         for (let i = 0; i < bufferLength; i++) {
-            let barHeight = dataArray[i] * 1; // 应用放大因子
+            let barHeight = dataArray[i] * 1.25; // 应用放大因子
 
             // 创建渐变颜色
             let gradient = ctx.createLinearGradient(x, canvasHeight, x, canvasHeight - barHeight);
