@@ -1,9 +1,10 @@
 // 创建音频上下文和分析器
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+const audioContext = new AudioContext();
 const analyser = audioContext.createAnalyser();
 analyser.fftSize = 256; // 减小FFT大小以提高稳定性
 const bufferLength = analyser.frequencyBinCount;
 const dataArray = new Uint8Array(bufferLength);
+
 
 // 获取canvas元素并设置绘图环境
 const canvas = document.getElementById('audioVisualization');
