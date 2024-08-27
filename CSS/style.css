@@ -178,11 +178,20 @@
 #audioVisualization {
     position: fixed;
     bottom: 0;
-    left: 777.666625px;
-    width: 53%;
+    left: 0px;
+    width: 100%;
     height: 100%; /* 确保这个高度与你的canvas高度一致 */
-    z-index: -1; /* 确保canvas位于其他元素之上 */
+    z-index: -0; /* 确保canvas位于其他元素之上 */
     pointer-events: none;
+    
+    
 }
 
 
+/* 使类名为title的元素中的文字不可选中 */
+.title {
+    user-select: none; /* 标准语法 */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE 10+ */
+}

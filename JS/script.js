@@ -1,7 +1,7 @@
 // 创建音频上下文和分析器
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 const analyser = audioContext.createAnalyser();
-analyser.fftSize = 512; // FFT大小，决定频率的分辨率
+analyser.fftSize = 256; // 减小FFT大小以提高稳定性
 const bufferLength = analyser.frequencyBinCount;
 const dataArray = new Uint8Array(bufferLength);
 
@@ -17,49 +17,66 @@ canvas.height = canvasHeight;
 let frameId;
 let lastDataArray = new Uint8Array(bufferLength);
 let barWidth = (canvasWidth / bufferLength) * 2.5; // 只计算一次
+let timeIncrement = 1; // 调整此值以控制速度，减小此值以放慢速度
+let currentTime = 0; // 当前时间
+
+// 定义roundRect函数
+function roundRect(ctx, x, y, width, height, radius) {
+    if (width < 2 * radius) radius = width / 2;
+    if (height < 2 * radius) radius = height / 2;
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.arcTo(x + width, y, x + width, y + height, radius);
+    ctx.arcTo(x + width, y + height, x, y + height, radius);
+    ctx.arcTo(x, y + height, x, y, radius);
+    ctx.arcTo(x, y, x + width, y, radius);
+    ctx.closePath();
+    ctx.fill();
+}
 
 function drawAudioVisualization() {
     analyser.getByteFrequencyData(dataArray);
-
-    // 检查数据是否有变化
-    let dataChanged = false;
+  
+    // 清除画布
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+  
+    let x = 0;
+    currentTime += timeIncrement; // 更新当前时间
+  
     for (let i = 0; i < bufferLength; i++) {
-        if (dataArray[i] !== lastDataArray[i]) {
-            dataChanged = true;
-            break;
-        }
+      let barHeight = dataArray[i] * 2; // 增大放大因子
+  
+      // 动态颜色渐变，引入时间因素
+      const hue = (i / bufferLength) * 360 + currentTime * 0.01; // 使用HSL颜色模式，色调从0到360，并随时间变化
+      const barColor = `hsl(${hue % 360}, 100%, 80%)`; // 饱和度100%，亮度50%
+  
+      // 创建径向辉光效果
+      const gradient = ctx.createRadialGradient(x + barWidth / 2, canvasHeight - barHeight, 0, x + barWidth / 2, canvasHeight - barHeight, barHeight / 2);
+      gradient.addColorStop(0, barColor);
+      gradient.addColorStop(1, 'rgba(0,0,0,0)'); // 透明度为0，形成辉光效果
+  
+      // 设置亚克力材质效果
+      ctx.globalAlpha = 0.8; // 设置透明度，模拟亚克力材质
+  
+      // 绘制条形
+      ctx.fillStyle = gradient;
+      roundRect(ctx, x, canvasHeight - barHeight, barWidth, barHeight, 5); // 添加圆角
+  
+      // 添加发光效果
+      ctx.shadowColor = barColor; // 动态调整阴影颜色
+      ctx.shadowBlur = 15; // 增加模糊度以增强辉光效果
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+  
+      x += barWidth + 1;
     }
-
-    if (dataChanged) {
-        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-
-        let x = 0;
-
-        for (let i = 0; i < bufferLength; i++) {
-            let barHeight = dataArray[i] * 1.25; // 应用放大因子
-
-            // 创建渐变颜色
-            let gradient = ctx.createLinearGradient(x, canvasHeight, x, canvasHeight - barHeight);
-            gradient.addColorStop(0, `rgb(255,255,255)`); // 修改后的颜色值
-            gradient.addColorStop(1, `rgb(255,255,0)`);
-
-            // 设置阴影
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = `rgb(255,255,255)`; // 设置为每个线条自身的颜色
-
-            // 绘制条形
-            ctx.fillStyle = gradient;
-            ctx.fillRect(x, canvasHeight - barHeight, barWidth, barHeight);
-
-            x += barWidth + 1;
-        }
-
-        // 更新lastDataArray
-        lastDataArray.set(dataArray);
-    }
-
+  
+    // 更新lastDataArray
+    lastDataArray.set(dataArray);
     frameId = requestAnimationFrame(drawAudioVisualization);
-}
+  }
+  
+
 
 // 停止绘制音频可视化
 function stopDrawAudioVisualization() {
