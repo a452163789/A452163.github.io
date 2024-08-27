@@ -36,7 +36,7 @@
 /* 边框和交互效果（.b 类） */
 .b {
     position: absolute;
-    left: 878.5px; /* 考虑使用百分比或vw单位 */
+    left: 874.6666666666667px; /* 考虑使用百分比或vw单位 */
     top: 7px;
     box-shadow: inset 0 0 0 0.05px #000;
     background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa); /* 简化颜色 */
@@ -102,7 +102,7 @@
 }
 .e {
     position: absolute;
-    left: 878.5px; /* 考虑使用百分比或vw单位 */
+    left: 874.6666666666667px; /* 考虑使用百分比或vw单位 */
     top: 310px;
     box-shadow: inset 0 0 0 0.05px #000;
     background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa); /* 简化颜色 */
@@ -122,8 +122,30 @@
     background-color: rgb(255, 255, 255);
     transform: rotate(-10deg); /* 修改为更小的角度 */
 }
-.NO{    width: px;
-    height: 14px;}
+.f {
+    position: absolute;
+    left: 874.6666666666667px; /* 考虑使用百分比或vw单位 */
+    top: 614px;
+    box-shadow: inset 0 0 0 0.05px #000;
+    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa); /* 简化颜色 */
+    background-size: 1000% 1000%;
+    animation: gradientBG 5s ease infinite;
+    transition: width 1.5s, height 1.5s, transform 1.5s, background-color 2s;
+    border-radius: 25px;
+    border: 2px solid #8AC007;
+    padding: 20px;
+    width: 725px;
+    height: 250px;
+}
+
+.f:hover {
+    width: 300px;
+    height: 250px;
+    background-color: rgb(255, 255, 255);
+    transform: rotate(-10deg); /* 修改为更小的角度 */
+}
+.NOV{    width: 0px;
+    height: 716px;}
 
 /* 动画定义 */
 @keyframes gradientBG {
@@ -178,9 +200,9 @@
 #audioVisualization {
     position: fixed;
     bottom: 0;
-    left: 0px;
+    left: 8px;
     width: 100%;
-    height: 100%; /* 确保这个高度与你的canvas高度一致 */
+    height: 837px; /* 确保这个高度与你的canvas高度一致 */
     z-index: -0; /* 确保canvas位于其他元素之上 */
     pointer-events: none;
     

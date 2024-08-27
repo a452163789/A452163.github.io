@@ -16,8 +16,8 @@ canvas.height = canvasHeight;
 // 绘制音频可视化
 let frameId;
 let lastDataArray = new Uint8Array(bufferLength);
-let barWidth = (canvasWidth / bufferLength) * 2.5; // 只计算一次
-let timeIncrement = 1; // 调整此值以控制速度，减小此值以放慢速度
+let barWidth = (canvasWidth / bufferLength) * 2.154; // 只计算一次
+let timeIncrement = 0.5; // 调整此值以控制速度，减小此值以放慢速度
 let currentTime = 0; // 当前时间
 
 // 定义roundRect函数
@@ -44,10 +44,10 @@ function drawAudioVisualization() {
     currentTime += timeIncrement; // 更新当前时间
   
     for (let i = 0; i < bufferLength; i++) {
-      let barHeight = dataArray[i] * 2; // 增大放大因子
+      let barHeight = dataArray[i] * 2.05; // 增大放大因子
   
       // 动态颜色渐变，引入时间因素
-      const hue = (i / bufferLength) * 360 + currentTime * 0.01; // 使用HSL颜色模式，色调从0到360，并随时间变化
+      const hue = (i / bufferLength) * 360 + currentTime * 2.5; // 使用HSL颜色模式，色调从0到360，并随时间变化
       const barColor = `hsl(${hue % 360}, 100%, 80%)`; // 饱和度100%，亮度50%
   
       // 创建径向辉光效果
@@ -94,7 +94,7 @@ function connectAudioSource(audio, analyser) {
 function initializeAudios(audioConfigs) {
     return audioConfigs.map(audioInfo => {
         const audio = new Audio(audioInfo.file);
-        audio.loop = false;
+        audio.loop = true;
         connectAudioSource(audio, analyser); // 连接音频源到分析器
         return { audio, container: document.querySelector(`#${audioInfo.containerId}`) };
     });
@@ -131,7 +131,8 @@ document.addEventListener('DOMContentLoaded', function() {
         { file: 'ONCE UPON A TIME.mp3', containerId: 'container2' },
         { file: 'AUTOMOTIVO BAYSIDE 2.0.mp3', containerId: 'container3' },
         { file: 'AUTOMOTIVO BAYSIDE 3.0.mp3', containerId: 'container4' },
-        { file: 'ROMANCE GARBAGE.mp3', containerId: 'container5' }
+        { file: 'ROMANCE GARBAGE.mp3', containerId: 'container5' },
+        { file: 'I BELIEVE.mp3', containerId: 'container6' }
     ]);
 
     bindAudioClickEvents(audios);
