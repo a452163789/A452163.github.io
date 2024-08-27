@@ -47,7 +47,7 @@ function drawAudioVisualization() {
       let barHeight = dataArray[i] * 2.05; // 增大放大因子
   
       // 动态颜色渐变，引入时间因素
-      const hue = (i / bufferLength) * 360 + currentTime * 2.5; // 使用HSL颜色模式，色调从0到360，并随时间变化
+      const hue = (i / bufferLength) * 360 + currentTime * 1; // 使用HSL颜色模式，色调从0到360，并随时间变化
       const barColor = `hsl(${hue % 360}, 100%, 80%)`; // 饱和度100%，亮度50%
   
       // 创建径向辉光效果
@@ -74,9 +74,7 @@ function drawAudioVisualization() {
     // 更新lastDataArray
     lastDataArray.set(dataArray);
     frameId = requestAnimationFrame(drawAudioVisualization);
-  }
-  
-
+}
 
 // 停止绘制音频可视化
 function stopDrawAudioVisualization() {
@@ -105,15 +103,17 @@ function bindAudioClickEvents(audios) {
     audios.forEach(({ audio, container }) => {
         if (container) {
             container.addEventListener('click', function() {
-                const others = audios.filter(other => other.audio !== audio);
-                others.forEach(other => other.audio.pause());
+                audioContext.resume().then(() => {
+                    const others = audios.filter(other => other.audio !== audio);
+                    others.forEach(other => other.audio.pause());
 
-                if (audio.paused) {
-                    audio.currentTime = 0;
-                    audio.play();
-                } else {
-                    audio.pause();
-                }
+                    if (audio.paused) {
+                        audio.currentTime = 0;
+                        audio.play();
+                    } else {
+                        audio.pause();
+                    }
+                });
             });
 
             audio.addEventListener('ended', function() {
