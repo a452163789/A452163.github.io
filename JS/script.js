@@ -5,6 +5,11 @@ analyser.fftSize = 256; // 减小FFT大小以提高稳定性
 const bufferLength = analyser.frequencyBinCount;
 const dataArray = new Uint8Array(bufferLength);
 
+// 创建第二个分析器
+const analyser2 = audioContext.createAnalyser();
+analyser2.fftSize = 256;
+const bufferLength2 = analyser2.frequencyBinCount;
+const dataArray2 = new Uint8Array(bufferLength2);
 
 // 获取canvas元素并设置绘图环境
 const canvas = document.getElementById('audioVisualization');
@@ -58,16 +63,14 @@ function drawAudioVisualization() {
   
       // 设置亚克力材质效果
       ctx.globalAlpha = 0.8; // 设置透明度，模拟亚克力材质
-  
-      // 绘制条形
-      ctx.fillStyle = gradient;
-      roundRect(ctx, x, canvasHeight - barHeight, barWidth, barHeight, 5); // 添加圆角
-  
-      // 添加发光效果
       ctx.shadowColor = barColor; // 动态调整阴影颜色
       ctx.shadowBlur = 15; // 增加模糊度以增强辉光效果
       ctx.shadowOffsetX = 0;
       ctx.shadowOffsetY = 0;
+  
+      // 绘制条形
+      ctx.fillStyle = gradient;
+      roundRect(ctx, x, canvasHeight - barHeight, barWidth, barHeight, 5); // 添加圆角
   
       x += barWidth + 1;
     }
@@ -77,16 +80,19 @@ function drawAudioVisualization() {
     frameId = requestAnimationFrame(drawAudioVisualization);
 }
 
+
 // 停止绘制音频可视化
 function stopDrawAudioVisualization() {
     cancelAnimationFrame(frameId);
 }
 
 // 将音频源连接到分析器
-function connectAudioSource(audio, analyser) {
+function connectAudioSource(audio, analyser, analyser2) {
     const source = audioContext.createMediaElementSource(audio);
     source.connect(analyser);
+    source.connect(analyser2);
     analyser.connect(audioContext.destination);
+    analyser2.connect(audioContext.destination);
 }
 
 // 初始化音频播放器时，连接音频源到分析器
@@ -94,7 +100,7 @@ function initializeAudios(audioConfigs) {
     return audioConfigs.map(audioInfo => {
         const audio = new Audio(audioInfo.file);
         audio.loop = true;
-        connectAudioSource(audio, analyser); // 连接音频源到分析器
+        connectAudioSource(audio, analyser, analyser2); // 连接音频源到分析器
         return { audio, container: document.querySelector(`#${audioInfo.containerId}`) };
     });
 }
@@ -125,6 +131,28 @@ function bindAudioClickEvents(audios) {
     });
 }
 
+// 获取圆形元素
+const circle = document.querySelector('.g');
+
+// 定义一个函数来更新圆形元素的大小和亚克力材质效果
+function updateCircleSize() {
+    analyser2.getByteFrequencyData(dataArray2);
+    let average = dataArray2.reduce((acc, val) => acc + val, 0) / bufferLength2;
+    // 根据音频数据调整圆形元素的大小，初始大小为0，设置一个上限值
+    let maxSize = 500; // 设置一个合理的上限值
+    let size = Math.min(average * 2, maxSize); // 确保大小不会超过上限值
+    circle.style.width = `${size}px`; // 从0开始，根据音频数据放大
+    circle.style.height = `${size}px`;
+
+    // 设置亚克力材质效果
+    circle.style.backgroundColor = 'rgba(255, 255, 255, 0.5)'; // 半透明背景
+    circle.style.backdropFilter = 'blur(10px)'; // 模糊效果
+    circle.style.borderRadius = '50%'; // 确保圆形
+    circle.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.2)'; // 轻微阴影
+
+    requestAnimationFrame(updateCircleSize);
+}
+
 // 在DOM加载完成后执行
 document.addEventListener('DOMContentLoaded', function() {
     const audios = initializeAudios([
@@ -140,6 +168,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 开始绘制音频可视化
     drawAudioVisualization();
+
+    // 开始更新圆形元素的大小和亚克力材质效果
+    updateCircleSize();
 });
 
+
 // 当需要停止动画时，可以调用 stopDrawAudioVisualization();
+
+
+
