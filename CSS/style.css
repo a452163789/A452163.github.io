@@ -156,6 +156,29 @@
     position: fixed; 
     z-index: -0;
 }
+.H {
+    position: absolute;
+    left: 8px; /* 考虑使用百分比或vw单位 */
+    top: 919px;
+    box-shadow: inset 0 0 0 0.05px #000;
+    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa); /* 简化颜色 */
+    background-size: 1000% 1000%;
+    animation: gradientBG 5s ease infinite;
+    transition: width 1.5s, height 1.5s, transform 1.5s, background-color 2s;
+    border-radius: 25px;
+    border: 2px solid #8AC007;
+    padding: 20px;
+    width: 725px;
+    height: 250px;
+}
+
+.H:hover {
+    width: 300px;
+    height: 250px;
+    background-color: rgb(255, 255, 255);
+    transform: rotate(-10deg); /* 修改为更小的角度 */
+}
+
 
 .NOV{    width: 0px;
     height: 716px;}
