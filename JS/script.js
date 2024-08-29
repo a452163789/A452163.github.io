@@ -162,7 +162,8 @@ document.addEventListener('DOMContentLoaded', function() {
         { file: 'AUTOMOTIVO BAYSIDE 3.0.mp3', containerId: 'container4' },
         { file: 'ROMANCE GARBAGE.mp3', containerId: 'container5' },
         { file: 'I BELIEVE.mp3', containerId: 'container6' },
-        { file: 'SWEET RALLY.mp3', containerId: 'container7' }
+        { file: 'SWEET RALLY.mp3', containerId: 'container7' },
+        { file: 'MY WAY.mp3', containerId: 'container8' }
     ]);
 
     bindAudioClickEvents(audios);
