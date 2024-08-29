@@ -117,11 +117,6 @@ function init() {
     const cursor = new ArrowPointer();
     document.addEventListener('mousemove', (event) => cursor.move(event));
     document.addEventListener('touchmove', (event) => cursor.move(event.touches[0]));
-    document.addEventListener('click', () => {
-        if (typeof cursor.click === 'function') {
-            cursor.click();
-        }
-    });
 }
 
 if (document.readyState === 'loading') {
