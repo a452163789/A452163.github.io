@@ -1,5 +1,5 @@
 // 创建音频上下文和分析器
-const audioContext = new AudioContext(); // 创建一个新的音频上下文
+const audioContext = new (window.AudioContext || window.webkitAudioContext)(); // 创建一个新的音频上下文
 const analyser = audioContext.createAnalyser(); // 创建一个分析器节点
 analyser.fftSize = 32; // 设置快速傅里叶变换的大小
 const frequencyBinCount = analyser.frequencyBinCount; // 获取频率数据的数量
