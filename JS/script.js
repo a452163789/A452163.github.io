@@ -57,24 +57,29 @@ function lerp(start, end, t) {
 }
 
 let currentValue = 0; // 当前值
+let lastUpdateTime = 0; // 上次更新时间
+const updateInterval = 16; // 更新间隔，大约60fps
 
 // 动画循环函数
-function animate() {
-    analyser.getByteFrequencyData(frequencyData); // 获取频率数据
-    let averageFrequency = frequencyData.reduce((sum, value) => sum + value, 0) / frequencyBinCount; // 计算平均频率
-    const maxValue = 999999; // 最大值
-    currentValue = Math.min(averageFrequency * 2.5, maxValue); // 更新当前值
+function animate(currentTime) {
+    if (currentTime - lastUpdateTime >= updateInterval) {
+        analyser.getByteFrequencyData(frequencyData); // 获取频率数据
+        let averageFrequency = frequencyData.reduce((sum, value) => sum + value, 0) / frequencyBinCount; // 计算平均频率
+        const maxValue = 999999; // 最大值
+        currentValue = Math.min(averageFrequency * 2.5, maxValue); // 更新当前值
 
-    let currentWidth = parseFloat(graphicElement.style.width) || 0; // 获取当前宽度
-    let newWidth = lerp(currentWidth, currentValue, 0.1); // 计算新的宽度
+        let currentWidth = parseFloat(graphicElement.style.width) || 0; // 获取当前宽度
+        let newWidth = lerp(currentWidth, currentValue, 0.1); // 计算新的宽度
 
-    graphicElement.style.width = `${newWidth}px`; // 设置图形元素的宽度
-    graphicElement.style.height = `${newWidth}px`; // 设置图形元素的高度
-    graphicElement.style.backgroundColor = 'rgba(255, 255, 255, 0.5)'; // 设置背景颜色
-    graphicElement.style.backdropFilter = 'blur(10px)'; // 设置背景模糊效果
-    graphicElement.style.borderRadius = '50%'; // 设置边框圆角
-    graphicElement.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.2)'; // 设置阴影效果
+        graphicElement.style.width = `${newWidth}px`; // 设置图形元素的宽度
+        graphicElement.style.height = `${newWidth}px`; // 设置图形元素的高度
+        graphicElement.style.backgroundColor = 'rgba(255, 255, 255, 0.5)'; // 设置背景颜色
+        graphicElement.style.backdropFilter = 'blur(10px)'; // 设置背景模糊效果
+        graphicElement.style.borderRadius = '50%'; // 设置边框圆角
+        graphicElement.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.2)'; // 设置阴影效果
 
+        lastUpdateTime = currentTime; // 更新上次更新时间
+    }
     requestAnimationFrame(animate); // 请求下一帧动画
 }
 
