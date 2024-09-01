@@ -200,6 +200,95 @@
     background-color: rgb(255, 255, 255);
     transform: rotate(-10deg); /* 修改为更小的角度 */
 }
+.K {
+    position: absolute;
+    left: 874.6666666666667px; /* 考虑使用百分比或vw单位 */
+    top: 1223px;
+    box-shadow: inset 0 0 0 0.05px #000;
+    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa); /* 简化颜色 */
+    background-size: 1000% 1000%;
+    animation: gradientBG 5s ease infinite;
+    transition: width 1.5s, height 1.5s, transform 1.5s, background-color 2s;
+    border-radius: 25px;
+    border: 2px solid #8AC007;
+    padding: 20px;
+    width: 725px;
+    height: 250px;
+}
+
+.K:hover {
+    width: 300px;
+    height: 250px;
+    background-color: rgb(255, 255, 255);
+    transform: rotate(-10deg); /* 修改为更小的角度 */
+}
+.M {
+    position: absolute;
+    left: 874.6666666666667px; /* 考虑使用百分比或vw单位 */
+    top: 1527px;
+    box-shadow: inset 0 0 0 0.05px #000;
+    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa); /* 简化颜色 */
+    background-size: 1000% 1000%;
+    animation: gradientBG 5s ease infinite;
+    transition: width 1.5s, height 1.5s, transform 1.5s, background-color 2s;
+    border-radius: 25px;
+    border: 2px solid #8AC007;
+    padding: 20px;
+    width: 725px;
+    height: 250px;
+}
+
+.M:hover {
+    width: 300px;
+    height: 250px;
+    background-color: rgb(255, 255, 255);
+    transform: rotate(-10deg); /* 修改为更小的角度 */
+}
+.N {
+    position: absolute;
+    left: 874.6666666666667px; /* 考虑使用百分比或vw单位 */
+    top: 1831px;
+    box-shadow: inset 0 0 0 0.05px #000;
+    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa); /* 简化颜色 */
+    background-size: 1000% 1000%;
+    animation: gradientBG 5s ease infinite;
+    transition: width 1.5s, height 1.5s, transform 1.5s, background-color 2s;
+    border-radius: 25px;
+    border: 2px solid #8AC007;
+    padding: 20px;
+    width: 725px;
+    height: 250px;
+}
+
+.N:hover {
+    width: 300px;
+    height: 250px;
+    background-color: rgb(255, 255, 255);
+    transform: rotate(-10deg); /* 修改为更小的角度 */
+}
+.O {
+    position: absolute;
+    left: 874.6666666666667px; /* 考虑使用百分比或vw单位 */
+    top: 2135px;
+    box-shadow: inset 0 0 0 0.05px #000;
+    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa); /* 简化颜色 */
+    background-size: 1000% 1000%;
+    animation: gradientBG 5s ease infinite;
+    transition: width 1.5s, height 1.5s, transform 1.5s, background-color 2s;
+    border-radius: 25px;
+    border: 2px solid #8AC007;
+    padding: 20px;
+    width: 725px;
+    height: 250px;
+}
+
+.O:hover {
+    width: 300px;
+    height: 250px;
+    background-color: rgb(255, 255, 255);
+    transform: rotate(-10deg); /* 修改为更小的角度 */
+}
+
 
 
 
@@ -227,6 +316,10 @@
     height: 100%;
     background-color: black; /* 设置背景颜色为黑色 */
     z-index: -5; /* 确保它在所有其他元素之下 */
+    
+}
+.g{
+    pointer-events: none;
 }
 
 /* 全局光标设置 */

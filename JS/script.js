@@ -76,7 +76,11 @@ document.addEventListener('DOMContentLoaded', () => {
         { file: 'ROMANCE GARBAGE.mp3', containerId: 'container5' },
         { file: 'I BELIEVE.mp3', containerId: 'container6' },
         { file: 'SWEET RALLY.mp3', containerId: 'container7' },
-        { file: 'MY WAY.mp3', containerId: 'container8' }
+        { file: 'MY WAY.mp3', containerId: 'container8' },
+        { file: 'CUTE.mp3', containerId: 'container9' },
+        { file: 'ITS OKAY NOW.mp3', containerId: 'container10' },
+        { file: 'III.mp3', containerId: 'container11' },
+        { file: 'RASA SAYANG.mp3', containerId: 'container12' },
     ]);
     addEventListeners(audioContainers);
     animate();
