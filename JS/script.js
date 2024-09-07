@@ -4,20 +4,21 @@ const analyser = audioContext.createAnalyser();
 analyser.fftSize = 32;
 const frequencyData = new Uint8Array(analyser.frequencyBinCount);
 
-// 创建媒体元素源并连接到分析器和音频上下文
-function createMediaElementSource(mediaElement) {
+// 异步创建媒体元素源并连接到分析器和音频上下文
+async function createMediaElementSource(mediaElement) {
+    await audioContext.resume();
     const source = audioContext.createMediaElementSource(mediaElement);
     source.connect(analyser).connect(audioContext.destination);
 }
 
-// 加载音频文件并返回音频对象和容器元素
-function loadAudioFiles(audioFiles) {
-    return audioFiles.map(fileInfo => {
+// 异步加载音频文件并返回音频对象和容器元素
+async function loadAudioFiles(audioFiles) {
+    return Promise.all(audioFiles.map(async fileInfo => {
         const audio = new Audio(fileInfo.file);
         audio.loop = true;
-        createMediaElementSource(audio);
+        await createMediaElementSource(audio);
         return { audio, container: document.getElementById(fileInfo.containerId) };
-    });
+    }));
 }
 
 // 为每个音频容器添加点击事件监听器
@@ -67,8 +68,8 @@ function animate(currentTime) {
 }
 
 // 页面加载完成后执行初始化
-document.addEventListener('DOMContentLoaded', () => {
-    const audioContainers = loadAudioFiles([
+document.addEventListener('DOMContentLoaded', async () => {
+    const audioContainers = await loadAudioFiles([
         { file: 'AUTOMOTIVO BAYSIDE.mp3', containerId: 'container1' },
         { file: 'ONCE UPON A TIME.mp3', containerId: 'container2' },
         { file: 'AUTOMOTIVO BAYSIDE 2.0.mp3', containerId: 'container3' },
@@ -81,6 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
         { file: 'ITS OKAY NOW.mp3', containerId: 'container10' },
         { file: 'III.mp3', containerId: 'container11' },
         { file: 'RASA SAYANG.mp3', containerId: 'container12' },
+        { file: 'HEARTBEAT.mp3', containerId: 'container13' },
+        { file: 'EU SENTO GABU.mp3', containerId: 'container14' },
+        { file: '蜘蛛糸モノポリー.mp3', containerId: 'container15' },
     ]);
     addEventListeners(audioContainers);
     animate();
