@@ -85,6 +85,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         { file: 'HEARTBEAT.mp3', containerId: 'container13' },
         { file: 'EU SENTO GABU.mp3', containerId: 'container14' },
         { file: '蜘蛛糸モノポリー.mp3', containerId: 'container15' },
+        { file: 'ECLIPSE!.mp3', containerId: 'container16' },
+        { file: 'GIGACHAD FUNK.mp3', containerId: 'container17' },
+        { file: 'BRODYAGA FUNK.mp3', containerId: 'container18' },
     ]);
     addEventListeners(audioContainers);
     animate();

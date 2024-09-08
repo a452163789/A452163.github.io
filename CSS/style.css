@@ -7,13 +7,15 @@
 .title {
     color: #05fa11;
     font-size: 16px;
+    user-select: none; /* 标准语法 */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE 10+ */
 }
 
 /* 边框和交互效果（.a 类） */
-.a {
+.a, .b, .c, .d, .e, .f, .H, .I, .K, .M, .N, .O, .P, .Q, .R, .S, .T, .U {
     position: absolute;
-    left: 8px; /* 考虑使用vw/vh或百分比，但这里保持原样 */
-    top: 7px;
     box-shadow: inset 0 0 0 0.05px #000;
     background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa);
     background-size: 1000% 1000%;
@@ -26,342 +28,125 @@
     height: 250px;
 }
 
-.a:hover {
+.a:hover, .b:hover, .c:hover, .d:hover, .e:hover, .f:hover, .H:hover, .I:hover, .K:hover, .M:hover, .N:hover, .O:hover, .P:hover, .Q:hover, .R:hover, .S:hover, .T:hover, .U:hover {
     width: 300px;
     height: 250px;
-    background-color: #fff; /* 使用简写形式 */
+    background-color: #fff;
     transform: rotate(-10deg);
 }
 
-/* 边框和交互效果（.b 类） */
-.b {
-    position: absolute;
-    left: 874.6666666666667px; /* 考虑使用百分比或vw单位 */
+.a {
+    left: 8px;
     top: 7px;
-    box-shadow: inset 0 0 0 0.05px #000;
-    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa); /* 简化颜色 */
-    background-size: 1000% 1000%;
-    animation: gradientBG 5s ease infinite;
-    transition: width 1.5s, height 1.5s, transform 1.5s, background-color 2s;
-    border-radius: 25px;
-    border: 2px solid #8AC007;
-    padding: 20px;
-    width: 725px;
-    height: 250px;
 }
 
-.b:hover {
-    width: 300px;
-    height: 250px;
-    background-color: rgb(255, 255, 255);
-    transform: rotate(-10deg); /* 修改为更小的角度 */
+.b {
+    left: 874.6666666666667px;
+    top: 7px;
 }
+
 .c {
-    position: absolute;
-    left: 8px; /* 考虑使用百分比或vw单位 */
+    left: 8px;
     top: 310px;
-    box-shadow: inset 0 0 0 0.05px #000;
-    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa); /* 简化颜色 */
-    background-size: 1000% 1000%;
-    animation: gradientBG 5s ease infinite;
-    transition: width 1.5s, height 1.5s, transform 1.5s, background-color 2s;
-    border-radius: 25px;
-    border: 2px solid #8AC007;
-    padding: 20px;
-    width: 725px;
-    height: 250px;
 }
 
-.c:hover {
-    width: 300px;
-    height: 250px;
-    background-color: rgb(255, 255, 255);
-    transform: rotate(-10deg); /* 修改为更小的角度 */
-}
 .d {
-    position: absolute;
-    left: 8px; /* 考虑使用百分比或vw单位 */
+    left: 8px;
     top: 614px;
-    box-shadow: inset 0 0 0 0.05px #000;
-    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa); /* 简化颜色 */
-    background-size: 1000% 1000%;
-    animation: gradientBG 5s ease infinite;
-    transition: width 1.5s, height 1.5s, transform 1.5s, background-color 2s;
-    border-radius: 25px;
-    border: 2px solid #8AC007;
-    padding: 20px;
-    width: 725px;
-    height: 250px;
 }
 
-.d:hover {
-    width: 300px;
-    height: 250px;
-    background-color: rgb(255, 255, 255);
-    transform: rotate(-10deg); /* 修改为更小的角度 */
-}
 .e {
-    position: absolute;
-    left: 874.6666666666667px; /* 考虑使用百分比或vw单位 */
+    left: 874.6666666666667px;
     top: 310px;
-    box-shadow: inset 0 0 0 0.05px #000;
-    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa); /* 简化颜色 */
-    background-size: 1000% 1000%;
-    animation: gradientBG 5s ease infinite;
-    transition: width 1.5s, height 1.5s, transform 1.5s, background-color 2s;
-    border-radius: 25px;
-    border: 2px solid #8AC007;
-    padding: 20px;
-    width: 725px;
-    height: 250px;
 }
 
-.e:hover {
-    width: 300px;
-    height: 250px;
-    background-color: rgb(255, 255, 255);
-    transform: rotate(-10deg); /* 修改为更小的角度 */
-}
 .f {
-    position: absolute;
-    left: 874.6666666666667px; /* 考虑使用百分比或vw单位 */
+    left: 874.6666666666667px;
     top: 614px;
-    box-shadow: inset 0 0 0 0.05px #000;
-    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa); /* 简化颜色 */
-    background-size: 1000% 1000%;
-    animation: gradientBG 5s ease infinite;
-    transition: width 1.5s, height 1.5s, transform 1.5s, background-color 2s;
-    border-radius: 25px;
-    border: 2px solid #8AC007;
-    padding: 20px;
-    width: 725px;
-    height: 250px;
 }
 
-.f:hover {
-    width: 300px;
-    height: 250px;
-    background-color: rgb(255, 255, 255);
-    transform: rotate(-10deg); /* 修改为更小的角度 */
-}
 .g {
-    width: 100px; /* 设置宽度 */
-    height: 100px; /* 设置高度 */
-    border-radius: 50%; /* 设置圆角，使其变成圆形 */
-    background-color: #ff0000; /* 设置背景颜色 */
-    position: absolute; /* 使用绝对定位 */
-    top: 50%; /* 垂直居中 */
-    left: 826px; /* 水平居中 */
-    transform: translate(-50%, -50%); /* 通过平移自身的一半宽度和高度来实现真正的居中 */
-    position: fixed; 
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #ff0000;
+    position: absolute;
+    top: 50%;
+    left: 826px;
+    transform: translate(-50%, -50%);
+    position: fixed;
     z-index: -0;
+    pointer-events: none;
 }
+
 .H {
-    position: absolute;
-    left: 8px; /* 考虑使用百分比或vw单位 */
+    left: 8px;
     top: 919px;
-    box-shadow: inset 0 0 0 0.05px #000;
-    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa); /* 简化颜色 */
-    background-size: 1000% 1000%;
-    animation: gradientBG 5s ease infinite;
-    transition: width 1.5s, height 1.5s, transform 1.5s, background-color 2s;
-    border-radius: 25px;
-    border: 2px solid #8AC007;
-    padding: 20px;
-    width: 725px;
-    height: 250px;
 }
 
-.H:hover {
-    width: 300px;
-    height: 250px;
-    background-color: rgb(255, 255, 255);
-    transform: rotate(-10deg); /* 修改为更小的角度 */
-}
 .I {
-    position: absolute;
-    left: 874.6666666666667px; /* 考虑使用百分比或vw单位 */
+    left: 874.6666666666667px;
     top: 919px;
-    box-shadow: inset 0 0 0 0.05px #000;
-    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa); /* 简化颜色 */
-    background-size: 1000% 1000%;
-    animation: gradientBG 5s ease infinite;
-    transition: width 1.5s, height 1.5s, transform 1.5s, background-color 2s;
-    border-radius: 25px;
-    border: 2px solid #8AC007;
-    padding: 20px;
-    width: 725px;
-    height: 250px;
 }
 
-.I:hover {
-    width: 300px;
-    height: 250px;
-    background-color: rgb(255, 255, 255);
-    transform: rotate(-10deg); /* 修改为更小的角度 */
-}
 .K {
-    position: absolute;
-    left: 874.6666666666667px; /* 考虑使用百分比或vw单位 */
+    left: 874.6666666666667px;
     top: 1223px;
-    box-shadow: inset 0 0 0 0.05px #000;
-    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa); /* 简化颜色 */
-    background-size: 1000% 1000%;
-    animation: gradientBG 5s ease infinite;
-    transition: width 1.5s, height 1.5s, transform 1.5s, background-color 2s;
-    border-radius: 25px;
-    border: 2px solid #8AC007;
-    padding: 20px;
-    width: 725px;
-    height: 250px;
 }
 
-.K:hover {
-    width: 300px;
-    height: 250px;
-    background-color: rgb(255, 255, 255);
-    transform: rotate(-10deg); /* 修改为更小的角度 */
-}
 .M {
-    position: absolute;
-    left: 874.6666666666667px; /* 考虑使用百分比或vw单位 */
+    left: 874.6666666666667px;
     top: 1527px;
-    box-shadow: inset 0 0 0 0.05px #000;
-    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa); /* 简化颜色 */
-    background-size: 1000% 1000%;
-    animation: gradientBG 5s ease infinite;
-    transition: width 1.5s, height 1.5s, transform 1.5s, background-color 2s;
-    border-radius: 25px;
-    border: 2px solid #8AC007;
-    padding: 20px;
-    width: 725px;
-    height: 250px;
 }
 
-.M:hover {
-    width: 300px;
-    height: 250px;
-    background-color: rgb(255, 255, 255);
-    transform: rotate(-10deg); /* 修改为更小的角度 */
-}
 .N {
-    position: absolute;
-    left: 874.6666666666667px; /* 考虑使用百分比或vw单位 */
+    left: 874.6666666666667px;
     top: 1831px;
-    box-shadow: inset 0 0 0 0.05px #000;
-    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa); /* 简化颜色 */
-    background-size: 1000% 1000%;
-    animation: gradientBG 5s ease infinite;
-    transition: width 1.5s, height 1.5s, transform 1.5s, background-color 2s;
-    border-radius: 25px;
-    border: 2px solid #8AC007;
-    padding: 20px;
-    width: 725px;
-    height: 250px;
 }
 
-.N:hover {
-    width: 300px;
-    height: 250px;
-    background-color: rgb(255, 255, 255);
-    transform: rotate(-10deg); /* 修改为更小的角度 */
-}
 .O {
-    position: absolute;
-    left: 874.6666666666667px; /* 考虑使用百分比或vw单位 */
+    left: 874.6666666666667px;
     top: 2135px;
-    box-shadow: inset 0 0 0 0.05px #000;
-    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa); /* 简化颜色 */
-    background-size: 1000% 1000%;
-    animation: gradientBG 5s ease infinite;
-    transition: width 1.5s, height 1.5s, transform 1.5s, background-color 2s;
-    border-radius: 25px;
-    border: 2px solid #8AC007;
-    padding: 20px;
-    width: 725px;
-    height: 250px;
 }
 
-.O:hover {
-    width: 300px;
-    height: 250px;
-    background-color: rgb(255, 255, 255);
-    transform: rotate(-10deg); /* 修改为更小的角度 */
-}
 .P {
-    position: absolute;
-    left: 874.6666666666667px; /* 考虑使用百分比或vw单位 */
+    left: 874.6666666666667px;
     top: 2439px;
-    box-shadow: inset 0 0 0 0.05px #000;
-    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa); /* 简化颜色 */
-    background-size: 1000% 1000%;
-    animation: gradientBG 5s ease infinite;
-    transition: width 1.5s, height 1.5s, transform 1.5s, background-color 2s;
-    border-radius: 25px;
-    border: 2px solid #8AC007;
-    padding: 20px;
-    width: 725px;
-    height: 250px;
 }
 
-.P:hover {
-    width: 300px;
-    height: 250px;
-    background-color: rgb(255, 255, 255);
-    transform: rotate(-10deg); /* 修改为更小的角度 */
-}
 .Q {
-    position: absolute;
-    left: 8px; /* 考虑使用百分比或vw单位 */
+    left: 8px;
     top: 1223px;
-    box-shadow: inset 0 0 0 0.05px #000;
-    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa); /* 简化颜色 */
-    background-size: 1000% 1000%;
-    animation: gradientBG 5s ease infinite;
-    transition: width 1.5s, height 1.5s, transform 1.5s, background-color 2s;
-    border-radius: 25px;
-    border: 2px solid #8AC007;
-    padding: 20px;
-    width: 725px;
-    height: 250px;
 }
 
-.Q:hover {
-    width: 300px;
-    height: 250px;
-    background-color: rgb(255, 255, 255);
-    transform: rotate(-10deg); /* 修改为更小的角度 */
-}
 .R {
-    position: absolute;
-    left: 874.6666666666667px; /* 考虑使用百分比或vw单位 */
+    left: 874.6666666666667px;
     top: 2744px;
-    box-shadow: inset 0 0 0 0.05px #000;
-    background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa); /* 简化颜色 */
-    background-size: 1000% 1000%;
-    animation: gradientBG 5s ease infinite;
-    transition: width 1.5s, height 1.5s, transform 1.5s, background-color 2s;
-    border-radius: 25px;
-    border: 2px solid #8AC007;
-    padding: 20px;
-    width: 725px;
-    height: 250px;
 }
 
-.R:hover {
-    width: 300px;
-    height: 250px;
-    background-color: rgb(255, 255, 255);
-    transform: rotate(-10deg); /* 修改为更小的角度 */
+.S {
+    left: 8px;
+    top: 1527px;
+    font-family: 'ECLIPSE', sans-serif;
+}
+
+.T {
+    left: 8px;
+    top: 1831px;
+    font-family: 'GIGACHAD FUNK', sans-serif;
+}
+
+.U {
+    left: 8px;
+    top: 2135px;
+    font-family: 'BRODYAGA FUNK', sans-serif;
 }
 
 
-
-
-
-
-.NOV{    width: 0px;
-    height: 716px;}
+.NOV {
+    width: 0px;
+    height: 716px;
+}
 
 /* 动画定义 */
 @keyframes gradientBG {
@@ -375,46 +160,39 @@
         background-position: 0% 50%;
     }
 }
+
 /* 确保黑色背景始终在最底层 */
 .NO {
-    position: fixed; /* 或者 absolute，取决于布局需求 */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: black; /* 设置背景颜色为黑色 */
-    z-index: -5; /* 确保它在所有其他元素之下 */
-    
-}
-.g{
-    pointer-events: none;
+    background-color: black;
+    z-index: -5;
 }
 
 /* 全局光标设置 */
-
 * {
     cursor: none;
 }
 
 /* demo1 和 demo2 的样式 */
 #demo1, #demo2 {
-    border-radius: 15px 15px 0 0; /* 简写border-radius */
+    border-radius: 15px 15px 0 0;
     position: absolute;
     display: block;
+    width: 769px;
+    height: 450px;
+    top: 301px;
 }
 
 #demo1 {
-    left: 7.7px; /* 如果可能，考虑使用em、rem或vw/vh */
-    top: 301px;
-    width: 769px;
-    height: 450px;
+    left: 7.7px;
 }
 
 #demo2 {
-    left: 878.5px; /* 同样，考虑使用更灵活的单位 */
-    top: 301px;
-    width: 769px;
-    height: 450px;
+    left: 878.5px;
 }
 
 #audioVisualization {
@@ -422,19 +200,27 @@
     bottom: 0;
     left: 8px;
     width: 100%;
-    height: 837px; /* 确保这个高度与你的canvas高度一致 */
-    z-index: -0; /* 确保canvas位于其他元素之上 */
+    height: 837px;
+    z-index: -0;
     pointer-events: none;
-    
-    
-    
 }
 
+@font-face {
+    font-family: 'ECLIPSE';
+    src: url('./ECLIPSE!.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
 
-/* 使类名为title的元素中的文字不可选中 */
-.title {
-    user-select: none; /* 标准语法 */
-    -webkit-user-select: none; /* Safari */
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* IE 10+ */
+@font-face {
+    font-family: 'GIGACHAD FUNK';
+    src: url('./GIGACHAD FUNK.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'BRODYAGA FUNK';
+    src: url('./BRODYAGA FUNK.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
 }
