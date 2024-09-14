@@ -88,6 +88,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         { file: 'ECLIPSE!.mp3', containerId: 'container16' },
         { file: 'GIGACHAD FUNK.mp3', containerId: 'container17' },
         { file: 'BRODYAGA FUNK.mp3', containerId: 'container18' },
+        { file: 'SimpsonWave1995.mp3', containerId: 'container19' },
     ]);
     addEventListeners(audioContainers);
     animate();

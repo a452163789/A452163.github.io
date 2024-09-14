@@ -14,7 +14,7 @@
 }
 
 /* 边框和交互效果（.a 类） */
-.a, .b, .c, .d, .e, .f, .H, .I, .K, .M, .N, .O, .P, .Q, .R, .S, .T, .U {
+.a, .b, .c, .d, .e, .f, .H, .I, .K, .M, .N, .O, .P, .Q, .R, .S, .T, .U ,.V {
     position: absolute;
     box-shadow: inset 0 0 0 0.05px #000;
     background: linear-gradient(-45deg, #ee5252, #e73c7e, #23a6d5, #23d5ab, #3e05fa);
@@ -28,7 +28,7 @@
     height: 250px;
 }
 
-.a:hover, .b:hover, .c:hover, .d:hover, .e:hover, .f:hover, .H:hover, .I:hover, .K:hover, .M:hover, .N:hover, .O:hover, .P:hover, .Q:hover, .R:hover, .S:hover, .T:hover, .U:hover {
+.a:hover, .b:hover, .c:hover, .d:hover, .e:hover, .f:hover, .H:hover, .I:hover, .K:hover, .M:hover, .N:hover, .O:hover, .P:hover, .Q:hover, .R:hover, .S:hover, .T:hover, .U:hover ,.V:hover {
     width: 300px;
     height: 250px;
     background-color: #fff;
@@ -48,11 +48,13 @@
 .c {
     left: 8px;
     top: 310px;
+    font-family: 'AUTOMOTIVO BAYSIDE 2.0',sans-serif;
 }
 
 .d {
     left: 8px;
     top: 614px;
+    font-family: 'AUTOMOTIVO BAYSIDE 3.0',sans-serif;
 }
 
 .e {
@@ -82,6 +84,8 @@
 .H {
     left: 8px;
     top: 919px;
+    font-family: 'SWEET RALLY', sans-serif;
+    
 }
 
 .I {
@@ -117,6 +121,7 @@
 .Q {
     left: 8px;
     top: 1223px;
+    font-family: 'EU SENTO GABU',sans-serif;
 }
 
 .R {
@@ -140,6 +145,11 @@
     left: 8px;
     top: 2135px;
     font-family: 'BRODYAGA FUNK', sans-serif;
+}
+.V{
+    left: 8px;
+    top: 2439px;
+    font-family: 'SimpsonWave1995',sans-serif;
 }
 
 
@@ -221,6 +231,36 @@
 @font-face {
     font-family: 'BRODYAGA FUNK';
     src: url('./BRODYAGA FUNK.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'SimpsonWave1995';
+    src: url('./SimpsonWave1995.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'EU SENTO GABU';
+    src: url('./EU SENTO GABU.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'SWEET RALLY';
+    src: url('./SWEET RALLY.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'AUTOMOTIVO BAYSIDE 3.0';
+    src: url('./AUTOMOTIVO BAYSIDE 3.0.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'AUTOMOTIVO BAYSIDE 2.0';
+    src: url('./AUTOMOTIVO BAYSIDE 2.0.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
