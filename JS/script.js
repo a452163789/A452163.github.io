@@ -67,6 +67,7 @@ function animate(currentTime) {
     requestAnimationFrame(animate);
 }
 
+
 // 页面加载完成后执行初始化
 document.addEventListener('DOMContentLoaded', async () => {
     const audioContainers = await loadAudioFiles([
@@ -89,6 +90,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         { file: 'GIGACHAD FUNK.mp3', containerId: 'container17' },
         { file: 'BRODYAGA FUNK.mp3', containerId: 'container18' },
         { file: 'SimpsonWave1995.mp3', containerId: 'container19' },
+        { file: 'WE NEVER.mp3', containerId: 'container20' },
     ]);
     addEventListeners(audioContainers);
     animate();

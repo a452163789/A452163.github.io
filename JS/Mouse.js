@@ -30,8 +30,8 @@ function init() {
             this.angle = 0;
             this.previousAngle = 0;
             this.angleDisplace = 0;
-            this.degrees = 57.296;
-            this.cursorSize = 20;
+            this.degrees = 57.296;  // 角度转换系数，从弧度到度
+            this.cursorSize = 20;  // 游标尺寸
 
             this.cursorStyle = {
                 boxSizing: 'border-box',
@@ -39,7 +39,7 @@ function init() {
                 top: '50%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
-                zIndex: '2147483647',
+                zIndex: '-0',  // 注意这里的 zIndex 使用了负值，这可能导致游标不在最上层
                 width: `${this.cursorSize}px`,
                 height: `${this.cursorSize}px`,
                 transition: '250ms, transform 100ms',
@@ -54,8 +54,8 @@ function init() {
             Object.assign(this.cursor.style, this.cursorStyle);
             setTimeout(() => {
                 this.cursor.removeAttribute("hidden");
-            }, 500);
-            this.cursor.style.opacity = 1;
+            }, 500);  // 500ms后显示游标
+            this.cursor.style.opacity = 1;  // 设置透明度为1显示游标
         }
 
         move(event) {
@@ -65,23 +65,25 @@ function init() {
             this.position.pointerY = event.pageY + this.root.getBoundingClientRect().y;
             this.position.distanceX = this.previousPointerX - this.position.pointerX;
             this.position.distanceY = this.previousPointerY - this.position.pointerY;
-            this.distance = Math.sqrt(this.position.distanceY ** 2 + this.position.distanceX ** 2);
+            this.position.distance = Math.sqrt(this.position.distanceY ** 2 + this.position.distanceX ** 2);
 
             this.cursor.style.transform = `translate3d(${this.position.pointerX}px, ${this.position.pointerY}px, 0)`;
 
-            if (this.distance > 1) {
+            // 判断游标是否移动，需旋转
+            if (this.position.distance > 1) {
                 this.rotate();
             } else {
-                this.cursor.style.transform += ` rotate(${this.angleDisplace}deg)`;
+                this.cursor.style.transform += ` rotate(${this.angleDisplace}deg)`;  // 跟随之前的角度
             }
         }
 
         rotate() {
-            let unsortedAngle = Math.atan(Math.abs(this.position.distanceY) / Math.abs(this.position.distanceX)) * this.degrees;
+            let unsortedAngle = Math.atan2(Math.abs(this.position.distanceY), Math.abs(this.position.distanceX)) * this.degrees;
             this.previousAngle = this.angle;
 
+            // 根据位置计算角度
             if (this.position.distanceX <= 0 && this.position.distanceY >= 0) {
-                this.angle = 90 - unsortedAngle + 0;
+                this.angle = 90 - unsortedAngle;
             } else if (this.position.distanceX < 0 && this.position.distanceY < 0) {
                 this.angle = unsortedAngle + 90;
             } else if (this.position.distanceX >= 0 && this.position.distanceY <= 0) {
@@ -90,9 +92,11 @@ function init() {
                 this.angle = unsortedAngle + 270;
             }
 
+            // 检查角度是否有效
             if (isNaN(this.angle)) {
                 this.angle = this.previousAngle;
             } else {
+                // 计算角度位移
                 if (this.angle - this.previousAngle <= -270) {
                     this.angleDisplace += 360 + this.angle - this.previousAngle;
                 } else if (this.angle - this.previousAngle >= 270) {
@@ -101,24 +105,29 @@ function init() {
                     this.angleDisplace += this.angle - this.previousAngle;
                 }
             }
+
+            // 更新 cursor 的位置
             this.cursor.style.left = `${-this.cursorSize / 2}px`;
-            this.cursor.style.top = `${0}px`;
+            this.cursor.style.top = '0px';
             this.cursor.style.transform += ` rotate(${this.angleDisplace}deg)`;
         }
 
         hidden() {
-            this.cursor.style.opacity = 0;
+            this.cursor.style.opacity = 0;  // 设置透明度为0隐藏游标
             setTimeout(() => {
-                this.cursor.setAttribute("hidden", "hidden");
+                this.cursor.setAttribute("hidden", "hidden");  // 500ms后设置为隐藏
             }, 500);
         }
     }
 
     const cursor = new ArrowPointer();
+    // 监听鼠标移动事件
     document.addEventListener('mousemove', (event) => cursor.move(event));
+    // 监听触摸事件
     document.addEventListener('touchmove', (event) => cursor.move(event.touches[0]));
 }
 
+// 判断文档就绪状态
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
 } else {

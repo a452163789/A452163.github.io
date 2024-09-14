@@ -134,7 +134,7 @@ function initfirework() {
 	// 创建一个 div 元素
 	var div = document.createElement('canvas');
 	div.className = 'fireworks';
-	div.style="position:fixed;left:0;top:0;z-index:99999999;pointer-events:none;"
+	div.style="position:fixed;left:0;top:0;z-index:0;pointer-events:none;"
 
 	// 将 div 添加到 body 的末尾
 	document.body.appendChild(div);
