@@ -38,33 +38,37 @@
 .a {
     left: 8px;
     top: 7px;
+    font-family: 'EACH',sans-serif;
 }
 
 .b {
     left: 874.6666666666667px;
     top: 7px;
+    font-family: 'O',sans-serif;
 }
 
 .c {
     left: 8px;
     top: 310px;
-    font-family: 'AUTOMOTIVO BAYSIDE 2.0',sans-serif;
+    font-family: 'EACH',sans-serif;
 }
 
 .d {
     left: 8px;
     top: 614px;
-    font-family: 'AUTOMOTIVO BAYSIDE 3.0',sans-serif;
+    font-family: 'EACH',sans-serif;
 }
 
 .e {
     left: 874.6666666666667px;
     top: 310px;
+    font-family: 'O',sans-serif;
 }
 
 .f {
     left: 874.6666666666667px;
     top: 614px;
+    font-family: 'O',sans-serif;
 }
 
 .g {
@@ -84,82 +88,103 @@
 .H {
     left: 8px;
     top: 919px;
-    font-family: 'SWEET RALLY', sans-serif;
+    font-family: 'EACH', sans-serif;
     
 }
 
 .I {
     left: 874.6666666666667px;
     top: 919px;
+    font-family: 'O',sans-serif;
 }
 
 .K {
     left: 874.6666666666667px;
     top: 1223px;
+    font-family: 'O',sans-serif;
 }
 
 .M {
     left: 874.6666666666667px;
     top: 1527px;
+    font-family: 'O',sans-serif;
 }
 
 .N {
     left: 874.6666666666667px;
     top: 1831px;
+    font-family: 'O',sans-serif;
 }
 
 .O {
     left: 874.6666666666667px;
     top: 2135px;
+    font-family: 'O',sans-serif;
 }
 
 .P {
     left: 874.6666666666667px;
     top: 2439px;
+    font-family: 'O',sans-serif;
 }
 
 .Q {
     left: 8px;
     top: 1223px;
-    font-family: 'EU SENTO GABU',sans-serif;
+    font-family: 'EACH',sans-serif;
 }
 
 .R {
     left: 874.6666666666667px;
     top: 2744px;
+    font-family: 'O',sans-serif;
 }
 
 .S {
     left: 8px;
     top: 1527px;
-    font-family: 'ECLIPSE', sans-serif;
+    font-family: 'EACH', sans-serif;
 }
 
 .T {
     left: 8px;
     top: 1831px;
-    font-family: 'GIGACHAD FUNK', sans-serif;
+    font-family: 'EACH', sans-serif;
 }
 
 .U {
     left: 8px;
     top: 2135px;
-    font-family: 'BRODYAGA FUNK', sans-serif;
+    font-family: 'EACH', sans-serif;
 }
 .V{
     left: 8px;
     top: 2439px;
-    font-family: 'SimpsonWave1995',sans-serif;
+    font-family: 'EACH',sans-serif;
 }
 .W{
+
     left: 8px;
     top: 2744px;
-    font-family: 'WE NEVER',sans-serif;
+    font-family: 'EACH',sans-serif;
 }
 
 .NOV {
     width: 0px;
     height: 716px;
+}
+
+
+
+.title{
+    font-size: 18.5PX;
+
+}
+.QQQ{
+    font-size: 21px;
+}
+.EEE{
+    font-family: 'R',sans-serif;
 }
 
 /* 动画定义 */
@@ -219,58 +244,22 @@
     pointer-events: none;
 }
 
-@font-face {
-    font-family: 'ECLIPSE';
-    src: url('./ECLIPSE!.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
 
 @font-face {
-    font-family: 'GIGACHAD FUNK';
-    src: url('./GIGACHAD FUNK.ttf') format('truetype');
+    font-family: 'EACH';
+    src: url('./EACH.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 @font-face {
-    font-family: 'BRODYAGA FUNK';
-    src: url('./BRODYAGA FUNK.ttf') format('truetype');
+    font-family: 'O';
+    src: url('./O.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 @font-face {
-    font-family: 'SimpsonWave1995';
-    src: url('./SimpsonWave1995.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'EU SENTO GABU';
-    src: url('./EU SENTO GABU.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'SWEET RALLY';
-    src: url('./SWEET RALLY.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'AUTOMOTIVO BAYSIDE 3.0';
-    src: url('./AUTOMOTIVO BAYSIDE 3.0.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'AUTOMOTIVO BAYSIDE 2.0';
-    src: url('./AUTOMOTIVO BAYSIDE 2.0.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'WE NEVER';
-    src: url('./WE NEVER.ttf') format('truetype');
+    font-family: 'R';
+    src: url('./R.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
