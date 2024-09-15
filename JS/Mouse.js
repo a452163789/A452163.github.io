@@ -39,7 +39,7 @@ function init() {
                 top: '50%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
-                zIndex: '-0',  // 注意这里的 zIndex 使用了负值，这可能导致游标不在最上层
+                zIndex: '9999',  // 确保游标在最上层
                 width: `${this.cursorSize}px`,
                 height: `${this.cursorSize}px`,
                 transition: '250ms, transform 100ms',
@@ -56,6 +56,9 @@ function init() {
                 this.cursor.removeAttribute("hidden");
             }, 500);  // 500ms后显示游标
             this.cursor.style.opacity = 1;  // 设置透明度为1显示游标
+            
+            // 隐藏默认鼠标指针
+            this.root.style.cursor = 'none';  // 隐藏真实的鼠标指针
         }
 
         move(event) {
