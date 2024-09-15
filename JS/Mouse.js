@@ -39,7 +39,7 @@ function init() {
                 top: '50%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
-                zIndex: '9999',  // 确保游标在最上层
+                zIndex: '0',  // 确保游标在最上层
                 width: `${this.cursorSize}px`,
                 height: `${this.cursorSize}px`,
                 transition: '250ms, transform 100ms',
