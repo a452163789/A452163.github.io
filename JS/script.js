@@ -24,13 +24,30 @@ const loadAudioFiles = async (audioFiles) => {
 // 为每个音频容器添加点击事件监听器
 const addEventListeners = (audioContainers) => {
     audioContainers.forEach(({ audio, container }) => {
-        container?.addEventListener('click', () => {
-            audioContext.resume().then(() => {
-                audioContainers.forEach(item => item.audio.paused || item.audio === audio ? null : item.audio.pause());
-                audio.paused ? (audio.currentTime = 0, audio.play()) : audio.pause();
+        container?.addEventListener('click', async () => {
+            await audioContext.resume(); // 确保音频上下文已经恢复
+
+            // 暂停其他音频
+            audioContainers.forEach(item => {
+                if (!item.audio.paused && item.audio !== audio) {
+                    item.audio.pause();
+                }
             });
+
+            // 播放或暂停当前音频
+            if (audio.paused) {
+                audio.currentTime = 0; // 重置播放时间
+                await audio.play();    // 播放音频
+            } else {
+                audio.pause();         // 暂停当前音频
+            }
         });
-        audio.addEventListener('ended', () => (audio.currentTime = 0, audio.play()));
+
+        // 音频结束时重置并重新播放
+        audio.addEventListener('ended', () => {
+            audio.currentTime = 0; // 重置播放时间
+            audio.play();          // 自动重播音频
+        });
     });
 }
 
