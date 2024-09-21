@@ -76,15 +76,33 @@ const animate = () => {
 
     // 使用 Math.min 限制 currentValue
     const currentValue = Math.min(averageFrequency * 2.5, 999999);
-
     const currentWidth = parseFloat(graphicElement.style.width) || 0;
-    graphicElement.style.width = `${lerp(currentWidth, currentValue, 0.1)}px`;
+
+    // 插值效果
+    graphicElement.style.width = `${lerp(currentWidth, currentValue, 0.2)}px`; // 插值系数调整为0.2
     graphicElement.style.height = graphicElement.style.width; // 维持正方形
-    graphicElement.style.backgroundColor = `rgba(${Math.min(255, averageFrequency * 2)}, 100, 150, 0.5)`; // 根据频率变化颜色
-    graphicElement.style.cssText += 'backdrop-filter: blur(10px); border-radius: 50%; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);'; // 提升性能
+
+    // 计算新的 transform，增加右偏移量和旋转效果
+    graphicElement.style.transform = `translate(-50%, -50%) translateX(4.8px) scale(${1 + averageFrequency / 1000}) rotate(${averageFrequency / 10}deg)`;
+
+    // 动态调整背景颜色，加入颜色渐变
+    const colorFactor = Math.min(255, averageFrequency * 2);
+    const bgColor = `rgba(${colorFactor}, 100, ${255 - colorFactor}, 0.5)`; // 使用colorFactor动态生成颜色
+    graphicElement.style.backgroundColor = bgColor;
+
+    // 添加波纹效果，动态调整阴影
+    graphicElement.style.boxShadow = `0 0 ${Math.min(25, colorFactor)}px rgba(0, 0, 0, 0.5), 0 0 ${Math.min(35, colorFactor)}px rgba(173, 216, 230, 0.6)`;
+
+    // 动态边框样式，调整边框宽度
+    graphicElement.style.border = `5px solid rgba(${colorFactor}, 100, 150, 0.7)`;
+    
+    // 加入transition，增强动画效果
+    graphicElement.style.transition = "width 0.1s ease-out, height 0.1s ease-out, background-color 0.1s ease-out";
 
     requestAnimationFrame(animate);
 };
+
+
 
 // 页面加载完成后执行初始化
 document.addEventListener('DOMContentLoaded', async () => {
@@ -122,3 +140,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error("初始化时出错:", error);
     }
 });
+
+window.onload = function() {
+    const lightblueBackground = document.querySelector('.acrylic-lightblue');
+    lightblueBackground.classList.add('expand'); // 添加类以触发动画效果
+};

@@ -72,18 +72,21 @@
 }
 
 .g {
-    width: 100px;
-    height: 100px;
+    width: 0;  /* 初始宽度为0 */
+    height: 0; /* 初始高度为0 */
     border-radius: 50%;
     background-color: #ff0000;
-    position: absolute;
+    position: fixed; /* 或 absolute */
     top: 50%;
-    left: 826px;
-    transform: translate(-50%, -50%);
-    position: fixed;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0); /* 初始状态缩放为0 */
     z-index: 6;
     pointer-events: none;
+    transition: width 0.1s ease, height 0.1s ease;
+    
 }
+
+
 
 .H {
     left: 8px;
@@ -264,3 +267,9 @@
     font-weight: normal;
     font-style: normal;
 }
+body {
+    margin: 0;
+    overflow: hidden;
+}
+
+
