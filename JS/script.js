@@ -33,36 +33,6 @@ const loadAudioFiles = async (audioFiles) => {
     }
 };
 
-// 为每个音频容器添加点击事件监听器
-const addEventListeners = (audioContainers) => {
-    audioContainers.forEach(({ audio, container }) => {
-        container?.addEventListener('click', async () => {
-            try {
-                await audioContext.resume(); // 确保音频上下文已经恢复
-
-                // 暂停其他音频
-                audioContainers.forEach(item => item.audio !== audio && item.audio.pause());
-
-                // 切换播放状态
-                if (audio.paused) {
-                    audio.currentTime = 0; // 重置播放时间
-                    audio.play().catch(error => console.error("播放音频时出错:", error));
-                } else {
-                    audio.pause(); // 暂停当前音频
-                }
-            } catch (error) {
-                console.error("播放音频时出错:", error);
-            }
-        });
-        
-        // 音频结束时重置并重新播放
-        audio.addEventListener('ended', () => {
-            audio.currentTime = 0; // 重置播放时间
-            audio.play().catch(error => console.error("重播音频时出错:", error));
-        });
-    });
-};
-
 // 获取页面中的图形元素
 const graphicElement = document.querySelector('.g');
 
@@ -83,7 +53,7 @@ const animate = () => {
     graphicElement.style.height = graphicElement.style.width; // 维持正方形
 
     // 计算新的 transform，增加右偏移量和旋转效果
-    graphicElement.style.transform = `translate(-50%, -50%) translateX(4.8px) scale(${1 + averageFrequency / 1000}) rotate(${averageFrequency / 10}deg)`;
+    graphicElement.style.transform = `translate(-50%, -50%) translateX(0px) scale(${1 + averageFrequency / 1000}) rotate(${averageFrequency / 0.5}deg)`;
 
     // 动态调整背景颜色，加入颜色渐变
     const colorFactor = Math.min(255, averageFrequency * 2);
@@ -96,17 +66,17 @@ const animate = () => {
     // 动态边框样式，调整边框宽度
     graphicElement.style.border = `5px solid rgba(${colorFactor}, 100, 150, 0.7)`;
     
-    // 加入transition，增强动画效果
-    graphicElement.style.transition = "width 0.1s ease-out, height 0.1s ease-out, background-color 0.1s ease-out";
-
     requestAnimationFrame(animate);
 };
-
-
 
 // 页面加载完成后执行初始化
 document.addEventListener('DOMContentLoaded', async () => {
     try {
+        // 确保在加载完后进行初始化
+        graphicElement.style.width = '0px'; // 初始宽度
+        graphicElement.style.height = '0px'; // 初始高度
+        graphicElement.style.opacity = '0'; // 初始为透明
+
         const audioContainers = await loadAudioFiles([
             { file: 'AUTOMOTIVO BAYSIDE.mp3', containerId: 'container1' },
             { file: 'ONCE UPON A TIME.mp3', containerId: 'container2' },
@@ -141,7 +111,62 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
+// 为每个音频容器添加点击事件监听器
+const addEventListeners = (audioContainers) => {
+    audioContainers.forEach(({ audio, container }) => {
+        container?.addEventListener('click', async () => {
+            try {
+                await audioContext.resume(); // 确保音频上下文已经恢复
+
+                // 暂停其他音频
+                audioContainers.forEach(item => {
+                    if (item.audio !== audio) {
+                        item.audio.pause();
+                        item.audio.currentTime = 0; // 重置其他音频播放时间
+                        graphicElement.style.opacity = '0'; // 设为透明
+                    }
+                });
+
+                // 切换播放状态
+                if (audio.paused) {
+                    audio.currentTime = 0; // 重置播放时间
+                    audio.play().then(() => {
+                        graphicElement.style.opacity = '1'; // 播放音频时显示
+                    }).catch(error => console.error("播放音频时出错:", error));
+                } else {
+                    audio.pause(); // 暂停当前音频
+                    // 只设置透明度
+                    graphicElement.style.opacity = '0'; // 隐藏元素
+                }
+            } catch (error) {
+                console.error("播放音频时出错:", error);
+            }
+        });
+        
+        // 音频结束时重置并重新播放
+        audio.addEventListener('ended', () => {
+            audio.currentTime = 0; // 重置播放时间
+            audio.play().then(() => {
+                graphicElement.style.opacity = '1'; // 播放时显示
+            }).catch(error => console.error("重播音频时出错:", error));
+        });
+    });
+};
+
 window.onload = function() {
-    const lightblueBackground = document.querySelector('.acrylic-lightblue');
-    lightblueBackground.classList.add('expand'); // 添加类以触发动画效果
+    const introPopup = document.getElementById('introPopup');
+    const closePopupButton = document.getElementById('closePopup');
+
+    // 显示弹出框
+    introPopup.classList.add('show');
+
+    // 关闭弹出框
+    closePopupButton.addEventListener('click', function() {
+        introPopup.classList.remove('show');
+
+        // 添加一个监听器，在过渡结束时将其隐藏
+        setTimeout(() => {
+            introPopup.style.visibility = 'hidden'; // 隐藏
+        }, 500); // 与 CSS 中的过渡持续时间相同
+    });
 };

@@ -42,7 +42,7 @@
 }
 
 .b {
-    left: 874.6666666666667px;
+    left: 914.7px;
     top: 7px;
     font-family: 'O',sans-serif;
 }
@@ -60,31 +60,32 @@
 }
 
 .e {
-    left: 874.6666666666667px;
+    left: 914.7px;
     top: 310px;
     font-family: 'O',sans-serif;
 }
 
 .f {
-    left: 874.6666666666667px;
+    left: 914.7px;
     top: 614px;
     font-family: 'O',sans-serif;
 }
 
+
+
 .g {
-    width: 0;  /* 初始宽度为0 */
-    height: 0; /* 初始高度为0 */
-    border-radius: 50%;
-    background-color: #ff0000;
-    position: fixed; /* 或 absolute */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0); /* 初始状态缩放为0 */
-    z-index: 6;
-    pointer-events: none;
-    transition: width 0.1s ease, height 0.1s ease;
-    
+    position: fixed; /* 固定定位，保持在视口中的位置 */
+    top: 50%; /* 视口高度的50% */
+    left: 50%; /* 视口宽度的50% */
+    transform: translate(-50%, -50%); /* 将元素居中对齐 */
+    width: 10vw; /* 宽度为视口宽度的10% */
+    height: 10vh; /* 高度为视口高度的10% */
+    opacity: 0; /* 初始状态透明 */
+    transition: width 0.1s ease-out, height 0.1s ease-out, background-color 0.1s ease-out, opacity 0.5s ease; /* 添加过渡效果 */
 }
+
+
+
 
 
 
@@ -96,37 +97,37 @@
 }
 
 .I {
-    left: 874.6666666666667px;
+    left: 914.7px;
     top: 919px;
     font-family: 'O',sans-serif;
 }
 
 .K {
-    left: 874.6666666666667px;
+    left: 914.7px;
     top: 1223px;
     font-family: 'O',sans-serif;
 }
 
 .M {
-    left: 874.6666666666667px;
+    left: 914.7px;
     top: 1527px;
     font-family: 'O',sans-serif;
 }
 
 .N {
-    left: 874.6666666666667px;
+    left: 914.7px;
     top: 1831px;
     font-family: 'O',sans-serif;
 }
 
 .O {
-    left: 874.6666666666667px;
+    left: 914.7px;
     top: 2135px;
     font-family: 'O',sans-serif;
 }
 
 .P {
-    left: 874.6666666666667px;
+    left: 914.7px;
     top: 2439px;
     font-family: 'O',sans-serif;
 }
@@ -138,7 +139,7 @@
 }
 
 .R {
-    left: 874.6666666666667px;
+    left: 914.7px;
     top: 2744px;
     font-family: 'O',sans-serif;
 }
@@ -273,3 +274,67 @@ body {
 }
 
 
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0; /* 背景色 */
+}
+
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* 半透明黑色背景 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    visibility: hidden; /* 初始为不可见 */
+    opacity: 0; /* 初始不透明度为0 */
+    transition: visibility 0s 0.5s, opacity 0.5s; /* 过渡效果，隐藏时延迟0.5秒 */
+    z-index: 1000; /* 确保弹出框在最上层 */
+}
+
+.popup.show {
+    visibility: visible; /* 可见 */
+    opacity: 1; /* 不透明度为1 */
+    transition: visibility 0s, opacity 0.5s; /* 直接过渡到可见状态 */
+}
+
+.popup-content {
+    background: rgba(255, 255, 255, 0.8); /* 半透明白色背景 */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* 阴影 */
+    text-align: center; /* 内容居中 */
+}
+
+button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007BFF; /* 按钮颜色 */
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3; /* 悬停效果 */
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(-360deg);
+    }
+}
+
+
+
+
+    
