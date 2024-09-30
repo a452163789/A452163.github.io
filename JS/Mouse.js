@@ -39,7 +39,6 @@ function init() {
                 top: '50%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
-                zIndex: '0',  // 确保游标在最上层
                 width: `${this.cursorSize}px`,
                 height: `${this.cursorSize}px`,
                 transition: '250ms, transform 100ms',
@@ -128,6 +127,21 @@ function init() {
     document.addEventListener('mousemove', (event) => cursor.move(event));
     // 监听触摸事件
     document.addEventListener('touchmove', (event) => cursor.move(event.touches[0]));
+
+    // 创建 MutationObserver 来监视 DOM 变化
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'childList') {
+                hideRealCursor();
+            }
+        });
+    });
+
+    // 配置 observer
+    const config = { childList: true, subtree: true };
+
+    // 开始观察 document.body 的所有子树修改
+    observer.observe(document.body, config);
 }
 
 // 判断文档就绪状态
@@ -135,4 +149,15 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
 } else {
     init(); // DOMContentLoaded 已经发生
+}
+
+function hideRealCursor() {
+    document.body.style.cursor = 'none';
+    document.documentElement.style.cursor = 'none';
+    
+    // 为所有元素添加 'cursor: none' 样式
+    const allElements = document.getElementsByTagName('*');
+    for (let i = 0; i < allElements.length; i++) {
+        allElements[i].style.cursor = 'none';
+    }
 }

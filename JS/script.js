@@ -53,7 +53,8 @@ const animate = () => {
     graphicElement.style.height = graphicElement.style.width; // 维持正方形
 
     // 计算新的 transform，增加右偏移量和旋转效果
-    graphicElement.style.transform = `translate(-50%, -50%) translateX(0px) scale(${1 + averageFrequency / 1000}) rotate(${averageFrequency / 0.5}deg)`;
+    graphicElement.style.position = 'fixed'; // 修改这行，使用 fixed 定位而不是 absolute
+    graphicElement.style.transform = `translate(-50%, -50%) translateX(0px) scale(${1 + averageFrequency / 1000}) rotate(${averageFrequency / 0.2}deg)`;
 
     // 动态调整背景颜色，加入颜色渐变
     const colorFactor = Math.min(255, averageFrequency * 2);
@@ -66,6 +67,13 @@ const animate = () => {
     // 动态边框样式，调整边框宽度
     graphicElement.style.border = `5px solid rgba(${colorFactor}, 100, 150, 0.7)`;
     
+    // 添加活力效果，增加旋转速度
+    graphicElement.style.transition = 'transform 0.1s ease-in-out, opacity 0.5s ease-in-out'; // 添加平滑过渡效果和渐隐效果
+    graphicElement.style.transform = `translate(-50%, -50%) translateX(0px) scale(${1 + averageFrequency / 1000}) rotate(${averageFrequency / 0.2}deg)`;
+
+    // 动态调整透明度
+    graphicElement.style.opacity = averageFrequency > 50 ? '1' : '0.5'; // 根据频率调整透明度
+
     requestAnimationFrame(animate);
 };
 
@@ -157,12 +165,14 @@ window.onload = function() {
     const introPopup = document.getElementById('introPopup');
     const closePopupButton = document.getElementById('closePopup');
 
-    // 显示弹出框
+    // 显示弹出框并禁用滚动
     introPopup.classList.add('show');
+    document.body.classList.add('no-scroll');
 
-    // 关闭弹出框
+    // 关闭弹出框并重新启用滚动
     closePopupButton.addEventListener('click', function() {
         introPopup.classList.remove('show');
+        document.body.classList.remove('no-scroll');
 
         // 添加一个监听器，在过渡结束时将其隐藏
         setTimeout(() => {
