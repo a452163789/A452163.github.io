@@ -163,7 +163,7 @@ const addEventListeners = (audioContainers) => {
 
 // Gist 相关代码
 const GIST_ID = '75a68ddfee6507b370732e9d7ce38fca'; // 请替换为您的实际 Gist ID
-const GITHUB_TOKEN = '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'; // 请替换为您的实际 GitHub Token
+const GITHUB_TOKEN = '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'; // 请替换为您的实际 GitHub Token
 
 const loadSharedMessage = async () => {
     try {
