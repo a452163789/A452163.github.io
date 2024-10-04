@@ -181,8 +181,8 @@ const addEventListeners = (audioContainers) => {
     });
 };
 
-const GIST_ID = '710107eba8ee7f45b8174a294bb3ce30'; // 替换为你的Gist ID
-const GITHUB_TOKEN = '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'; // 替换为你的GitHub个人访问令牌
+const GIST_ID = 'd4e4ad804ed6520cc3aebb2a7f5429f8'; // 替换为你的Gist ID
+const GITHUB_TOKEN = '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'; // 替换为你的GitHub个人访问令牌
 
 window.onload = function() {
     const introPopup = document.getElementById('introPopup');
@@ -220,45 +220,44 @@ window.onload = function() {
 
 // 从Gist加载评论
 function loadCommentsFromGist() {
-    fetch(`https://api.github.com/gists/${GIST_ID}`, {
+    fetch(`https://api.github.com/gists/d4e4ad804ed6520cc3aebb2a7f5429f8`, {
         headers: {
-            'Authorization': `token ${GITHUB_TOKEN}`
+            'Authorization': `token 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`
         }
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
+        if (!data.files || !data.files['comments.json']) {
+            throw new Error('comments.json file not found in the gist');
+        }
         const comments = JSON.parse(data.files['comments.json'].content);
         displayComments(comments);
     })
-    .catch(error => console.error('加载评论时出错:', error));
+    .catch(error => {
+        console.error('加载评论时出错:', error);
+        document.getElementById('commentDisplay').textContent = '加载评论失败，请稍后再试。';
+    });
 }
 
 // 添加评论到Gist
 function addCommentToGist(comment) {
-    fetch(`https://api.github.com/gists/${GIST_ID}`, {
+    fetch(`https://api.github.com/gists/d4e4ad804ed6520cc3aebb2a7f5429f8`, {
+        method: 'PATCH',
         headers: {
-            'Authorization': `token ${GITHUB_TOKEN}`
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        let comments = JSON.parse(data.files['comments.json'].content);
-        comments.push(comment);
-        
-        return fetch(`https://api.github.com/gists/${GIST_ID}`, {
-            method: 'PATCH',
-            headers: {
-                'Authorization': `token ${GITHUB_TOKEN}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                files: {
-                    'comments.json': {
-                        content: JSON.stringify(comments)
-                    }
+            'Authorization': `token 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`
+        },  // 在这里添加逗号
+        body: JSON.stringify({
+            files: {
+                'comments.json': {
+                    content: JSON.stringify([comment])
                 }
-            })
-        });
+            }
+        })
     })
     .then(() => loadCommentsFromGist())
     .catch(error => console.error('添加评论时出错:', error));
