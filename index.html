@@ -4,36 +4,7 @@
         <link rel="icon" href="/网站图标.png" type="image/png">
         <title>Soul-Echoes</title>
         <link rel="stylesheet" href="./CSS/style.css">
-        
-        <!-- 添加共享消息功能的样式 -->
-        <style>
-            .shared-message-container {
-                position: fixed;
-                bottom: 20px;
-                right: 20px;
-                background-color: white;
-                padding: 20px;
-                border-radius: 8px;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-                z-index: 1000;
-            }
-            #sharedMessage {
-                width: 100%;
-                height: 100px;
-                margin-bottom: 10px;
-            }
-            #saveMessage {
-                padding: 5px 10px;
-                background-color: #4CAF50;
-                color: white;
-                border: none;
-                cursor: pointer;
-            }
-            #status {
-                margin-top: 10px;
-                font-size: 14px;
-            }
-        </style>
+ 
     </head>
     <body>
         <div id="introPopup" class="popup">
@@ -42,6 +13,13 @@
                 <p>嗨，我是个喜欢做网页的新手。正在学习中，希望能做出实用又炫酷的网站。</p>
                 <button id="closePopup">关闭</button>
             </div>
+        </div>
+        <!-- 添加共享消息容器 -->
+        <div class="shared-message-container">
+            <h3>共享消息</h3>
+            <textarea id="sharedMessage" placeholder="在这里输入共享消息..."></textarea>
+            <button id="saveMessage">保存消息</button>
+            <p id="status"></p>
         </div>
         <div class="container a abcdef" id="container1">
             <h1 class="title">⟪AUTOMOTIVO BAYSIDE⟫</h1>
@@ -239,56 +217,7 @@
         
         
         
-        <!-- 在body的最后添加共享消息容器 -->
-        <div class="shared-message-container">
-            <h3>共享消息</h3>
-            <textarea id="sharedMessage" placeholder="在这里输入共享消息..."></textarea>
-            <button id="saveMessage">保存消息</button>
-            <p id="status"></p>
-        </div>
 
-        <!-- 添加GitHub Gist交互脚本 -->
-        <script>
-            const GIST_ID = '91c3122284e713125e8a323a71867d05';
-            const GITHUB_TOKEN = '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';
-
-            async function loadSharedMessage() {
-                try {
-                    const response = await fetch(`https://api.github.com/gists/91c3122284e713125e8a323a71867d05`);
-                    const data = await response.json();
-                    document.getElementById('sharedMessage').value = data.files['shared_message.txt'].content;
-                } catch (error) {
-                    console.error('加载消息失败:', error);
-                    document.getElementById('status').textContent = '加载消息失败，请刷新页面重试。';
-                }
-            }
-
-            async function saveSharedMessage() {
-                const message = document.getElementById('sharedMessage').value;
-                try {
-                    const response = await fetch(`https://api.github.com/gists/91c3122284e713125e8a323a71867d05`, {
-                        method: 'PATCH',
-                        headers: {
-                            'Authorization': `token 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`,
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            files: {
-                                'shared_message.txt': { content: message }
-                            }
-                        })
-                    });
-                    if (response.ok) {
-                        document.getElementById('status').textContent = '消息已成功保存！';
-                    } else {
-                        throw new Error('保存失败');
-                    }
-                } catch (error) {
-                    console.error('保存消息失败:', error);
-                    document.getElementById('status').textContent = '保存消息失败，请刷新页面重试。';
-                }
-            }
-        </script>
         
         
         </body>

@@ -180,3 +180,53 @@ window.onload = function() {
         }, 500); // 与 CSS 中的过渡持续时间相同
     });
 };
+
+// 添加到 script.js 文件末尾
+
+const GIST_ID = '91c3122284e713125e8a323a71867d05';
+const GITHUB_TOKEN = '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';
+
+async function loadSharedMessage() {
+    try {
+        const response = await fetch(`https://api.github.com/gists/91c3122284e713125e8a323a71867d05`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        document.getElementById('sharedMessage').value = data.files['shared_message.txt'].content;
+    } catch (error) {
+        console.error('加载消息失败:', error);
+        document.getElementById('status').textContent = '加载消息失败，请刷新页面重试。';
+    }
+}
+
+async function saveSharedMessage() {
+    const message = document.getElementById('sharedMessage').value;
+    try {
+        const response = await fetch(`https://api.github.com/gists/91c3122284e713125e8a323a71867d05`, {
+            method: 'PATCH',
+            headers: {
+                'Authorization': `token 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`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                files: {
+                    'shared_message.txt': { content: message }
+                }
+            })
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        document.getElementById('status').textContent = '消息已成功保存！';
+    } catch (error) {
+        console.error('保存消息失败:', error);
+        document.getElementById('status').textContent = '保存消息失败，请重试。';
+    }
+}
+
+// 页面加载时获取共享消息
+document.addEventListener('DOMContentLoaded', loadSharedMessage);
+
+// 添加保存按钮事件监听器
+document.getElementById('saveMessage').addEventListener('click', saveSharedMessage);
