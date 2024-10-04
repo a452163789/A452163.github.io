@@ -205,15 +205,6 @@
     z-index: -5;
 }
 
-/* 全局光标设置 */
-* {
-    cursor: none !important;
-}
-
-body, html {
-    cursor: none !important;
-}
-
 /* demo1 和 demo2 的样式 */
 #demo1, #demo2 {
     border-radius: 15px 15px 0 0;
@@ -261,7 +252,7 @@ body, html {
     font-style: normal;
 }
 body {
-    margin: 0;
+    margin-left: 420px; /* 稍微大于评论侧边栏的宽度 */
     font-family: Arial, sans-serif;
     background-color: #f0f0f0; /* 背景色 */
     overflow-y: auto; /* 允许垂直滚动 */
@@ -311,6 +302,10 @@ body {
     transform-style: preserve-3d; /* 保持3D效果 */
     transform: perspective(1000px) rotateX(10deg) rotateY(-20deg); /* 添加3D旋转 */
     transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh; /* 置最大高度 */
+    overflow: hidden; /* 防止整体出现滚动条 */
 }
 
 .popup-content:hover {
@@ -411,7 +406,7 @@ button:hover {
     z-index: 10; /* 确保介绍弹窗在较高层 */
 }
 
-/* 确保鼠标相关元素在介绍弹窗上层，但在音频可视化下层 */
+/* 确保鼠相关元素在介绍弹窗上层，但在音频可视化下层 */
 .curzr-arrow-pointer {
     z-index: 20;
 }
@@ -446,11 +441,16 @@ button:hover {
 
 /* 评论部分样式 */
 #commentSection {
-    margin-top: 20px;
+    width: 100%; /* 让评论输入区域占满整个侧边栏宽度 */
+    max-width: 380px; /* 设置最大宽度，保持一些边距 */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 居中对齐子元素 */
 }
 
 #commentInput {
     width: 100%;
+    box-sizing: border-box; /* 确保padding不会增加总宽度 */
     height: 100px;
     padding: 10px;
     border-radius: 5px;
@@ -458,13 +458,14 @@ button:hover {
     background: rgba(255, 255, 255, 0.1);
     color: #fff;
     font-size: 16px;
-    resize: vertical;
+    resize: none; /* 禁用调整大小控件 */
+    margin-bottom: 10px;
     font-family: 'EACH', sans-serif;
 }
 
 #submitComment {
-    margin-top: 10px;
-    padding: 10px 20px;
+    width: 100%; /* 使按钮宽度与输入框一致 */
+    padding: 10px;
     background: linear-gradient(45deg, #ff6b6b, #feca57);
     border: none;
     border-radius: 5px;
@@ -481,12 +482,16 @@ button:hover {
 }
 
 #commentDisplay {
-    margin-top: 20px;
+    flex-grow: 1;
+    overflow-y: auto; /* 只在必要时显示垂直滚动条 */
+    margin-bottom: 20px; /* 为关闭按钮留出空间 */
     max-height: 200px;
     overflow-y: auto;
     padding: 10px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 5px;
+    transition: all 0.3s ease;
+    margin-bottom: 10px; /* 添加间距 */
 }
 
 #commentDisplay p {
@@ -496,6 +501,26 @@ button:hover {
     border-radius: 5px;
     color: #fff;
     font-family: 'EACH', sans-serif;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.delete-comment {
+    background: none;
+    border: none;
+    color: #ff6b6b;
+    cursor: pointer;
+    font-size: 1.2em;
+    padding: 0 5px;
+    transition: color 0.3s;
+}
+
+.delete-comment:hover {
+    color: #ff4757;
 }
 
 /* 确保弹出框内容可以滚动 */
@@ -505,3 +530,305 @@ button:hover {
 }
 
 /* ... 现有代码 ... */
+
+/* 评论容器的样式 */
+#commentDisplay {
+    transition: all 0.3s ease;
+}
+
+/* 单个评论的样式 */
+#commentDisplay p {
+    transition: all 0.3s ease;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 新添加评论的动画 */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 删除评论的动画 */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+/* 应用动画的类 */
+.comment-new {
+    animation: slideIn 0.3s ease forwards;
+}
+
+.comment-delete {
+    animation: fadeOut 0.3s ease forwards;
+}
+
+.close-button {
+    align-self: center; /* 使按钮居中 */
+    margin-top: auto; /* 将按钮推到底部 */
+}
+
+/* 覆盖层容器 */
+#overlayContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(15px) saturate(180%);
+    -webkit-backdrop-filter: blur(15px) saturate(180%);
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    padding: 20px;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 0.5s, opacity 0.5s;
+}
+
+#overlayContainer.show {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s, opacity 0.5s;
+}
+
+/* 评论侧边栏样式 */
+#commentSidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 400px; /* 保持宽度 */
+    max-height: 100vh;
+    overflow-y: auto;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-right: 1px solid rgba(255,255,255,0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 100;
+    color: #fff;
+    font-family: 'EACH', sans-serif;
+}
+
+#commentSidebar h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#commentSection {
+    width: 100%;
+    max-width: 380px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#commentInput {
+    width: 90%; /* 稍微减小宽度，留出一些边距 */
+    box-sizing: border-box;
+    height: 100px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 16px;
+    resize: none;
+    margin-bottom: 10px;
+}
+
+#submitComment {
+    width: 90%; /* 与输入框保持一致的宽度 */
+    padding: 10px;
+    background: linear-gradient(45deg, #ff6b6b, #feca57);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+#commentDisplay {
+    width: 90%; /* 与输入框保持一致的宽度 */
+    flex-grow: 1;
+    overflow-y: auto;
+    max-height: calc(100vh - 300px); /* 调整高度，为顶部和底部留出更多空间 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
+
+#commentDisplay p {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 5px;
+    font-size: 16px;
+    line-height: 1.5;
+    box-sizing: border-box;
+}
+
+/* 隐藏滚动条但保留滚动功能 */
+#commentSidebar,
+#commentDisplay {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    overflow-y: auto;
+}
+
+#commentSidebar::-webkit-scrollbar,
+#commentDisplay::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+/* 自我介绍弹出框式 */
+.popup {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup-content {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-radius: 10px;
+    padding: 40px;
+    max-width: 500px;
+    text-align: center;
+    color: #fff;
+    font-family: 'EACH', sans-serif;
+}
+
+.popup-content h2 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.popup-content p {
+    font-size: 1.2em;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+#closePopup {
+    padding: 10px 20px;
+    background: linear-gradient(45deg, #ff6b6b, #feca57);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+#closePopup:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* ... 其他现有样式 ... */
+
+/* 美化滚动条 */
+#commentSidebar::-webkit-scrollbar,
+#commentDisplay::-webkit-scrollbar {
+    width: 8px;
+}
+
+#commentSidebar::-webkit-scrollbar-thumb,
+#commentDisplay::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}
+
+#commentSidebar::-webkit-scrollbar-track,
+#commentDisplay::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* 隐藏滚动条但保留滚动功能 */
+#commentSidebar,
+#commentDisplay {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+
+#commentSidebar::-webkit-scrollbar,
+#commentDisplay::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none; /* Chrome, Safari, Opera*/
+}
+
+/* 确保内容可以滚动 */
+#commentSidebar,
+#commentDisplay {
+    overflow-y: auto;
+}
+
+body, html {
+    cursor: default;
+}
+
+/* 确保音频可视化在较低层 */
+#audioVisualizationContainer, .g {
+    z-index: 5;
+    pointer-events: none;
+}
+
+/* 确保评论区和弹出窗口在较高层 */
+#overlayContainer {
+    z-index: 1000;
+}
+
+/* 确保鼠标指针在最顶层 */
+.curzr-arrow-pointer {
+    z-index: 10000 !important;
+    pointer-events: none;
+}
+
+.g, #audioVisualizationContainer, .ripple {
+    pointer-events: none;
+}
+
+#introPopup .popup-content p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    text-align: justify;
+    color: #e0e0e0;
+}

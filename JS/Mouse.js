@@ -36,9 +36,8 @@ function init() {
             this.cursorStyle = {
                 boxSizing: 'border-box',
                 position: 'fixed',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
+                top: '0',
+                left: '0',
                 width: `${this.cursorSize}px`,
                 height: `${this.cursorSize}px`,
                 transition: '250ms, transform 100ms',
@@ -63,13 +62,13 @@ function init() {
         move(event) {
             this.previousPointerX = this.position.pointerX;
             this.previousPointerY = this.position.pointerY;
-            this.position.pointerX = event.pageX + this.root.getBoundingClientRect().x;
-            this.position.pointerY = event.pageY + this.root.getBoundingClientRect().y;
+            this.position.pointerX = event.clientX;
+            this.position.pointerY = event.clientY;
             this.position.distanceX = this.previousPointerX - this.position.pointerX;
             this.position.distanceY = this.previousPointerY - this.position.pointerY;
             this.position.distance = Math.sqrt(this.position.distanceY ** 2 + this.position.distanceX ** 2);
 
-            this.cursor.style.transform = `translate3d(${this.position.pointerX}px, ${this.position.pointerY}px, 0)`;
+            this.cursor.style.transform = `translate3d(${this.position.pointerX - this.cursorSize / 2}px, ${this.position.pointerY - this.cursorSize / 2}px, 0)`;
 
             // 判断游标是否移动，需旋转
             if (this.position.distance > 1) {

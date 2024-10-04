@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// 为每个音频容器添加点击事件监听器
+// 为每个音容器添加点击事件监听器
 const addEventListeners = (audioContainers) => {
     audioContainers.forEach(({ audio, container }) => {
         container?.addEventListener('click', async () => {
@@ -167,7 +167,7 @@ const addEventListeners = (audioContainers) => {
                     graphicElement.style.opacity = '0'; // 隐藏元素
                 }
             } catch (error) {
-                console.error("播放��频时出错:", error);
+                console.error("播放:", error);
             }
         });
         
@@ -181,96 +181,8 @@ const addEventListeners = (audioContainers) => {
     });
 };
 
-const GIST_ID = 'd4e4ad804ed6520cc3aebb2a7f5429f8'; 
-const GITHUB_TOKEN = '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';
-
-function extractEssentialInfo(gistData) {
-    return {
-        id: gistData.id || 'Unknown',
-        description: gistData.description || 'No description',
-        owner: gistData.owner ? gistData.owner.login : 'Unknown',
-        files: gistData.files ? Object.keys(gistData.files) : [],
-        lastUpdated: gistData.updated_at || 'Unknown'
-    };
-}
-
-function displayGistInfo(info) {
-    const infoElement = document.getElementById('gistInfo');
-    if (infoElement) {
-        infoElement.innerHTML = `
-            <h3>Gist 信息</h3>
-            <p>ID: ${info.id}</p>
-            <p>描述: ${info.description || '无描述'}</p>
-            <p>所有者: ${info.owner}</p>
-            <p>文件: ${info.files.join(', ')}</p>
-            <p>最后更新: ${new Date(info.lastUpdated).toLocaleString()}</p>
-        `;
-    }
-}
-
-function loadCommentsFromGist() {
-    return fetch(`https://api.github.com/gists/${GIST_ID}`, {
-        headers: {
-            'Authorization': `token ${GITHUB_TOKEN}`
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        const file = data.files ? Object.values(data.files)[0] : null;
-        if (file && file.content) {
-            const comments = JSON.parse(file.content);
-            displayComments(comments);
-            return comments; // 返回评论
-        } else {
-            displayComments([]);
-            return []; // 返回空数组
-        }
-    })
-    .catch(error => {
-        console.error('加载评论时出错:', error);
-        document.getElementById('commentDisplay').textContent = '加载评论失败，请稍后再试。错误详情: ' + error.message;
-        return []; // 返回空数组以防止后续错误
-    });
-}
-
-function addCommentToGist(newComment) {
-    loadCommentsFromGist()
-        .then(existingComments => {
-            const updatedComments = [...existingComments, newComment];
-            return fetch(`https://api.github.com/gists/${GIST_ID}`, {
-                method: 'PATCH',
-                headers: {
-                    'Authorization': `token ${GITHUB_TOKEN}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    files: {
-                        'comments.json': {
-                            content: JSON.stringify(updatedComments)
-                        }
-                    }
-                })
-            });
-        })
-        .then(response => response.json())
-        .then(() => loadCommentsFromGist())
-        .catch(error => console.error('添加评论时出错:', error));
-}
-
-function displayComments(comments) {
-    const commentDisplay = document.getElementById('commentDisplay');
-    commentDisplay.innerHTML = '';
-    comments.forEach(comment => {
-        const commentElement = document.createElement('p');
-        commentElement.textContent = comment;
-        commentDisplay.appendChild(commentElement);
-    });
-}
+const GIST_ID = 'd4e4ad804ed6520cc3aebb2a7f5429f8'; // 替换为你的Gist ID
+const GITHUB_TOKEN = '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'; // 替换为你的GitHub个人访问令牌
 
 window.onload = function() {
     const introPopup = document.getElementById('introPopup');
@@ -304,7 +216,158 @@ window.onload = function() {
 
     // 加载评论
     loadCommentsFromGist();
+
+    // 在适当的地方（比如页面加载完成后）显示 overlayContainer
+    document.getElementById('overlayContainer').classList.add('show');
+
+    // 在关闭按钮的点击事件中隐藏 overlayContainer
+    document.getElementById('closePopup').addEventListener('click', function() {
+        document.getElementById('overlayContainer').classList.remove('show');
+    });
 };
 
-// 确保在页面加载时调用 loadCommentsFromGist
-document.addEventListener('DOMContentLoaded', loadCommentsFromGist);
+let commentsCache = [];
+
+// 修改加载评论的函数
+function loadCommentsFromGist() {
+    fetch(`https://api.github.com/gists/${GIST_ID}`, {
+        headers: {
+            'Authorization': `token ${GITHUB_TOKEN}`
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        commentsCache = JSON.parse(data.files['comments.json'].content);
+        displayComments(commentsCache);
+    })
+    .catch(error => console.error('加载评论时出错:', error));
+}
+
+// 修改显示评论的函数
+function displayComments(comments) {
+    const commentDisplay = document.getElementById('commentDisplay');
+    commentDisplay.innerHTML = '';
+    comments.forEach((comment, index) => {
+        const commentElement = document.createElement('p');
+        commentElement.innerHTML = `
+            ${comment}
+            <button class="delete-comment" data-index="${index}">X</button>
+        `;
+        commentDisplay.appendChild(commentElement);
+        
+        // 为新添加的评论应用动画
+        if (index === comments.length - 1) {
+            commentElement.classList.add('comment-new');
+        }
+    });
+}
+
+// 修改删除评论的函数
+function deleteComment(index) {
+    const commentElement = document.querySelector(`#commentDisplay p:nth-child(${index + 1})`);
+    commentElement.classList.add('comment-delete');
+    
+    // 等待动画完成后再从 DOM 中移除元素
+    setTimeout(() => {
+        commentsCache.splice(index, 1);
+        displayComments(commentsCache);
+        updateGistInBackground();
+    }, 300); // 300ms 与 CSS 动画持续时间相匹配
+}
+
+// 为评论显示区域添加事件委托
+document.getElementById('commentDisplay').addEventListener('click', function(event) {
+    if (event.target.classList.contains('delete-comment')) {
+        deleteComment(parseInt(event.target.getAttribute('data-index')));
+    }
+});
+
+// 修改添加评论的函数
+function addComment(comment) {
+    commentsCache.push(comment);
+    displayComments(commentsCache);
+    updateGistInBackground();
+}
+
+// 在后台更新 Gist
+function updateGistInBackground() {
+    fetch(`https://api.github.com/gists/${GIST_ID}`, {
+        method: 'PATCH',
+        headers: {
+            'Authorization': `token ${GITHUB_TOKEN}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            files: {
+                'comments.json': { content: JSON.stringify(commentsCache) }
+            }
+        })
+    })
+    .catch(error => console.error('更新 Gist 时出错:', error));
+}
+
+// 修改提交评论按钮的事件监听器
+document.getElementById('submitComment').addEventListener('click', function() {
+    const commentInput = document.getElementById('commentInput');
+    const comment = commentInput.value.trim();
+    if (comment) {
+        addComment(comment);
+        commentInput.value = ''; // 清空输入框
+    }
+});
+
+// 添加评论到Gist
+function addCommentToGist(comment) {
+    fetch(`https://api.github.com/gists/${GIST_ID}`, {
+        headers: {
+            'Authorization': `token ${GITHUB_TOKEN}`
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        let comments = JSON.parse(data.files['comments.json'].content);
+        comments.push(comment);
+        
+        return fetch(`https://api.github.com/gists/${GIST_ID}`, {
+            method: 'PATCH',
+            headers: {
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                files: {
+                    'comments.json': {
+                        content: JSON.stringify(comments)
+                    }
+                }
+            })
+        });
+    })
+    .then(() => loadCommentsFromGist())
+    .catch(error => console.error('添加评论时出错:', error));
+}
+
+// 显示overlayContainer
+function showOverlay() {
+    document.getElementById('overlayContainer').classList.add('show');
+}
+
+// 隐藏overlayContainer
+function hideOverlay() {
+    document.getElementById('overlayContainer').classList.remove('show');
+}
+
+// 在适当的地方调用showOverlay()来显示覆盖层
+// 例如,页面加载完成后或点击某个按钮时
+
+// 为关闭按钮添加点击事件
+document.getElementById('closePopup').addEventListener('click', hideOverlay);
+
+function toggleIntroPopup() {
+    const popup = document.getElementById('introPopup');
+    popup.classList.toggle('show');
+}
+
+document.getElementById('closePopup').addEventListener('click', toggleIntroPopup);
+
+// 在需要显示自我介绍弹窗的地方调用 toggleIntroPopup()
