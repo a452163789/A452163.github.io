@@ -489,7 +489,6 @@ button:hover {
 @keyframes titleGlow {
     0%, 100% { text-shadow: 0 0 5px rgba(255,255,255,0.5); }
     50% { text-shadow: 0 0 20px rgba(255,255,255,0.8); }
-<<<<<<< HEAD
 }
 
 /* 在文件末尾添加以下样式 */
@@ -530,6 +529,4 @@ button:hover {
     padding: 10px;
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 5px;
-=======
->>>>>>> f17e0d1aeef22ecd34959c14b4f66a4322375c9c
 }
