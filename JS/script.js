@@ -161,88 +161,13 @@ const addEventListeners = (audioContainers) => {
     });
 };
 
-// Gist 相关代码
-const GIST_ID = '75a68ddfee6507b370732e9d7ce38fca'; // 请替换为您的实际 Gist ID
-const GITHUB_TOKEN = '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'; // 请替换为您的实际 GitHub Token
-
-const loadSharedMessage = async () => {
-    try {
-        console.log('开始加载共享消息');
-        const response = await fetch(`https://api.github.com/gists/${GIST_ID}`);
-        console.log('Gist API 响应状态:', response.status);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        console.log('加载的数据:', data);
-        return data.files['shared_message.txt'].content;
-    } catch (error) {
-        console.error('加载共享消息时出错:', error);
-        return '加载消息失败。请稍后再试。';
-    }
-};
-
-const saveSharedMessage = async (message) => {
-    try {
-        console.log('开始保存消息:', message);
-        const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-            method: 'PATCH',
-            mode: 'cors',
-            cache: 'no-cache',
-            credentials: 'same-origin',
-            headers: {
-                'Authorization': `token ${GITHUB_TOKEN}`,
-                'Content-Type': 'application/json',
-            },
-            redirect: 'follow',
-            referrerPolicy: 'no-referrer',
-            body: JSON.stringify({
-                files: {
-                    'shared_message.txt': {
-                        content: message
-                    }
-                }
-            })
-        });
-        console.log('保存消息响应状态:', response.status);
-        console.log('保存消息响应内容:', await response.text());
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        alert('消息已保存！');
-    } catch (error) {
-        console.error('保存共享消息时出错:', error);
-        alert('保存失败。请稍后再试。');
-    }
-};
-
-// 修改 window.onload 函数
-window.onload = async function() {
+window.onload = function() {
     const introPopup = document.getElementById('introPopup');
     const closePopupButton = document.getElementById('closePopup');
-    const sharedTextArea = document.getElementById('sharedText');
-    const saveButton = document.getElementById('saveButton');
-
-    console.log('页面加载完成');
 
     // 显示弹出框并禁用滚动
     introPopup.classList.add('show');
     document.body.classList.add('no-scroll');
-
-    // 加载共享消息
-    try {
-        const sharedMessage = await loadSharedMessage();
-        console.log('加载的共享消息:', sharedMessage);
-        sharedTextArea.value = sharedMessage;
-    } catch (error) {
-        console.error('加载共享消息时出错:', error);
-    }
-
-    // 添加保存按钮事件监听器
-    saveButton.addEventListener('click', () => {
-        console.log('保存按钮被点击');
-        saveSharedMessage(sharedTextArea.value);
-    });
 
     // 关闭弹出框并重新启用滚动
     closePopupButton.addEventListener('click', function() {
