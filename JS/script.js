@@ -182,7 +182,7 @@ const addEventListeners = (audioContainers) => {
 };
 
 const GIST_ID = 'd4e4ad804ed6520cc3aebb2a7f5429f8'; // 替换为你的Gist ID
-const GITHUB_TOKEN = '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'; // 替换为你的GitHub个人访问令牌
+const GITHUB_TOKEN = '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'; // 替换为你的GitHub个人访问令牌
 
 window.onload = function() {
     const introPopup = document.getElementById('introPopup');
