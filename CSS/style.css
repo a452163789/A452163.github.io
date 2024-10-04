@@ -490,28 +490,3 @@ button:hover {
     0%, 100% { text-shadow: 0 0 5px rgba(255,255,255,0.5); }
     50% { text-shadow: 0 0 20px rgba(255,255,255,0.8); }
 }
-
-#introInput {
-    width: 80%;
-    padding: 10px;
-    margin-top: 20px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 1em;
-}
-
-#saveIntroButton {
-    margin-top: 15px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #4CAF50;
-    color: white;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-#saveIntroButton:hover {
-    background-color: #45a049;
-}

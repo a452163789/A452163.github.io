@@ -66,7 +66,7 @@ const animate = () => {
 
     // 动态边框样式，调整边框宽度
     graphicElement.style.border = `5px solid rgba(${colorFactor}, 100, 150, 0.7)`;
-    
+
     // 添加活力效果，增加旋转速度
     graphicElement.style.transition = 'transform 0.1s ease-in-out, opacity 0.5s ease-in-out'; // 添加平滑过渡效果和渐隐效果
     graphicElement.style.transform = `translate(-50%, -50%) translateX(0px) scale(${1 + averageFrequency / 1000}) rotate(${averageFrequency / 0.2}deg)`;
@@ -75,6 +75,25 @@ const animate = () => {
     graphicElement.style.opacity = averageFrequency > 50 ? '1' : '0.5'; // 根据频率调整透明度
 
     requestAnimationFrame(animate);
+};
+
+// 保存内容函数
+const saveContent = (content) => {
+    let savedContents = JSON.parse(localStorage.getItem('savedContents')) || [];
+    savedContents.push(content);
+    localStorage.setItem('savedContents', JSON.stringify(savedContents));
+};
+
+// 加载并显示已保存的内容
+const loadSavedContent = () => {
+    const savedContents = JSON.parse(localStorage.getItem('savedContents')) || [];
+    const savedContentDiv = document.getElementById('savedContent');
+    savedContentDiv.innerHTML = ''; // 清空已有内容
+    savedContents.forEach(content => {
+        const contentElement = document.createElement('p');
+        contentElement.textContent = content;
+        savedContentDiv.appendChild(contentElement);
+    });
 };
 
 // 页面加载完成后执行初始化
@@ -114,6 +133,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else {
             throw new Error("音频容器加载失败");
         }
+
+        // 加载已保存内容
+        loadSavedContent();
+
+        // 保存按钮点击事件
+        document.getElementById('saveButton').onclick = () => {
+            const userInput = document.getElementById('userInput').value;
+            if (userInput.trim() !== '') { // 确保输入不为空
+                saveContent(userInput);
+                loadSavedContent(); // 重新加载显示内容
+                document.getElementById('userInput').value = ''; // 清空输入框
+            }
+        };
     } catch (error) {
         console.error("初始化时出错:", error);
     }
@@ -180,75 +212,3 @@ window.onload = function() {
         }, 500); // 与 CSS 中的过渡持续时间相同
     });
 };
-
-const GITHUB_TOKEN = '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'; // 使用您的 GitHub Token
-const GITHUB_REPO = '91c3122284e713125e8a323a71867d05/your_repo'; // 替换为您的 GitHub 用户名和仓库名
-const FILE_PATH = 'introduction.txt'; // 存储自我介绍的文件路径
-
-// 从 GitHub 加载自我介绍
-const loadIntroductionFromGitHub = async () => {
-    try {
-        const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${FILE_PATH}`, {
-            headers: {
-                'Authorization': `token ${GITHUB_TOKEN}`,
-                'Accept': 'application/vnd.github.v3.raw'
-            }
-        });
-        if (!response.ok) throw new Error('Failed to fetch introduction');
-        return await response.text();
-    } catch (error) {
-        console.error("加载自我介绍时出错:", error);
-        return "嗨，我是个喜欢做网页的新手。正在学习中，希望能做出实用又炫酷的网站。";
-    }
-};
-
-// 保存自我介绍到 GitHub
-const saveIntroductionToGitHub = async (text) => {
-    try {
-        // 获取文件的 SHA 值
-        const getFileResponse = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${FILE_PATH}`, {
-            headers: {
-                'Authorization': `token ${GITHUB_TOKEN}`
-            }
-        });
-        const fileData = await getFileResponse.json();
-        const sha = fileData.sha;
-
-        // 更新文件内容
-        const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${FILE_PATH}`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `token ${GITHUB_TOKEN}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                message: 'Update introduction',
-                content: btoa(unescape(encodeURIComponent(text))), // Base64 encode
-                sha: sha
-            })
-        });
-
-        if (!response.ok) throw new Error('Failed to save introduction');
-    } catch (error) {
-        console.error("保存自我介绍时出错:", error);
-    }
-};
-
-// 页面加载完成后执行初始化
-document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        const introText = await loadIntroductionFromGitHub();
-        document.querySelector('.popup-content p').textContent = introText;
-
-        // ... existing code ...
-    } catch (error) {
-        console.error("初始化时出错:", error);
-    }
-});
-
-// 添加事件监听器以保存用户输入
-document.getElementById('saveIntroButton').addEventListener('click', async () => {
-    const userInput = document.getElementById('introInput').value;
-    await saveIntroductionToGitHub(userInput);
-    document.querySelector('.popup-content p').textContent = userInput;
-});
