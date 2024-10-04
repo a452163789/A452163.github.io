@@ -77,6 +77,25 @@ const animate = () => {
     requestAnimationFrame(animate);
 };
 
+// 保存内容函数
+const saveContent = (content) => {
+    let savedContents = JSON.parse(localStorage.getItem('savedContents')) || [];
+    savedContents.push(content);
+    localStorage.setItem('savedContents', JSON.stringify(savedContents));
+};
+
+// 加载并显示已保存的内容
+const loadSavedContent = () => {
+    const savedContents = JSON.parse(localStorage.getItem('savedContents')) || [];
+    const savedContentDiv = document.getElementById('savedContent');
+    savedContentDiv.innerHTML = ''; // 清空已有内容
+    savedContents.forEach(content => {
+        const contentElement = document.createElement('p');
+        contentElement.textContent = content;
+        savedContentDiv.appendChild(contentElement);
+    });
+};
+
 // 页面加载完成后执行初始化
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -114,6 +133,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else {
             throw new Error("音频容器加载失败");
         }
+
+        // 加载已保存内容
+        loadSavedContent();
+
+        // 保存按钮点击事件
+        document.getElementById('saveButton').onclick = () => {
+            const userInput = document.getElementById('userInput').value;
+            if (userInput.trim() !== '') { // 确保输入不为空
+                saveContent(userInput);
+                loadSavedContent(); // 重新加载显示内容
+                document.getElementById('userInput').value = ''; // 清空输入框
+            }
+        };
     } catch (error) {
         console.error("初始化时出错:", error);
     }
