@@ -134,18 +134,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             throw new Error("音频容器加载失败");
         }
 
-        // 加载已保存内容
-        loadSavedContent();
-
-        // 保存按钮点击事件
-        document.getElementById('saveButton').onclick = () => {
-            const userInput = document.getElementById('userInput').value;
-            if (userInput.trim() !== '') { // 确保输入不为空
-                saveContent(userInput);
-                loadSavedContent(); // 重新加载显示内容
-                document.getElementById('userInput').value = ''; // 清空输入框
-            }
-        };
     } catch (error) {
         console.error("初始化时出错:", error);
     }
@@ -193,9 +181,15 @@ const addEventListeners = (audioContainers) => {
     });
 };
 
+const GIST_ID = '710107eba8ee7f45b8174a294bb3ce30'; // 替换为你的Gist ID
+const GITHUB_TOKEN = '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'; // 替换为你的GitHub个人访问令牌
+
 window.onload = function() {
     const introPopup = document.getElementById('introPopup');
     const closePopupButton = document.getElementById('closePopup');
+    const commentInput = document.getElementById('commentInput');
+    const submitCommentButton = document.getElementById('submitComment');
+    const commentDisplay = document.getElementById('commentDisplay');
 
     // 显示弹出框并禁用滚动
     introPopup.classList.add('show');
@@ -206,56 +200,77 @@ window.onload = function() {
         introPopup.classList.remove('show');
         document.body.classList.remove('no-scroll');
 
-        // 添加一个监听器，在过渡结束时将其隐藏
         setTimeout(() => {
-            introPopup.style.visibility = 'hidden'; // 隐藏
-        }, 500); // 与 CSS 中的过渡持续时间相同
+            introPopup.style.visibility = 'hidden';
+        }, 500);
     });
-};
-// 留言功能
-const REPO_OWNER = 'A452163';
-const REPO_NAME = 'https://api.github.com/repos/A452163/website-messages';
 
-function initMessageSystem() {
-    loadMessages();
-
-    document.getElementById('saveMessage').addEventListener('click', function() {
-        const message = document.getElementById('userMessage').value.trim();
-        if (message) {
-            saveMessage(message);
-            document.getElementById('userMessage').value = '';
+    // 提交评论
+    submitCommentButton.addEventListener('click', function() {
+        const comment = commentInput.value.trim();
+        if (comment) {
+            addCommentToGist(comment);
+            commentInput.value = ''; // 清空输入框
         }
     });
-}
 
-function saveMessage(message) {
-    fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/issues`, {
-        method: 'POST',
+    // 加载评论
+    loadCommentsFromGist();
+};
+
+// 从Gist加载评论
+function loadCommentsFromGist() {
+    fetch(`https://api.github.com/gists/${GIST_ID}`, {
         headers: {
-            'Accept': 'application/vnd.github.v3+json'
-        },
-        body: JSON.stringify({
-            title: 'New Message',
-            body: message
-        })
+            'Authorization': `token ${GITHUB_TOKEN}`
+        }
     })
-    .then(() => {
-        setTimeout(loadMessages, 5000);
+    .then(response => response.json())
+    .then(data => {
+        const comments = JSON.parse(data.files['comments.json'].content);
+        displayComments(comments);
     })
-    .catch(error => console.error('Error:', error));
+    .catch(error => console.error('加载评论时出错:', error));
 }
 
-function loadMessages() {
-    fetch(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/messages.json`)
-        .then(response => response.json())
-        .then(messages => {
-            const messageDisplay = document.getElementById('messageDisplay');
-            messageDisplay.innerHTML = messages.reverse().slice(0, 10).map(msg => 
-                `<p><strong>${new Date(msg.timestamp).toLocaleString()}</strong>: ${msg.content}</p>`
-            ).join('');
-        })
-        .catch(error => console.error('Error:', error));
+// 添加评论到Gist
+function addCommentToGist(comment) {
+    fetch(`https://api.github.com/gists/${GIST_ID}`, {
+        headers: {
+            'Authorization': `token ${GITHUB_TOKEN}`
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        let comments = JSON.parse(data.files['comments.json'].content);
+        comments.push(comment);
+        
+        return fetch(`https://api.github.com/gists/${GIST_ID}`, {
+            method: 'PATCH',
+            headers: {
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                files: {
+                    'comments.json': {
+                        content: JSON.stringify(comments)
+                    }
+                }
+            })
+        });
+    })
+    .then(() => loadCommentsFromGist())
+    .catch(error => console.error('添加评论时出错:', error));
 }
 
-// 在页面加载完成后初始化留言系统
-document.addEventListener('DOMContentLoaded', initMessageSystem);
+// 显示评论
+function displayComments(comments) {
+    const commentDisplay = document.getElementById('commentDisplay');
+    commentDisplay.innerHTML = '';
+    comments.forEach(comment => {
+        const commentElement = document.createElement('p');
+        commentElement.textContent = comment;
+        commentDisplay.appendChild(commentElement);
+    });
+}

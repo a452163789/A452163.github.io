@@ -444,89 +444,64 @@ button:hover {
     /* 保留之前的亚克力效果样式 */
 }
 
-.ripple {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
-    transform: scale(0);
-    animation: ripple 4s linear infinite;
+/* 评论部分样式 */
+#commentSection {
+    margin-top: 20px;
 }
 
-.ripple:nth-child(2) {
-    animation-delay: 1s;
-}
-
-.ripple:nth-child(3) {
-    animation-delay: 2s;
-}
-
-@keyframes ripple {
-    0% {
-        top: 50%;
-        left: 50%;
-        width: 0;
-        height: 0;
-        opacity: 1;
-    }
-    100% {
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-    }
-}
-
-/* 保留之前的亚克力效果样式 */
-#audioVisualizationContainer, .g {
-    /* 移除亚克力材质效果 */
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 
-                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
-}
-
-@keyframes titleGlow {
-    0%, 100% { text-shadow: 0 0 5px rgba(255,255,255,0.5); }
-    50% { text-shadow: 0 0 20px rgba(255,255,255,0.8); }
-}
-
-/* 在文件末尾添加以下样式 */
-#messageSystem {
-    margin: 20px;
-    padding: 20px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-}
-
-#userMessage {
+#commentInput {
     width: 100%;
     height: 100px;
-    margin-bottom: 10px;
     padding: 10px;
-    background-color: rgba(255, 255, 255, 0.2);
-    border: none;
     border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
     color: #fff;
+    font-size: 16px;
+    resize: vertical;
+    font-family: 'EACH', sans-serif;
 }
 
-#saveMessage {
+#submitComment {
+    margin-top: 10px;
     padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
+    background: linear-gradient(45deg, #ff6b6b, #feca57);
     border: none;
     border-radius: 5px;
+    color: white;
+    font-size: 16px;
     cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    font-family: 'EACH', sans-serif;
 }
 
-#messageDisplay {
+#submitComment:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+#commentDisplay {
     margin-top: 20px;
-    color: #fff;
-}
-
-#messageDisplay p {
-    margin-bottom: 10px;
+    max-height: 200px;
+    overflow-y: auto;
     padding: 10px;
-    background-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 5px;
 }
+
+#commentDisplay p {
+    margin-bottom: 10px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 5px;
+    color: #fff;
+    font-family: 'EACH', sans-serif;
+}
+
+/* 确保弹出框内容可以滚动 */
+.popup-content {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+/* ... 现有代码 ... */
