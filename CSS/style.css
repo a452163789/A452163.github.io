@@ -71,8 +71,6 @@
     font-family: 'O',sans-serif;
 }
 
-
-
 .g {
     position: fixed; /* 固定定位，保持在视口中的位置 */
     top: 50%; /* 视口高度的50% */
@@ -84,16 +82,10 @@
     transition: width 0.1s ease-out, height 0.1s ease-out, background-color 0.1s ease-out, opacity 0.5s ease; /* 添加过渡效果 */
 }
 
-
-
-
-
-
 .H {
     left: 8px;
     top: 919px;
     font-family: 'EACH', sans-serif;
-    
 }
 
 .I {
@@ -178,8 +170,6 @@
     height: 716px;
 }
 
-
-
 .title{
     font-size: 18.5PX;
 
@@ -251,8 +241,6 @@ body, html {
     z-index: -0;
     pointer-events: none;
 }
-
-
 
 @font-face {
     font-family: 'EACH';
@@ -346,9 +334,9 @@ body {
     margin-bottom: 25px;
     background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
     -webkit-background-clip: text;
+    background-clip: text; /* 添加标准属性 */
     -webkit-text-fill-color: transparent;
     animation: titleFloat 6s ease-in-out infinite;
-    transform: translateZ(100px);
 }
 
 .popup-content p {
