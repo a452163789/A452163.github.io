@@ -167,7 +167,7 @@ const addEventListeners = (audioContainers) => {
                     graphicElement.style.opacity = '0'; // 隐藏元素
                 }
             } catch (error) {
-                console.error("播放音频时出错:", error);
+                console.error("播放��频时出错:", error);
             }
         });
         
@@ -182,26 +182,59 @@ const addEventListeners = (audioContainers) => {
 };
 
 const GIST_ID = 'd4e4ad804ed6520cc3aebb2a7f5429f8'; 
-const GITHUB_TOKEN = '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';
+const GITHUB_TOKEN = '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';
+
+function extractEssentialInfo(gistData) {
+    return {
+        id: gistData.id || 'Unknown',
+        description: gistData.description || 'No description',
+        owner: gistData.owner ? gistData.owner.login : 'Unknown',
+        files: gistData.files ? Object.keys(gistData.files) : [],
+        lastUpdated: gistData.updated_at || 'Unknown'
+    };
+}
+
+function displayGistInfo(info) {
+    const infoElement = document.getElementById('gistInfo');
+    if (infoElement) {
+        infoElement.innerHTML = `
+            <h3>Gist 信息</h3>
+            <p>ID: ${info.id}</p>
+            <p>描述: ${info.description || '无描述'}</p>
+            <p>所有者: ${info.owner}</p>
+            <p>文件: ${info.files.join(', ')}</p>
+            <p>最后更新: ${new Date(info.lastUpdated).toLocaleString()}</p>
+        `;
+    }
+}
 
 function loadCommentsFromGist() {
-    fetch(`https://api.github.com/gists/${GIST_ID}`, {
+    return fetch(`https://api.github.com/gists/${GIST_ID}`, {
         headers: {
             'Authorization': `token ${GITHUB_TOKEN}`
         }
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
-        if (data.files && data.files['comments.json']) {
-            const comments = JSON.parse(data.files['comments.json'].content);
+        const file = data.files ? Object.values(data.files)[0] : null;
+        if (file && file.content) {
+            const comments = JSON.parse(file.content);
             displayComments(comments);
+            return comments; // 返回评论
         } else {
             displayComments([]);
+            return []; // 返回空数组
         }
     })
     .catch(error => {
         console.error('加载评论时出错:', error);
-        document.getElementById('commentDisplay').textContent = '加载评论失败,请稍后再试。';
+        document.getElementById('commentDisplay').textContent = '加载评论失败，请稍后再试。错误详情: ' + error.message;
+        return []; // 返回空数组以防止后续错误
     });
 }
 
@@ -272,3 +305,6 @@ window.onload = function() {
     // 加载评论
     loadCommentsFromGist();
 };
+
+// 确保在页面加载时调用 loadCommentsFromGist
+document.addEventListener('DOMContentLoaded', loadCommentsFromGist);
