@@ -182,49 +182,41 @@ window.onload = function() {
 };
 
 const GITHUB_TOKEN = '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'; // 使用您的 GitHub Token
-const GITHUB_REPO = '91c3122284e713125e8a323a71867d05/your_repo'; // 替换为您的 GitHub 用户名和仓库名
-const FILE_PATH = 'introduction.txt'; // 存储自我介绍的文件路径
+const GIST_ID = '91c3122284e713125e8a323a71867d05'; // 替换为您的 Gist ID
+const FILE_NAME = 'introduction.txt'; // 存储自我介绍的文件名
 
-// 从 GitHub 加载自我介绍
-const loadIntroductionFromGitHub = async () => {
+// 从 GitHub Gist 加载自我介绍
+const loadIntroductionFromGist = async () => {
     try {
-        const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${FILE_PATH}`, {
+        const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
             headers: {
-                'Authorization': `token ${GITHUB_TOKEN}`,
-                'Accept': 'application/vnd.github.v3.raw'
+                'Authorization': `token ${GITHUB_TOKEN}`
             }
         });
         if (!response.ok) throw new Error('Failed to fetch introduction');
-        return await response.text();
+        const gistData = await response.json();
+        return gistData.files[FILE_NAME].content;
     } catch (error) {
         console.error("加载自我介绍时出错:", error);
         return "嗨，我是个喜欢做网页的新手。正在学习中，希望能做出实用又炫酷的网站。";
     }
 };
 
-// 保存自我介绍到 GitHub
-const saveIntroductionToGitHub = async (text) => {
+// 保存自我介绍到 GitHub Gist
+const saveIntroductionToGist = async (text) => {
     try {
-        // 获取文件的 SHA 值
-        const getFileResponse = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${FILE_PATH}`, {
-            headers: {
-                'Authorization': `token ${GITHUB_TOKEN}`
-            }
-        });
-        const fileData = await getFileResponse.json();
-        const sha = fileData.sha;
-
-        // 更新文件内容
-        const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${FILE_PATH}`, {
-            method: 'PUT',
+        const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+            method: 'PATCH',
             headers: {
                 'Authorization': `token ${GITHUB_TOKEN}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                message: 'Update introduction',
-                content: btoa(unescape(encodeURIComponent(text))), // Base64 encode
-                sha: sha
+                files: {
+                    [FILE_NAME]: {
+                        content: text
+                    }
+                }
             })
         });
 
@@ -237,7 +229,7 @@ const saveIntroductionToGitHub = async (text) => {
 // 页面加载完成后执行初始化
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        const introText = await loadIntroductionFromGitHub();
+        const introText = await loadIntroductionFromGist();
         document.querySelector('.popup-content p').textContent = introText;
 
         // ... existing code ...
@@ -249,6 +241,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 // 添加事件监听器以保存用户输入
 document.getElementById('saveIntroButton').addEventListener('click', async () => {
     const userInput = document.getElementById('introInput').value;
-    await saveIntroductionToGitHub(userInput);
+    await saveIntroductionToGist(userInput);
     document.querySelector('.popup-content p').textContent = userInput;
 });
