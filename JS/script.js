@@ -181,52 +181,74 @@ window.onload = function() {
     });
 };
 
-// 添加到 script.js 文件末尾
+const GITHUB_TOKEN = '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'; // 使用您的 GitHub Token
+const GITHUB_REPO = '91c3122284e713125e8a323a71867d05/your_repo'; // 替换为您的 GitHub 用户名和仓库名
+const FILE_PATH = 'introduction.txt'; // 存储自我介绍的文件路径
 
-const GIST_ID = '91c3122284e713125e8a323a71867d05';
-const GITHUB_TOKEN = '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';
-
-async function loadSharedMessage() {
+// 从 GitHub 加载自我介绍
+const loadIntroductionFromGitHub = async () => {
     try {
-        const response = await fetch(`https://api.github.com/gists/91c3122284e713125e8a323a71867d05`);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        document.getElementById('sharedMessage').value = data.files['shared_message.txt'].content;
-    } catch (error) {
-        console.error('加载消息失败:', error);
-        document.getElementById('status').textContent = '加载消息失败，请刷新页面重试。';
-    }
-}
-
-async function saveSharedMessage() {
-    const message = document.getElementById('sharedMessage').value;
-    try {
-        const response = await fetch(`https://api.github.com/gists/91c3122284e713125e8a323a71867d05`, {
-            method: 'PATCH',
+        const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${FILE_PATH}`, {
             headers: {
-                'Authorization': `token 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`,
-                'Content-Type': 'application/json',
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Accept': 'application/vnd.github.v3.raw'
+            }
+        });
+        if (!response.ok) throw new Error('Failed to fetch introduction');
+        return await response.text();
+    } catch (error) {
+        console.error("加载自我介绍时出错:", error);
+        return "嗨，我是个喜欢做网页的新手。正在学习中，希望能做出实用又炫酷的网站。";
+    }
+};
+
+// 保存自我介绍到 GitHub
+const saveIntroductionToGitHub = async (text) => {
+    try {
+        // 获取文件的 SHA 值
+        const getFileResponse = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${FILE_PATH}`, {
+            headers: {
+                'Authorization': `token ${GITHUB_TOKEN}`
+            }
+        });
+        const fileData = await getFileResponse.json();
+        const sha = fileData.sha;
+
+        // 更新文件内容
+        const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${FILE_PATH}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                files: {
-                    'shared_message.txt': { content: message }
-                }
+                message: 'Update introduction',
+                content: btoa(unescape(encodeURIComponent(text))), // Base64 encode
+                sha: sha
             })
         });
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        document.getElementById('status').textContent = '消息已成功保存！';
+
+        if (!response.ok) throw new Error('Failed to save introduction');
     } catch (error) {
-        console.error('保存消息失败:', error);
-        document.getElementById('status').textContent = '保存消息失败，请重试。';
+        console.error("保存自我介绍时出错:", error);
     }
-}
+};
 
-// 页面加载时获取共享消息
-document.addEventListener('DOMContentLoaded', loadSharedMessage);
+// 页面加载完成后执行初始化
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const introText = await loadIntroductionFromGitHub();
+        document.querySelector('.popup-content p').textContent = introText;
 
-// 添加保存按钮事件监听器
-document.getElementById('saveMessage').addEventListener('click', saveSharedMessage);
+        // ... existing code ...
+    } catch (error) {
+        console.error("初始化时出错:", error);
+    }
+});
+
+// 添加事件监听器以保存用户输入
+document.getElementById('saveIntroButton').addEventListener('click', async () => {
+    const userInput = document.getElementById('introInput').value;
+    await saveIntroductionToGitHub(userInput);
+    document.querySelector('.popup-content p').textContent = userInput;
+});

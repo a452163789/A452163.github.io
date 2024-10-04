@@ -491,53 +491,27 @@ button:hover {
     50% { text-shadow: 0 0 20px rgba(255,255,255,0.8); }
 }
 
-/* 添加到 style.css 文件末尾 */
-
-.shared-message-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 
-                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-    z-index: 1000;
-    color: white;
-    font-family: 'EACH', sans-serif;
+#introInput {
+    width: 80%;
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1em;
 }
 
-#sharedMessage {
-    width: 100%;
-    height: 100px;
-    margin-bottom: 10px;
-    background: rgba(255, 255, 255, 0.2);
+#saveIntroButton {
+    margin-top: 15px;
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    padding: 10px;
+    background-color: #4CAF50;
     color: white;
-    font-family: 'EACH', sans-serif;
-}
-
-#saveMessage {
-    padding: 10px 20px;
-    background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
-    border: none;
-    border-radius: 25px;
-    color: white;
-    font-weight: bold;
+    font-size: 1em;
     cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: background-color 0.3s;
 }
 
-#saveMessage:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-#status {
-    margin-top: 10px;
-    font-size: 14px;
+#saveIntroButton:hover {
+    background-color: #45a049;
 }
