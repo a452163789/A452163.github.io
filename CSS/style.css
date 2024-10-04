@@ -71,8 +71,6 @@
     font-family: 'O',sans-serif;
 }
 
-
-
 .g {
     position: fixed; /* 固定定位，保持在视口中的位置 */
     top: 50%; /* 视口高度的50% */
@@ -84,16 +82,10 @@
     transition: width 0.1s ease-out, height 0.1s ease-out, background-color 0.1s ease-out, opacity 0.5s ease; /* 添加过渡效果 */
 }
 
-
-
-
-
-
 .H {
     left: 8px;
     top: 919px;
     font-family: 'EACH', sans-serif;
-    
 }
 
 .I {
@@ -178,8 +170,6 @@
     height: 716px;
 }
 
-
-
 .title{
     font-size: 18.5PX;
 
@@ -217,7 +207,11 @@
 
 /* 全局光标设置 */
 * {
-    cursor: none;
+    cursor: none !important;
+}
+
+body, html {
+    cursor: none !important;
 }
 
 /* demo1 和 demo2 的样式 */
@@ -248,8 +242,6 @@
     pointer-events: none;
 }
 
-
-
 @font-face {
     font-family: 'EACH';
     src: url('./EACH.ttf') format('truetype');
@@ -270,15 +262,10 @@
 }
 body {
     margin: 0;
-    overflow: hidden;
-}
-
-
-
-body {
-    margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f0f0f0; /* 背景色 */
+    overflow-y: auto; /* 允许垂直滚动 */
+    height: auto; /* 允许内容决定高度 */
 }
 
 .popup {
@@ -295,6 +282,9 @@ body {
     opacity: 0; /* 初始不透明度为0 */
     transition: visibility 0s 0.5s, opacity 0.5s; /* 过渡效果，隐藏时延迟0.5秒 */
     z-index: 1000; /* 确保弹出框在最上层 */
+    backdrop-filter: blur(15px) saturate(180%);
+    -webkit-backdrop-filter: blur(15px) saturate(180%);
+    perspective: 3000px;
 }
 
 .popup.show {
@@ -304,37 +294,239 @@ body {
 }
 
 .popup-content {
-    background: rgba(255, 255, 255, 0.8); /* 半透明白色背景 */
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* 阴影 */
-    text-align: center; /* 内容居中 */
+    background: rgba(255,255,255,0.1);
+    padding: 60px;
+    border-radius: 30px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2), 
+                inset 0 0 0 2px rgba(255, 255, 255, 0.1);
+    text-align: center;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: none;
+    max-width: 80%;
+    color: #fff;
+    font-family: 'EACH', sans-serif;
+    overflow: hidden;
+    position: relative;
+    transform-style: preserve-3d; /* 保持3D效果 */
+    transform: perspective(1000px) rotateX(10deg) rotateY(-20deg); /* 添加3D旋转 */
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.popup-content:hover {
+    transform: perspective(1000px) rotateX(0deg) rotateY(0deg); /* 悬停时恢复 */
+}
+
+.popup-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 100%);
+    transform: translateZ(-1px);
+    pointer-events: none;
+}
+
+.popup-content h2 {
+    font-size: 3.5em;
+    margin-bottom: 25px;
+    background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+    -webkit-background-clip: text;
+    background-clip: text; /* 添加标准属性 */
+    -webkit-text-fill-color: transparent;
+    animation: titleFloat 6s ease-in-out infinite;
+}
+
+.popup-content p {
+    font-size: 1.4em;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    transform: translateZ(50px);
 }
 
 button {
-    margin-top: 20px;
-    padding: 10px 20px;
+    margin-top: 35px;
+    padding: 15px 35px;
     border: none;
-    border-radius: 5px;
-    background-color: #007BFF; /* 按钮颜色 */
+    border-radius: 50px;
+    background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+    background-size: 300% 300%;
     color: white;
+    font-size: 1.2em;
+    font-weight: bold;
     cursor: pointer;
+    animation: gradientShift 8s ease infinite;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
+    transform: translateZ(75px);
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
 button:hover {
-    background-color: #0056b3; /* 悬停效果 */
+    transform: translateY(-3px) translateZ(85px);
+    box-shadow: 0 15px 25px rgba(0,0,0,0.3);
 }
 
-@keyframes rotate {
-    from {
-        transform: rotate(0deg);
+@keyframes float {
+    0%, 100% { transform: translateZ(50px); }
+    50% { transform: translateZ(70px); }
+}
+
+@keyframes titleGlow {
+    0%, 100% { text-shadow: 0 0 5px rgba(255,255,255,0.5); }
+    50% { text-shadow: 0 0 20px rgba(255,255,255,0.8); }
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.popup.show .popup-content {
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, rotateIn 1s ease-out forwards;
+}
+
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(-50px) rotateX(-20deg);
     }
-    to {
-        transform: rotate(-360deg);
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0) rotateX(0deg);
     }
 }
 
+@keyframes rotateIn {
+    0% { transform: rotateY(-90deg); }
+    100% { transform: rotateY(0deg); }
+}
 
+/* 确保介绍弹窗在最底层 */
+#introPopup {
+    z-index: 10; /* 确保介绍弹窗在较高层 */
+}
 
+/* 确保鼠标相关元素在介绍弹窗上层，但在音频可视化下层 */
+.curzr-arrow-pointer {
+    z-index: 20;
+}
 
-    
+/* 确保音频可视化在最上层 */
+#audioVisualizationContainer, .g {
+    z-index: 5; /* 确保音频可视化在介绍弹窗下层 */
+    pointer-events: none;
+    background: rgba(255, 255, 255, 0.2); /* 半透明白色背景 */
+    backdrop-filter: blur(10px); /* 背景模糊效果 */
+    -webkit-backdrop-filter: blur(10px); /* 为 Safari 浏览器添加前缀 */
+    border-radius: 10px; /* 圆角边框 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 轻微阴影效果 */
+    transition: all 0.3s ease; /* 平滑过渡效果 */
+}
+
+/* 当音频播放时，稍微增强亚克力效果 */
+#audioVisualizationContainer.active, .g.active {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ... 现有代码 ... */
+
+#audioVisualizationContainer {
+    position: relative;
+    overflow: hidden;
+    /* 保留之前的亚克力效果样式 */
+}
+
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(0);
+    animation: ripple 4s linear infinite;
+}
+
+.ripple:nth-child(2) {
+    animation-delay: 1s;
+}
+
+.ripple:nth-child(3) {
+    animation-delay: 2s;
+}
+
+@keyframes ripple {
+    0% {
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        opacity: 1;
+    }
+    100% {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+    }
+}
+
+/* 保留之前的亚克力效果样式 */
+#audioVisualizationContainer, .g {
+    /* 移除亚克力材质效果 */
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+@keyframes titleGlow {
+    0%, 100% { text-shadow: 0 0 5px rgba(255,255,255,0.5); }
+    50% { text-shadow: 0 0 20px rgba(255,255,255,0.8); }
+}
+
+/* 在文件末尾添加以下样式 */
+#messageSystem {
+    margin: 20px;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+#userMessage {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+}
+
+#saveMessage {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#messageDisplay {
+    margin-top: 20px;
+    color: #fff;
+}
+
+#messageDisplay p {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+}

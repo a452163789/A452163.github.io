@@ -4,6 +4,11 @@
         <link rel="icon" href="/网站图标.png" type="image/png">
         <title>Soul-Echoes</title>
         <link rel="stylesheet" href="./CSS/style.css">
+        <!-- 在适当的位置添加以下代码 -->
+        
+        
+
+
         
         
 
@@ -11,12 +16,19 @@
     </head>
     <body>
         <div id="introPopup" class="popup">
-            <div class="popup-content">
-                <h2>自我介绍</h2>
-                <p>您好！我是一名对编程充满热情的前端开发爱好者，致力于不断提升和创造优质的用户体验。
-                </p>
-                <button id="closePopup">关闭</button>
-            </div>
+    <div class="popup-content">
+        
+        <h2>自我介绍</h2>
+        <p>嗨，我是个喜欢做网页的新手。正在学习中，希望能做出实用又炫酷的网站。</p>
+        <div id="messageSystem">
+            <textarea id="userMessage" placeholder="在这里输入你的留言..."></textarea>
+            <button id="saveMessage">保存留言</button>
+            <div id="messageDisplay"></div>
+        </div>
+        <button id="closePopup">关闭</button>
+    </div>
+</div>
+
         </div>
         <div class="container a abcdef" id="container1">
             <h1 class="title">⟪AUTOMOTIVO BAYSIDE⟫</h1>
@@ -183,7 +195,11 @@
 
 
         
-        
+        <div id="audioVisualizationContainer">
+            <div class="ripple"></div>
+            <div class="ripple"></div>
+            <div class="ripple"></div>
+          </div>
         
           
         
@@ -209,6 +225,8 @@
         <div class="container NOV">
             <h1>   </h1>
         </div>
-
+        
+        
+        
         </body>
 </html>

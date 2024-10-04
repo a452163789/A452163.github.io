@@ -1,0 +1,22 @@
+name: Update Messages
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  update-messages:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Update messages.json
+      run: |
+        message=$(jq -r '.issue.body' "$GITHUB_EVENT_PATH")
+        jq --arg msg "$message" --arg time "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+          '. += [{"content": $msg, "timestamp": $time}]' messages.json > temp.json && mv temp.json messages.json
+    - name: Commit and push if changed
+      run: |
+        git config --global user.email "action@github.com"
+        git config --global user.name "GitHub Action"
+        git add messages.json
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Update messages" && git push)
