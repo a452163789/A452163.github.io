@@ -254,7 +254,7 @@
 
             async function loadSharedMessage() {
                 try {
-                    const response = await fetch(`https://api.github.com/gists/${GIST_ID}`);
+                    const response = await fetch(`https://api.github.com/gists/91c3122284e713125e8a323a71867d05`);
                     const data = await response.json();
                     document.getElementById('sharedMessage').value = data.files['shared_message.txt'].content;
                 } catch (error) {
@@ -266,10 +266,10 @@
             async function saveSharedMessage() {
                 const message = document.getElementById('sharedMessage').value;
                 try {
-                    const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+                    const response = await fetch(`https://api.github.com/gists/91c3122284e713125e8a323a71867d05`, {
                         method: 'PATCH',
                         headers: {
-                            'Authorization': `token ${GITHUB_TOKEN}`,
+                            'Authorization': `token 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`,
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
