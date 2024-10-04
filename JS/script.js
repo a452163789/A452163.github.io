@@ -187,10 +187,15 @@ const saveSharedMessage = async (message) => {
         console.log('开始保存消息:', message);
         const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
             method: 'PATCH',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
             headers: {
                 'Authorization': `token ${GITHUB_TOKEN}`,
                 'Content-Type': 'application/json',
             },
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer',
             body: JSON.stringify({
                 files: {
                     'shared_message.txt': {
@@ -200,8 +205,9 @@ const saveSharedMessage = async (message) => {
             })
         });
         console.log('保存消息响应状态:', response.status);
+        console.log('保存消息响应内容:', await response.text());
         if (!response.ok) {
-            throw new Error('保存失败');
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
         alert('消息已保存！');
     } catch (error) {
