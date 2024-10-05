@@ -416,42 +416,24 @@ const createParticle = () => {
     particle.className = 'particle';
     document.body.appendChild(particle);
     particles.push(particle);
-
-    // 设置粒子的初始位置和大小
-    const size = Math.random() * 10 + 5; // 增大粒子大小
-    const x = Math.random() * window.innerWidth;
-    const y = Math.random() * window.innerHeight;
-    particle.style.width = `${size}px`;
-    particle.style.height = `${size}px`;
-    particle.style.left = `${x}px`;
-    particle.style.top = `${y}px`;
-    particle.style.opacity = Math.random();
-    particle.style.transition = 'all 1s ease-out'; // 增加过渡时间
-
-    // 添加光晕效果
-    particle.style.boxShadow = `0 0 ${size * 2}px rgba(255, 255, 255, 0.8)`;
 };
 
-// 动态更新粒子位置
 const updateParticles = () => {
-    particles.forEach((particle) => {
+    particles.forEach((particle, index) => {
+        const size = Math.random() * 5 + 1;
         const x = Math.random() * window.innerWidth;
         const y = Math.random() * window.innerHeight;
+        const opacity = Math.random();
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
         particle.style.left = `${x}px`;
         particle.style.top = `${y}px`;
+        particle.style.opacity = opacity;
+        particle.style.transition = 'all 0.5s ease-out';
     });
 };
 
-// 动态背景渐变
-const updateBackgroundGradient = () => {
-    const color1 = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.5)`;
-    const color2 = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.5)`;
-    document.body.style.background = `linear-gradient(45deg, ${color1}, ${color2})`;
-};
-
-// 定时更新背景和粒子
 setInterval(() => {
     createParticle();
     updateParticles();
-    updateBackgroundGradient();
-}, 2000);
+}, 1000);
