@@ -17,6 +17,7 @@ const createMediaElementSource = async (mediaElement) => {
     }
 };
 
+
 // 异步加载音频文件并返回音频对象和容器元素
 const loadAudioFiles = async (audioFiles) => {
     try {
@@ -53,12 +54,12 @@ const animate = () => {
     graphicElement.style.height = graphicElement.style.width; // 维持正方形
 
     // 计算新的 transform，增加右偏移量和旋转效果
-    graphicElement.style.position = 'fixed'; // 修改这行，使用 fixed 定位而不是 absolute
+    graphicElement.style.position = 'fixed'; // 使用 fixed 定位
     graphicElement.style.transform = `translate(-50%, -50%) translateX(0px) scale(${1 + averageFrequency / 1000}) rotate(${averageFrequency / 0.2}deg)`;
 
     // 动态调整背景颜色，加入颜色渐变
     const colorFactor = Math.min(255, averageFrequency * 2);
-    const bgColor = `rgba(${colorFactor}, 100, ${255 - colorFactor}, 0.5)`; // 使用colorFactor动态生成颜色
+    const bgColor = `rgba(${colorFactor}, 100, ${255 - colorFactor}, 0.5)`;
     graphicElement.style.backgroundColor = bgColor;
 
     // 添加波纹效果，动态调整阴影
@@ -68,14 +69,15 @@ const animate = () => {
     graphicElement.style.border = `5px solid rgba(${colorFactor}, 100, 150, 0.7)`;
 
     // 添加活力效果，增加旋转速度
-    graphicElement.style.transition = 'transform 0.1s ease-in-out, opacity 0.5s ease-in-out'; // 添加平滑过渡效果和渐隐效果
+    graphicElement.style.transition = 'transform 0.1s ease-in-out, opacity 0.5s ease-in-out';
     graphicElement.style.transform = `translate(-50%, -50%) translateX(0px) scale(${1 + averageFrequency / 1000}) rotate(${averageFrequency / 0.2}deg)`;
 
     // 动态调整透明度
-    graphicElement.style.opacity = averageFrequency > 50 ? '1' : '0.5'; // 根据频率调整透明度
+    graphicElement.style.opacity = averageFrequency > 50 ? '1' : '0.5';
 
     requestAnimationFrame(animate);
 };
+
 
 // 保存内容函数
 const saveContent = (content) => {
@@ -83,6 +85,7 @@ const saveContent = (content) => {
     savedContents.push(content);
     localStorage.setItem('savedContents', JSON.stringify(savedContents));
 };
+
 
 // 加载并显示已保存的内容
 const loadSavedContent = () => {
@@ -95,6 +98,7 @@ const loadSavedContent = () => {
         savedContentDiv.appendChild(contentElement);
     });
 };
+
 
 // 页面加载完成后执行初始化
 document.addEventListener('DOMContentLoaded', async () => {
@@ -139,6 +143,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
+
 // 为每个音器添加点击事件监听器
 const addEventListeners = (audioContainers) => {
     audioContainers.forEach(({ audio, container }) => {
@@ -180,6 +185,7 @@ const addEventListeners = (audioContainers) => {
         });
     });
 };
+
 
 import { GIST_ID, GITHUB_TOKEN } from './config.js';
 
@@ -240,17 +246,54 @@ function loadCommentsFromGist() {
     .catch(error => console.error('加载评论时出错:', error));
 }
 
-// 显示评论
+
+// 修改显示评论的函数
 function displayComments(comments) {
     const commentDisplay = document.getElementById('commentDisplay');
     commentDisplay.innerHTML = '';
     comments.forEach((comment, index) => {
-        const commentElement = document.createElement('p');
+        const commentElement = document.createElement('div');
+        commentElement.className = 'comment-item';
         commentElement.innerHTML = `
-            ${comment}
-            <button class="delete-comment" data-index="${index}">删除</button>
+            <div class="comment-content">
+                <span class="comment-text">${comment}</span>
+                <button class="delete-comment" data-index="${index}">删除</button>
+            </div>
         `;
+        commentElement.style.opacity = '0';
+        commentElement.style.transform = 'rotateX(-90deg) translateY(30px)';
         commentDisplay.appendChild(commentElement);
+        
+        requestAnimationFrame(() => {
+            commentElement.classList.add('comment-new');
+        });
+        
+        commentElement.addEventListener('mousemove', (e) => {
+            const rect = commentElement.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = (y - centerY) / 10;
+            const rotateY = (centerX - x) / 10;
+            
+            commentElement.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+            
+            const content = commentElement.querySelector('.comment-content');
+            content.style.transform = `rotateX(${-rotateX}deg) rotateY(${-rotateY}deg)`;
+            
+            // 为文字添加额外的3D效果
+            const text = commentElement.querySelector('.comment-text');
+            text.style.transform = `translateZ(20px) rotateX(${-rotateX * 1.5}deg) rotateY(${-rotateY * 1.5}deg)`;
+        });
+        
+        commentElement.addEventListener('mouseleave', () => {
+            commentElement.style.transform = 'rotateX(0) rotateY(0) scale(1)';
+            const content = commentElement.querySelector('.comment-content');
+            content.style.transform = 'rotateX(0) rotateY(0)';
+            const text = commentElement.querySelector('.comment-text');
+            text.style.transform = 'translateZ(0) rotateX(0) rotateY(0)';
+        });
     });
 }
 
@@ -272,23 +315,30 @@ function addComment(comment) {
     .catch(error => console.error('添加评论时出错:', error));
 }
 
-// 删除评论
+
+// 修改删除论的函数
 function deleteComment(index) {
-    fetch(`https://api.github.com/gists/${GIST_ID}`, {
-        method: 'GET',
-        headers: {
-            'Authorization': `token ${GITHUB_TOKEN}`
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        const comments = JSON.parse(data.files['comments.json'].content);
-        comments.splice(index, 1);
-        return updateGist(comments);
-    })
-    .then(() => loadCommentsFromGist())
-    .catch(error => console.error('删除评论时出错:', error));
+    const commentElement = document.querySelector(`[data-index="${index}"]`).parentNode;
+    commentElement.classList.add('comment-delete');
+    
+    setTimeout(() => {
+        fetch(`https://api.github.com/gists/${GIST_ID}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `token ${GITHUB_TOKEN}`
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const comments = JSON.parse(data.files['comments.json'].content);
+            comments.splice(index, 1);
+            return updateGist(comments);
+        })
+        .then(() => loadCommentsFromGist())
+        .catch(error => console.error('删除评论时出错:', error));
+    }, 600); // 匹配动画持续时间
 }
+
 
 // 更新 Gist
 function updateGist(comments) {
@@ -347,3 +397,61 @@ function toggleIntroPopup() {
 document.getElementById('closePopup').addEventListener('click', toggleIntroPopup);
 
 // 在需要显示自我介绍弹窗的地方调用 toggleIntroPopup()
+
+// 鼠标移动事件监听器，增强视差效果
+document.addEventListener('mousemove', (e) => {
+    const { clientX, clientY } = e;
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    const rotateX = (clientY - centerY) / 50;
+    const rotateY = (centerX - clientX) / 50;
+
+    graphicElement.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+});
+
+// 粒子效果
+const particles = [];
+const createParticle = () => {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    document.body.appendChild(particle);
+    particles.push(particle);
+
+    // 设置粒子的初始位置和大小
+    const size = Math.random() * 10 + 5; // 增大粒子大小
+    const x = Math.random() * window.innerWidth;
+    const y = Math.random() * window.innerHeight;
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+    particle.style.left = `${x}px`;
+    particle.style.top = `${y}px`;
+    particle.style.opacity = Math.random();
+    particle.style.transition = 'all 1s ease-out'; // 增加过渡时间
+
+    // 添加光晕效果
+    particle.style.boxShadow = `0 0 ${size * 2}px rgba(255, 255, 255, 0.8)`;
+};
+
+// 动态更新粒子位置
+const updateParticles = () => {
+    particles.forEach((particle) => {
+        const x = Math.random() * window.innerWidth;
+        const y = Math.random() * window.innerHeight;
+        particle.style.left = `${x}px`;
+        particle.style.top = `${y}px`;
+    });
+};
+
+// 动态背景渐变
+const updateBackgroundGradient = () => {
+    const color1 = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.5)`;
+    const color2 = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.5)`;
+    document.body.style.background = `linear-gradient(45deg, ${color1}, ${color2})`;
+};
+
+// 定时更新背景和粒子
+setInterval(() => {
+    createParticle();
+    updateParticles();
+    updateBackgroundGradient();
+}, 2000);

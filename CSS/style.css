@@ -244,6 +244,7 @@
     src: url('./O.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
+    font-display: swap;
 }
 @font-face {
     font-family: 'R';
@@ -305,7 +306,7 @@ body {
     display: flex;
     flex-direction: column;
     max-height: 80vh; /* 置最大高度 */
-    overflow: hidden; /* 防止整体出现滚动条 */
+    overflow: hidden; /* 防止出现滚动条 */
 }
 
 .popup-content:hover {
@@ -411,7 +412,7 @@ button:hover {
     z-index: 20;
 }
 
-/* 确保音频可视化在最上层 */
+/* 确保音频可视最上层 */
 #audioVisualizationContainer, .g {
     z-index: 5; /* 确保音频可视化在介绍弹窗下层 */
     pointer-events: none;
@@ -495,40 +496,34 @@ button:hover {
 }
 
 #commentDisplay p {
-    margin-bottom: 10px;
-    padding: 10px;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 15px;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 5px;
-    color: #fff;
-    font-family: 'EACH', sans-serif;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: all 0.3s ease;
-    opacity: 1;
-    transform: translateY(0);
+    font-size: 16px;
+    line-height: 1.5;
+    box-sizing: border-box;
+    display: flex; /* 添加此行 */
+    justify-content: space-between; /* 使内容分布在两端 */
+    align-items: center; /* 添加此行 */
+}
+
+.comment-text {
+    flex-grow: 1; /* 让评论文本占据大部分空间 */
+    margin-right: 10px; /* 与删除按钮保持一定距离 */
 }
 
 .delete-comment {
     background-color: #ff4d4d;
     color: white;
     border: none;
-    padding: 8px 12px;
+    padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    transition: background-color 0.3s, transform 0.2s;
-    margin-left: 10px;
-}
-
-.delete-comment:hover {
-    background-color: #ff1a1a;
-    transform: scale(1.05);
-}
-
-.delete-comment:active {
-    transform: scale(0.95);
+    font-size: 14px;
+    transition: background-color 0.3s;
+    flex-shrink: 0; /* 防止按钮被压缩 */
 }
 
 /* 确保弹出框内容可以滚动 */
@@ -702,6 +697,9 @@ button:hover {
     font-size: 16px;
     line-height: 1.5;
     box-sizing: border-box;
+    display: flex; /* 添加此行 */
+    justify-content: space-between; /* 添加此行 */
+    align-items: center; /* 添加此行 */
 }
 
 /* 隐藏滚动条但保留滚动功能 */
@@ -848,6 +846,7 @@ body, html {
     margin-bottom: 10px;
     padding: 5px;
     border-bottom: 1px solid #eee;
+    width: 100%; /* 确保评论项占满宽度 */
 }
 
 .comment-text {
@@ -864,8 +863,249 @@ body, html {
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.3s;
+    margin-left: 10px; /* 添加此行,与评论文本保持一定距离 */
+}
+
+#commentDisplay {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+}
+
+#commentDisplay p {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes rotateIn {
+    from {
+        opacity: 0;
+        transform: rotateX(-90deg) translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: rotateX(0) translateY(0);
+    }
+}
+
+@keyframes rotateOut {
+    from {
+        opacity: 1;
+        transform: rotateX(0) translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: rotateX(90deg) translateY(-30px);
+    }
+}
+
+.comment-new {
+    animation: rotateIn 0.6s forwards;
+}
+
+.comment-delete {
+    animation: rotateOut 0.6s forwards;
+}
+
+#commentDisplay p:hover {
+    transform: scale(1.05) rotateY(5deg);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.delete-comment {
+    background: rgba(255, 0, 0, 0.6);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .delete-comment:hover {
-    background-color: #ff1a1a;
+    background: rgba(255, 0, 0, 0.8);
+    transform: translateY(-2px);
+}
+
+#commentDisplay {
+    perspective: 1000px;
+}
+
+.comment-item {
+    position: relative;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+    transform-style: preserve-3d;
+}
+
+.comment-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.comment-text {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.delete-comment {
+    background: rgba(255, 0, 0, 0.6);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.delete-comment:hover {
+    background: rgba(255, 0, 0, 0.8);
+    transform: translateY(-2px);
+}
+
+@keyframes rotateIn {
+    from {
+        opacity: 0;
+        transform: rotateX(-90deg) translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: rotateX(0) translateY(0);
+    }
+}
+
+@keyframes rotateOut {
+    from {
+        opacity: 1;
+        transform: rotateX(0) translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: rotateX(90deg) translateY(-30px);
+    }
+}
+
+.comment-new {
+    animation: rotateIn 0.6s forwards;
+}
+
+.comment-delete {
+    animation: rotateOut 0.6s forwards;
+}
+
+/* 增强视差效果的样式 */
+.comment-item {
+    position: relative;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transform-style: preserve-3d;
+    perspective: 1500px; /* 增加透视深度 */
+}
+
+.comment-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transform: translateZ(0); /* 初始深度 */
+}
+
+.comment-item:hover .comment-content {
+    transform: translateZ(30px) scale(1.1) rotateY(10deg); /* 增加深度和旋转 */
+    box-shadow: 0 12px 18px rgba(0, 0, 0, 0.3);
+}
+
+/* ... 现有代码 ... */
+
+/* 评论区样式优化 */
+
+/* 评论侧边栏 */
+#commentSidebar {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+/* 评论输入框 */
+#commentInput {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.3s ease;
+}
+
+#commentInput:focus {
+  background: rgba(255,255,255,0.1);
+  box-shadow: 0 0 10px rgba(255,255,255,0.2);
+}
+
+/* 提交按钮 */
+#submitComment {
+  background: linear-gradient(45deg, #ff6b6b, #feca57);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#submitComment:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* 评论显示区域 */
+#commentDisplay {
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* 单个评论项 */
+.comment-item {
+  background: rgba(255,255,255,0.1);
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.comment-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* 删除按钮 */
+.delete-comment {
+  background: rgba(255,0,0,0.6);
+  transition: all 0.3s ease;
+}
+
+.delete-comment:hover {
+  background: rgba(255,0,0,0.8);
+  transform: scale(1.05);
+}
+
+/* 简单的进入动画 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.comment-new {
+  animation: fadeIn 0.5s ease forwards;
 }
