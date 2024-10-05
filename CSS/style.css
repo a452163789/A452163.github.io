@@ -510,17 +510,25 @@ button:hover {
 }
 
 .delete-comment {
-    background: none;
+    background-color: #ff4d4d;
+    color: white;
     border: none;
-    color: #ff6b6b;
+    padding: 8px 12px;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 1.2em;
-    padding: 0 5px;
-    transition: color 0.3s;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-left: 10px;
 }
 
 .delete-comment:hover {
-    color: #ff4757;
+    background-color: #ff1a1a;
+    transform: scale(1.05);
+}
+
+.delete-comment:active {
+    transform: scale(0.95);
 }
 
 /* 确保弹出框内容可以滚动 */
@@ -831,4 +839,33 @@ body, html {
     line-height: 1.6;
     text-align: justify;
     color: #e0e0e0;
+}
+
+.comment-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+.comment-text {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.delete-comment {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.delete-comment:hover {
+    background-color: #ff1a1a;
 }

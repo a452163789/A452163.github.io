@@ -225,20 +225,22 @@ window.onload = function() {
     });
 };
 
-let commentsCache = [];
-
-// 修改加载评论的函数
+// 加载评论
 function loadCommentsFromGist() {
-    fetch(`https://gist.githubusercontent.com/A452163/${GIST_ID}/raw/comments.json?timestamp=${Date.now()}`)
+    fetch(`https://api.github.com/gists/${GIST_ID}`, {
+        headers: {
+            'Authorization': `token ${GITHUB_TOKEN}`
+        }
+    })
     .then(response => response.json())
     .then(data => {
-        commentsCache = data;
-        displayComments(commentsCache);
+        const comments = JSON.parse(data.files['comments.json'].content);
+        displayComments(comments);
     })
     .catch(error => console.error('加载评论时出错:', error));
 }
 
-// 修改显示评论的函数
+// 显示评论
 function displayComments(comments) {
     const commentDisplay = document.getElementById('commentDisplay');
     commentDisplay.innerHTML = '';
@@ -246,37 +248,62 @@ function displayComments(comments) {
         const commentElement = document.createElement('p');
         commentElement.innerHTML = `
             ${comment}
-            <button class="delete-comment" data-index="${index}">X</button>
+            <button class="delete-comment" data-index="${index}">删除</button>
         `;
         commentDisplay.appendChild(commentElement);
-        
-        // 为新添加的评论应用动画
-        if (index === comments.length - 1) {
-            commentElement.classList.add('comment-new');
-        }
     });
 }
 
-// 修改删除评论的函数
-function deleteComment(index) {
-    console.log('Attempting to delete comment at index:', index);
-    const commentElement = document.querySelector(`#commentDisplay p:nth-child(${index + 1})`);
-    if (!commentElement) {
-        console.error('Comment element not found for index:', index);
-        return;
-    }
-    commentElement.classList.add('comment-delete');
-    
-    setTimeout(() => {
-        if (index >= 0 && index < commentsCache.length) {
-            commentsCache.splice(index, 1);
-            displayComments(commentsCache);
-            updateGistInBackground();
-            console.log('Comment deleted successfully');
-        } else {
-            console.error('Invalid index for deletion:', index);
+// 添加评论
+function addComment(comment) {
+    fetch(`https://api.github.com/gists/${GIST_ID}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `token ${GITHUB_TOKEN}`
         }
-    }, 300);
+    })
+    .then(response => response.json())
+    .then(data => {
+        const comments = JSON.parse(data.files['comments.json'].content);
+        comments.push(comment);
+        return updateGist(comments);
+    })
+    .then(() => loadCommentsFromGist())
+    .catch(error => console.error('添加评论时出错:', error));
+}
+
+// 删除评论
+function deleteComment(index) {
+    fetch(`https://api.github.com/gists/${GIST_ID}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `token ${GITHUB_TOKEN}`
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const comments = JSON.parse(data.files['comments.json'].content);
+        comments.splice(index, 1);
+        return updateGist(comments);
+    })
+    .then(() => loadCommentsFromGist())
+    .catch(error => console.error('删除评论时出错:', error));
+}
+
+// 更新 Gist
+function updateGist(comments) {
+    return fetch(`https://api.github.com/gists/${GIST_ID}`, {
+        method: 'PATCH',
+        headers: {
+            'Authorization': `token ${GITHUB_TOKEN}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            files: {
+                'comments.json': { content: JSON.stringify(comments) }
+            }
+        })
+    });
 }
 
 // 为评论显示区域添加事件委托
@@ -286,70 +313,15 @@ document.getElementById('commentDisplay').addEventListener('click', function(eve
     }
 });
 
-// 修改添加评论的函数
-function addComment(comment) {
-    commentsCache.push(comment);
-    displayComments(commentsCache);
-    updateGistInBackground();
-}
-
-// 在后台更新 Gist
-function updateGistInBackground() {
-    fetch(`https://api.github.com/gists/${GIST_ID}`, {
-        method: 'PATCH',
-        headers: {
-            'Authorization': `token ${GITHUB_TOKEN}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            files: {
-                'comments.json': { content: JSON.stringify(commentsCache) }
-            }
-        })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => console.log('Gist updated successfully:', data))
-    .catch(error => console.error('更新 Gist 时出错:', error));
-}
-
 // 修改提交评论按钮的事件监听器
 document.getElementById('submitComment').addEventListener('click', function() {
     const commentInput = document.getElementById('commentInput');
     const comment = commentInput.value.trim();
     if (comment) {
         addComment(comment);
-        commentInput.value = ''; // ���输入框
+        commentInput.value = ''; // 清空输入框
     }
 });
-
-// 修改添加评论到Gist的函数
-function addCommentToGist(comment) {
-    commentsCache.push(comment);
-    displayComments(commentsCache);
-    
-    // 更新Gist内容
-    fetch(`https://api.github.com/gists/${GIST_ID}`, {
-        method: 'PATCH',
-        headers: {
-            'Authorization': `token ${GITHUB_TOKEN}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            files: {
-                'comments.json': {
-                    content: JSON.stringify(commentsCache)
-                }
-            }
-        })
-    })
-    .then(() => console.log('评论已添加并更新到Gist'))
-    .catch(error => console.error('更新Gist时出错:', error));
-}
 
 // 显示overlayContainer
 function showOverlay() {
