@@ -129,6 +129,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             { file: 'BRODYAGA FUNK.mp3', containerId: 'container18' },
             { file: 'SimpsonWave1995.mp3', containerId: 'container19' },
             { file: 'WE NEVER.mp3', containerId: 'container20' },
+            { file: '親愛なるあなたは火葬.mp3', containerId: 'container21' },
         ]);
         
         if (audioContainers.length > 0) {
