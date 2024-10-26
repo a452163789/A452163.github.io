@@ -412,7 +412,7 @@ button:hover {
     z-index: 10; /* 确保介绍弹窗在较高层 */
 }
 
-/* 确保鼠相关元素在介绍弹窗上层，但在音频可视化下层 */
+/* 确保鼠相关元素在介绍弹窗上层，但在音��可视化下层 */
 .curzr-arrow-pointer {
     z-index: 20;
 }
@@ -458,15 +458,15 @@ button:hover {
     width: 100%;
     box-sizing: border-box; /* 确保padding不会增加总宽度 */
     height: 100px;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-    font-size: 16px;
-    resize: none; /* 禁用调整大小控件 */
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    resize: vertical;
     margin-bottom: 10px;
-    font-family: 'EACH', sans-serif;
+    font-family: Arial, sans-serif; /* 修改为默认字体 */
 }
 
 #submitComment {
@@ -515,8 +515,19 @@ button:hover {
 }
 
 .comment-text {
-    flex-grow: 1; /* 让评论文本占据大部分空间 */
-    margin-right: 10px; /* 与删除按钮保持一定距离 */
+    flex-grow: 1;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: 0.3px;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    min-width: 0;
+    word-wrap: break-word;
+    font-family: Arial, sans-serif; /* 修改为默认字体 */
 }
 
 .delete-comment {
@@ -621,7 +632,7 @@ button:hover {
     left: 0;
     top: 0;
     bottom: 0;
-    width: 400px; /* 保持宽度 */
+    width: 400px; /* 保持度 */
     max-height: 100vh;
     overflow-y: auto;
     background: rgba(255,255,255,0.1);
@@ -645,6 +656,7 @@ button:hover {
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: Arial, sans-serif; /* 修改为默认字体 */
 }
 
 #commentSection {
@@ -792,7 +804,7 @@ button:hover {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-/* 隐藏滚动条但保留滚动功能 */
+/* 隐藏滚动条保留滚动功能 */
 #commentSidebar,
 #commentDisplay {
     scrollbar-width: none; /* Firefox */
@@ -868,7 +880,7 @@ body, html {
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.3s;
-    margin-left: 10px; /* 添加此行,与评论文本保持一定距离 */
+    margin-left: 10px; /* 添加此行,与论文本保持一定距离 */
 }
 
 #commentDisplay {
@@ -1032,7 +1044,7 @@ body, html {
 }
 
 .comment-item:hover .comment-content {
-    transform: translateZ(30px) scale(1.1) rotateY(10deg); /* 增加深度和旋转 */
+    transform: translateZ(30px) scale(1.1) rotateY(10deg); /* 增��深度和旋转 */
     box-shadow: 0 12px 18px rgba(0, 0, 0, 0.3);
 }
 
@@ -1042,75 +1054,443 @@ body, html {
 
 /* 评论侧边栏 */
 #commentSidebar {
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-right: 1px solid rgba(255,255,255,0.1);
-  box-shadow: 0 0 20px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
+  background: rgba(18, 18, 24, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+  padding: 30px;
+  border-radius: 20px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* 评论输入框 */
+/* 评论输入框美化 */
 #commentInput {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 16px;
+  line-height: 1.6;
   transition: all 0.3s ease;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #commentInput:focus {
-  background: rgba(255,255,255,0.1);
-  box-shadow: 0 0 10px rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+  outline: none;
 }
 
-/* 提交按钮 */
+/* 提交按钮样式 */
 #submitComment {
-  background: linear-gradient(45deg, #ff6b6b, #feca57);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: linear-gradient(45deg, #4F46E5, #7C3AED);
+  padding: 12px 30px;
+  border-radius: 12px;
+  border: none;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
 }
 
 #submitComment:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 16px rgba(124, 58, 237, 0.4);
 }
 
-/* 评论显示区域 */
-#commentDisplay {
-  background: rgba(255,255,255,0.05);
-  border-radius: 10px;
-  overflow: hidden;
+/* 自我介绍弹窗优化 */
+.popup-content {
+  background: rgba(18, 18, 24, 0.95);
+  backdrop-filter: blur(30px) saturate(180%);
+  border-radius: 24px;
+  padding: 40px;
+  max-width: 600px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transform: scale(0.95);
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* 单个评论项 */
+.popup.show .popup-content {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.popup-content h2 {
+  font-size: 2.8em;
+  margin-bottom: 25px;
+  background: linear-gradient(135deg, #4F46E5, #7C3AED, #EC4899);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+}
+
+.popup-content p {
+  font-size: 1.2em;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 35px;
+}
+
+/* 评论项样式优化 */
 .comment-item {
-  background: rgba(255,255,255,0.1);
-  margin-bottom: 10px;
-  padding: 15px;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(0);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .comment-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.05);
 }
 
-/* 删除按钮 */
+.comment-image {
+    max-width: 200px;
+    max-height: 200px;
+    margin: 10px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.comment-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.comment-input-container {
+    margin: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.upload-controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 8px 15px;
+    cursor: pointer;
+    background: #f0f0f0;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.custom-file-upload:hover {
+    background: #e0e0e0;
+}
+
+.image-preview {
+    margin-top: 10px;
+    max-width: 200px;
+}
+
+.image-preview img {
+    max-width: 100%;
+    border-radius: 5px;
+}
+
+/* 修改评论项的样式 */
+.comment-item {
+    margin: 15px 0;
+    padding: 20px;
+    background: rgba(18, 18, 24, 0.85);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3),
+                inset 0 0 20px rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    width: 100%; /* 确保宽度占满 */
+}
+
+.comment-content {
+    display: flex; /* 改用 flex 布局 */
+    align-items: flex-start; /* 顶部对齐 */
+    gap: 20px;
+    width: 100%;
+}
+
+.comment-image {
+    flex-shrink: 0; /* 防止图片被压缩 */
+    width: 150px; /* 固定宽度 */
+    height: 150px; /* 固定高度 */
+    object-fit: cover; /* 保持图片比例 */
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.comment-text {
+    flex: 1; /* 文字区域占据剩余空间 */
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: 0.3px;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    min-width: 0; /* 防止文字溢出 */
+    word-wrap: break-word; /* 长文字换行 */
+}
+
 .delete-comment {
-  background: rgba(255,0,0,0.6);
-  transition: all 0.3s ease;
+    flex-shrink: 0; /* 防止按钮被压缩 */
+    align-self: flex-start;
+    padding: 8px 15px;
+    background: rgba(255, 59, 59, 0.15);
+    color: rgba(255, 89, 89, 0.9);
+    border: 1px solid rgba(255, 59, 59, 0.2);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 12px;
+    height: fit-content;
 }
 
 .delete-comment:hover {
-  background: rgba(255,0,0,0.8);
-  transform: scale(1.05);
+    background: rgba(255, 59, 59, 0.25);
+    color: rgba(255, 89, 89, 1);
+    border-color: rgba(255, 59, 59, 0.3);
+    transform: translateY(-2px);
 }
 
-/* 简单的进入动画 */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+/* 评论输入区域样式 */
+.comment-input-container {
+    background: rgba(18, 18, 24, 0.85);
+    backdrop-filter: blur(10px);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 30px;
 }
 
-.comment-new {
-  animation: fadeIn 0.5s ease forwards;
+#commentInput {
+    width: 100%;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    transition: all 0.3s ease;
+    resize: vertical;
+    min-height: 100px;
+}
+
+#commentInput:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.upload-controls {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.custom-file-upload {
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.custom-file-upload:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.custom-file-upload i {
+    font-size: 16px;
+}
+
+#submitComment {
+    padding: 10px 25px;
+    background: rgba(64, 128, 255, 0.15);
+    color: rgba(100, 155, 255, 0.9);
+    border: 1px solid rgba(64, 128, 255, 0.2);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+#submitComment:hover {
+    background: rgba(64, 128, 255, 0.25);
+    transform: translateY(-2px);
+}
+
+/* 图片预览区域 */
+.image-preview {
+    margin-top: 15px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.image-preview img {
+    max-width: 200px;
+    border-radius: 6px;
+}
+
+/* 添加评论容器的样式 */
+#commentDisplay {
+    max-height: 70vh; /* 设置最大高度为视窗高度的70% */
+    overflow-y: auto; /* 添加垂直滚动条 */
+    padding-right: 10px; /* 为滚动条留出空间 */
+    margin: 20px 0;
+}
+
+/* 自定义滚动条样式 */
+#commentDisplay::-webkit-scrollbar {
+    width: 8px;
+}
+
+#commentDisplay::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+#commentDisplay::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+#commentDisplay::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* 确保评论项样式正确 */
+.comment-item {
+    margin: 15px 0;
+    padding: 20px;
+    background: rgba(18, 18, 24, 0.85);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    box-sizing: border-box; /* 确保padding不会增加总宽度 */
+}
+
+/* 调整评论输入区域的位置 */
+.comment-input-container {
+    position: sticky; /* 使输入框固定在底部 */
+    bottom: 0;
+    background: rgba(18, 18, 24, 0.95); /* 稍微加深背景色 */
+    z-index: 10; /* 确保在其他内容之上 */
+    margin-top: 20px;
+}
+
+/* 添加模态框样式 */
+.image-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* 确保在最上层 */
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(0);
+}
+
+.image-modal.show {
+    opacity: 1;
+    visibility: visible;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+}
+
+.modal-content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    transform: scale(0.8);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    margin: auto; /* 确保居中 */
+}
+
+.modal-content.show {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.modal-content img {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    transform-origin: center;
+}
+
+.close-modal {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    color: #fff;
+    font-size: 30px;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    z-index: 10000; /* 确保在图片上层 */
+}
+
+.close-modal:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+/* 修改评论中图片的样式，添加放大提示 */
+.comment-image {
+    cursor: zoom-in;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.comment-image:hover {
+    transform: scale(1.02);
+    filter: brightness(1.1);
 }

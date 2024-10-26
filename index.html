@@ -5,6 +5,7 @@
         <title>Soul-Echoes</title>
         <link rel="stylesheet" href="./CSS/style.css">
         <link rel="preload" href="https://a452163.github.io/CSS/O.ttf" as="font" type="font/ttf" crossorigin>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
         
         
         
@@ -18,10 +19,19 @@
             <div id="commentSidebar">
                 <h2>评论区</h2>
                 <div id="commentSection">
-                    <textarea id="commentInput" placeholder="请输入您的评论..."></textarea>
-                    <button id="submitComment">提交评论</button>
+                    <div class="comment-input-container">
+                        <textarea id="commentInput" placeholder="写下你的评论..."></textarea>
+                        <div class="upload-controls">
+                            <label for="imageInput" class="custom-file-upload">
+                                <i class="fas fa-image"></i> 添加图片
+                            </label>
+                            <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                            <button id="submitComment">发送</button>
+                        </div>
+                        <div id="imagePreview" class="image-preview"></div>
+                    </div>
+                    <div id="commentDisplay"></div>
                 </div>
-                <div id="commentDisplay"></div>
             </div>
 
             <!-- 自我介绍弹出框 -->
@@ -180,7 +190,7 @@
         </div>
         <div class="container V" id="container19" >
             <h1 class="title">⟪SIMPSON WAVE 1995⟫</h1>
-            <h1 class="title">⟪SIMPSON WAVE 1995⟫</h1>
+            <h1 class="title">SIMPSON WAVE 1995⟫</h1>
             <h1 class="title">⟪SIMPSON WAVE 1995⟫</h1>
             <h1 class="title">⟪SIMPSON WAVE 1995⟫</h1>
             <h1 class="title">⟪SIMPSON WAVE 1995⟫</h1>
