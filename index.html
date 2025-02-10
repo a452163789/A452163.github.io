@@ -1,255 +1,314 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="icon" href="/网站图标.png" type="image/png">
-        <title>你觉得我该选一个什么样子的标题?</title>
-        <link rel="stylesheet" href="./CSS/style.css">
-        <link rel="preload" href="https://a452163.github.io/CSS/O.ttf" as="font" type="font/ttf" crossorigin>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-        
-        
-        
 
-        
-    </head>
-    <body>
-        <!-- 评论区和自我介绍弹窗容器 -->
-        <div id="overlayContainer">
-            <!-- 评论区侧边栏 -->
-            <div id="commentSidebar">
-                <h2>评论区</h2>
-                <div id="commentSection">
-                    <div class="comment-input-container">
-                        <textarea id="commentInput" placeholder="写下你的评论..."></textarea>
-                        <div class="upload-controls">
-                            <label for="imageInput" class="custom-file-upload">
-                                <i class="fas fa-image"></i> 添加图片
-                            </label>
-                            <input type="file" id="imageInput" accept="image/*" style="display: none;">
-                            <button id="submitComment">发送</button>
-                        </div>
-                        <div id="imagePreview" class="image-preview"></div>
+<head>
+    <link rel="icon" href="/网站图标.png" type="image/png">
+    <title>Music</title>
+    <link rel="stylesheet" href="./CSS/style.css">
+    <link rel="preload" href="https://a452163.github.io/CSS/O.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
+
+
+
+</head>
+
+<body>
+    <!-- 评论区和自我介绍弹窗容器 -->
+    <div id="overlayContainer">
+        <!-- 评论区侧边栏 -->
+        <div id="commentSidebar">
+            <h2>评论区</h2>
+            <div id="commentSection">
+                <div class="comment-input-container">
+                    <textarea id="commentInput" placeholder="写下你的评论..."></textarea>
+                    <div class="upload-controls">
+                        <label for="imageInput" class="custom-file-upload">
+                            <i class="fas fa-image"></i> 添加图片
+                        </label>
+                        <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                        <button id="submitComment">发送</button>
                     </div>
-                    <div id="commentDisplay"></div>
+                    <div id="imagePreview" class="image-preview"></div>
                 </div>
-            </div>
-
-            <!-- 自我介绍弹出框 -->
-            <div id="introPopup" class="popup">
-                <div class="popup-content">
-                    <h2>自我介绍</h2>
-                    <p>额，我做了一个网页，就这样。</p>
-                    <button id="closePopup">关闭</button>
-                </div>
+                <div id="commentDisplay"></div>
             </div>
         </div>
 
-        <div class="container a abcdef" id="container1">
-            <h1 class="title">⟪AUTOMOTIVO BAYSIDE⟫</h1>
-            <h1 class="title">⟪AUTOMOTIVO BAYSIDE⟫</h1>
-            <h1 class="title">⟪AUTOMOTIVO BAYSIDE⟫</h1>
-            <h1 class="title">⟪AUTOMOTIVO BAYSIDE⟫</h1>
-            <h1 class="title">⟪AUTOMOTIVO BAYSIDE⟫</h1>
-            <h1 class="title">⟪AUTOMOTIVO BAYSIDE⟫</h1>
+        <!-- 自我介绍弹出框 -->
+        <div id="introPopup" class="popup">
+            <div class="popup-content">
+                <h2>自我介绍</h2>
+                <p>额，我做了一个网页，就这样。</p>
+                <button id="closePopup">关闭</button>
+            </div>
         </div>
-        <div class="container b" id="container2" onclick="showCanvas()">
-            <h1 class="title QQQ">⟪ONCE UPON A TIME⟫</h1>
-            <h1 class="title QQQ">⟪ONCE UPON A TIME⟫</h1>
-            <h1 class="title QQQ">⟪ONCE UPON A TIME⟫</h1>
-            <h1 class="title QQQ">⟪ONCE UPON A TIME⟫</h1>
-            <h1 class="title QQQ">⟪ONCE UPON A TIME⟫</h1>
-            <h1 class="title QQQ">⟪ONCE UPON A TIME⟫</h1>
-        </div>
-        <div class="container c" id="container3">
-            <h1 class="title">⟪AUTOMOTIVO BAYSIDE 2.0⟫</h1>
-            <h1 class="title">⟪AUTOMOTIVO BAYSIDE 2.0⟫</h1>
-            <h1 class="title">⟪AUTOMOTIVO BAYSIDE 2.0⟫</h1>
-            <h1 class="title">⟪AUTOMOTIVO BAYSIDE 2.0⟫</h1>
-            <h1 class="title">⟪AUTOMOTIVO BAYSIDE 2.0⟫</h1>
-            <h1 class="title">⟪AUTOMOTIVO BAYSIDE 2.0⟫</h1>
-        </div>
-        <div class="container d" id="container4">
-            <h1 class="title">⟪AUTOMOTIVO BAYSIDE 3.0⟫</h1>
-            <h1 class="title">⟪AUTOMOTIVO BAYSIDE 3.0⟫</h1>
-            <h1 class="title">⟪AUTOMOTIVO BAYSIDE 3.0⟫</h1>
-            <h1 class="title">⟪AUTOMOTIVO BAYSIDE 3.0⟫</h1>
-            <h1 class="title">⟪AUTOMOTIVO BAYSIDE 3.0⟫</h1>
-            <h1 class="title">⟪AUTOMOTIVO BAYSIDE 3.0⟫</h1>
-        </div>
-        <div class="container e" id="container5">
-            <h1 class="title QQQ">⟪ROMANCE GARBAGE⟫</h1>
-            <h1 class="title QQQ">⟪ROMANCE GARBAGE⟫</h1>
-            <h1 class="title QQQ">⟪ROMANCE GARBAGE⟫</h1>
-            <h1 class="title QQQ">⟪ROMANCE GARBAGE⟫</h1>
-            <h1 class="title QQQ">⟪ROMANCE GARBAGE⟫</h1>
-            <h1 class="title QQQ">⟪ROMANCE GARBAGE⟫</h1>
-        </div>
-        <div class="container f" id="container6" >
-            <h1 class="title QQQ">⟪I BELIEVE⟫</h1>
-            <h1 class="title QQQ">⟪I BELIEVE⟫</h1>
-            <h1 class="title QQQ">⟪I BELIEVE⟫</h1>
-            <h1 class="title QQQ">⟪I BELIEVE⟫</h1>
-            <h1 class="title QQQ">⟪I BELIEVE⟫</h1>
-            <h1 class="title QQQ">⟪I BELIEVE⟫</h1>
-        </div>
-        <div class="container H"  id="container7" >
-            <h1 class="title">⟪SWEET RALLY⟫</h1>
-            <h1 class="title">⟪SWEET RALLY⟫</h1>
-            <h1 class="title">⟪SWEET RALLY⟫</h1>
-            <h1 class="title">⟪SWEET RALLY⟫</h1>
-            <h1 class="title">⟪SWEET RALLY⟫</h1>
-            <h1 class="title">⟪SWEET RALLY⟫</h1>
-        </div>
-        <div class="container I" id="container8" >
-            <h1 class="title QQQ">⟪MY WAY⟫</h1>
-            <h1 class="title QQQ">⟪MY WAY⟫</h1>
-            <h1 class="title QQQ">⟪MY WAY⟫</h1>
-            <h1 class="title QQQ">⟪MY WAY⟫</h1>
-            <h1 class="title QQQ">⟪MY WAY⟫</h1>
-            <h1 class="title QQQ">⟪MY WAY⟫</h1>
-        </div>
-        <div class="container K" id="container9" >
-            <h1 class="title QQQ">⟪CUTE⟫</h1>
-            <h1 class="title QQQ">⟪CUTE⟫</h1>
-            <h1 class="title QQQ">⟪CUTE⟫</h1>
-            <h1 class="title QQQ">⟪CUTE⟫</h1>
-            <h1 class="title QQQ">⟪CUTE⟫</h1>
-            <h1 class="title QQQ">⟪CUTE⟫</h1>
-        </div>
-        <div class="container M" id="container10" >
-            <h1 class="title QQQ">⟪ITS OKAY NOW⟫</h1>
-            <h1 class="title QQQ">⟪ITS OKAY NOW⟫</h1>
-            <h1 class="title QQQ">⟪ITS OKAY NOW⟫</h1>
-            <h1 class="title QQQ">⟪ITS OKAY NOW⟫</h1>
-            <h1 class="title QQQ">⟪ITS OKAY NOW⟫</h1>
-            <h1 class="title QQQ">⟪ITS OKAY NOW⟫</h1>
-        </div>
-        <div class="container N" id="container11" >
-            <h1 class="title QQQ">⟪III⟫</h1>
-            <h1 class="title QQQ">⟪III⟫</h1>
-            <h1 class="title QQQ">⟪III⟫</h1>
-            <h1 class="title QQQ">⟪III⟫</h1>
-            <h1 class="title QQQ">⟪III⟫</h1>
-            <h1 class="title QQQ">⟪III⟫</h1>
-        </div>
-        <div class="container O" id="container12" >
-            <h1 class="title QQQ">⟪RASA SAYANG⟫</h1>
-            <h1 class="title QQQ">⟪RASA SAYANG⟫</h1>
-            <h1 class="title QQQ">⟪RASA SAYANG⟫</h1>
-            <h1 class="title QQQ">⟪RASA SAYANG⟫</h1>
-            <h1 class="title QQQ">⟪RASA SAYANG⟫</h1>
-            <h1 class="title QQQ">⟪RASA SAYANG⟫</h1>
-        </div>
-        <div class="container P" id="container13" >
-            <h1 class="title QQQ">⟪HEARTBEAT⟫</h1>
-            <h1 class="title QQQ">⟪HEARTBEAT⟫</h1>
-            <h1 class="title QQQ">⟪HEARTBEAT⟫</h1>
-            <h1 class="title QQQ">⟪HEARTBEAT⟫</h1>
-            <h1 class="title QQQ">⟪HEARTBEAT⟫</h1>
-            <h1 class="title QQQ">⟪HEARTBEAT⟫</h1>
-        </div>
-        <div class="container Q" id="container14" >
-            <h1 class="title">⟪EU SENTO GABU⟫</h1>
-            <h1 class="title">⟪EU SENTO GABU⟫</h1>
-            <h1 class="title">⟪EU SENTO GABU⟫</h1>
-            <h1 class="title">⟪EU SENTO GABU⟫</h1>
-            <h1 class="title">⟪EU SENTO GABU⟫</h1>
-            <h1 class="title">⟪EU SENTO GABU⟫</h1>
-        </div>
-        <div class="container R" id="container15" >
-            <h1 class="title EEE">⟪蜘蛛糸モノポリー⟫</h1>
-            <h1 class="title EEE">⟪蜘蛛糸モノポリー⟫</h1>
-            <h1 class="title EEE">⟪蜘蛛糸モノポリー⟫</h1>
-            <h1 class="title EEE">⟪蜘蛛糸モノポリー⟫</h1>
-            <h1 class="title EEE">⟪蜘蛛糸モノポリー⟫</h1>
-            <h1 class="title EEE">⟪蜘蛛糸モノポリー⟫</h1>
-        </div>
-        <div class="container S" id="container16" >
-            <h1 class="title">⟪ECLIPSE!⟫</h1>
-            <h1 class="title">⟪ECLIPSE!⟫</h1>
-            <h1 class="title">⟪ECLIPSE!⟫</h1>
-            <h1 class="title">⟪ECLIPSE!⟫</h1>
-            <h1 class="title">⟪ECLIPSE!⟫</h1>
-            <h1 class="title">⟪ECLIPSE!⟫</h1>
-        </div>
-        <div class="container T" id="container17" >
-            <h1 class="title">⟪GIGACHAD FUNK⟫</h1>
-            <h1 class="title">⟪GIGACHAD FUNK⟫</h1>
-            <h1 class="title">⟪GIGACHAD FUNK⟫</h1>
-            <h1 class="title">⟪GIGACHAD FUNK⟫</h1>
-            <h1 class="title">⟪GIGACHAD FUNK⟫</h1>
-            <h1 class="title">⟪GIGACHAD FUNK⟫</h1>
-        </div>
-        <div class="container U" id="container18" >
-            <h1 class="title">⟪BRODYAGA FUNK⟫</h1>
-            <h1 class="title">⟪BRODYAGA FUNK⟫</h1>
-            <h1 class="title">⟪BRODYAGA FUNK⟫</h1>
-            <h1 class="title">⟪BRODYAGA FUNK⟫</h1>
-            <h1 class="title">⟪BRODYAGA FUNK⟫</h1>
-            <h1 class="title">⟪BRODYAGA FUNK⟫</h1>
-        </div>
-        <div class="container V" id="container19" >
-            <h1 class="title">⟪SIMPSON WAVE 1995⟫</h1>
-            <h1 class="title">SIMPSON WAVE 1995⟫</h1>
-            <h1 class="title">⟪SIMPSON WAVE 1995⟫</h1>
-            <h1 class="title">⟪SIMPSON WAVE 1995⟫</h1>
-            <h1 class="title">⟪SIMPSON WAVE 1995⟫</h1>
-            <h1 class="title">⟪SIMPSON WAVE 1995⟫</h1>
-        </div>
-        <div class="container W" id="container20" >
-            <h1 class="title">⟪WE NEVER⟫</h1>
-            <h1 class="title">⟪WE NEVER⟫</h1>
-            <h1 class="title">⟪WE NEVER⟫</h1>
-            <h1 class="title">⟪WE NEVER⟫</h1>
-            <h1 class="title">⟪WE NEVER⟫</h1>
-            <h1 class="title">⟪WE NEVER⟫</h1>
-        </div>
-        <div class="container X" id="container21" >
-            <h1 class="title">⟪親愛なるあなたは火葬⟫</h1>
-            <h1 class="title">⟪親愛なるあなたは火葬⟫</h1>
-            <h1 class="title">⟪親愛なるあなたは火葬⟫</h1>
-            <h1 class="title">⟪親愛なるあなたは火葬⟫</h1>
-            <h1 class="title">⟪親愛なるあなたは火葬⟫</h1>
-            <h1 class="title">⟪親愛なるあなたは火葬⟫</h1>
-        </div>
-        <div class="acrylic-gray"></div>
-        <div class="acrylic-lightblue"></div>
+    </div>
+
+    <div class="container a abcdef" id="container1">
+        <h1 class="title">⟪AUTOMOTIVO BAYSIDE⟫</h1>
+        <h1 class="title">⟪AUTOMOTIVO BAYSIDE⟫</h1>
+        <h1 class="title">⟪AUTOMOTIVO BAYSIDE⟫</h1>
+        <h1 class="title">⟪AUTOMOTIVO BAYSIDE⟫</h1>
+        <h1 class="title">⟪AUTOMOTIVO BAYSIDE⟫</h1>
+        <h1 class="title">⟪AUTOMOTIVO BAYSIDE⟫</h1>
+    </div>
+    <div class="container b" id="container2" onclick="showCanvas()">
+        <h1 class="title QQQ">⟪ONCE UPON A TIME⟫</h1>
+        <h1 class="title QQQ">⟪ONCE UPON A TIME⟫</h1>
+        <h1 class="title QQQ">⟪ONCE UPON A TIME⟫</h1>
+        <h1 class="title QQQ">⟪ONCE UPON A TIME⟫</h1>
+        <h1 class="title QQQ">⟪ONCE UPON A TIME⟫</h1>
+        <h1 class="title QQQ">⟪ONCE UPON A TIME⟫</h1>
+    </div>
+    <div class="container c" id="container3">
+        <h1 class="title">⟪AUTOMOTIVO BAYSIDE 2.0⟫</h1>
+        <h1 class="title">⟪AUTOMOTIVO BAYSIDE 2.0⟫</h1>
+        <h1 class="title">⟪AUTOMOTIVO BAYSIDE 2.0⟫</h1>
+        <h1 class="title">⟪AUTOMOTIVO BAYSIDE 2.0⟫</h1>
+        <h1 class="title">⟪AUTOMOTIVO BAYSIDE 2.0⟫</h1>
+        <h1 class="title">⟪AUTOMOTIVO BAYSIDE 2.0⟫</h1>
+    </div>
+    <div class="container d" id="container4">
+        <h1 class="title">⟪AUTOMOTIVO BAYSIDE 3.0⟫</h1>
+        <h1 class="title">⟪AUTOMOTIVO BAYSIDE 3.0⟫</h1>
+        <h1 class="title">⟪AUTOMOTIVO BAYSIDE 3.0⟫</h1>
+        <h1 class="title">⟪AUTOMOTIVO BAYSIDE 3.0⟫</h1>
+        <h1 class="title">⟪AUTOMOTIVO BAYSIDE 3.0⟫</h1>
+        <h1 class="title">⟪AUTOMOTIVO BAYSIDE 3.0⟫</h1>
+    </div>
+    <div class="container e" id="container5">
+        <h1 class="title QQQ">⟪ROMANCE GARBAGE⟫</h1>
+        <h1 class="title QQQ">⟪ROMANCE GARBAGE⟫</h1>
+        <h1 class="title QQQ">⟪ROMANCE GARBAGE⟫</h1>
+        <h1 class="title QQQ">⟪ROMANCE GARBAGE⟫</h1>
+        <h1 class="title QQQ">⟪ROMANCE GARBAGE⟫</h1>
+        <h1 class="title QQQ">⟪ROMANCE GARBAGE⟫</h1>
+    </div>
+    <div class="container f" id="container6">
+        <h1 class="title QQQ">⟪I BELIEVE⟫</h1>
+        <h1 class="title QQQ">⟪I BELIEVE⟫</h1>
+        <h1 class="title QQQ">⟪I BELIEVE⟫</h1>
+        <h1 class="title QQQ">⟪I BELIEVE⟫</h1>
+        <h1 class="title QQQ">⟪I BELIEVE⟫</h1>
+        <h1 class="title QQQ">⟪I BELIEVE⟫</h1>
+    </div>
+    <div class="container H" id="container7">
+        <h1 class="title">⟪SWEET RALLY⟫</h1>
+        <h1 class="title">⟪SWEET RALLY⟫</h1>
+        <h1 class="title">⟪SWEET RALLY⟫</h1>
+        <h1 class="title">⟪SWEET RALLY⟫</h1>
+        <h1 class="title">⟪SWEET RALLY⟫</h1>
+        <h1 class="title">⟪SWEET RALLY⟫</h1>
+    </div>
+    <div class="container I" id="container8">
+        <h1 class="title QQQ">⟪MY WAY⟫</h1>
+        <h1 class="title QQQ">⟪MY WAY⟫</h1>
+        <h1 class="title QQQ">⟪MY WAY⟫</h1>
+        <h1 class="title QQQ">⟪MY WAY⟫</h1>
+        <h1 class="title QQQ">⟪MY WAY⟫</h1>
+        <h1 class="title QQQ">⟪MY WAY⟫</h1>
+    </div>
+    <div class="container K" id="container9">
+        <h1 class="title QQQ">⟪CUTE⟫</h1>
+        <h1 class="title QQQ">⟪CUTE⟫</h1>
+        <h1 class="title QQQ">⟪CUTE⟫</h1>
+        <h1 class="title QQQ">⟪CUTE⟫</h1>
+        <h1 class="title QQQ">⟪CUTE⟫</h1>
+        <h1 class="title QQQ">⟪CUTE⟫</h1>
+    </div>
+    <div class="container M" id="container10">
+        <h1 class="title QQQ">⟪ITS OKAY NOW⟫</h1>
+        <h1 class="title QQQ">⟪ITS OKAY NOW⟫</h1>
+        <h1 class="title QQQ">⟪ITS OKAY NOW⟫</h1>
+        <h1 class="title QQQ">⟪ITS OKAY NOW⟫</h1>
+        <h1 class="title QQQ">⟪ITS OKAY NOW⟫</h1>
+        <h1 class="title QQQ">⟪ITS OKAY NOW⟫</h1>
+    </div>
+    <div class="container N" id="container11">
+        <h1 class="title QQQ">⟪III⟫</h1>
+        <h1 class="title QQQ">⟪III⟫</h1>
+        <h1 class="title QQQ">⟪III⟫</h1>
+        <h1 class="title QQQ">⟪III⟫</h1>
+        <h1 class="title QQQ">⟪III⟫</h1>
+        <h1 class="title QQQ">⟪III⟫</h1>
+    </div>
+    <div class="container O" id="container12">
+        <h1 class="title QQQ">⟪RASA SAYANG⟫</h1>
+        <h1 class="title QQQ">⟪RASA SAYANG⟫</h1>
+        <h1 class="title QQQ">⟪RASA SAYANG⟫</h1>
+        <h1 class="title QQQ">⟪RASA SAYANG⟫</h1>
+        <h1 class="title QQQ">⟪RASA SAYANG⟫</h1>
+        <h1 class="title QQQ">⟪RASA SAYANG⟫</h1>
+    </div>
+    <div class="container P" id="container13">
+        <h1 class="title QQQ">⟪HEARTBEAT⟫</h1>
+        <h1 class="title QQQ">⟪HEARTBEAT⟫</h1>
+        <h1 class="title QQQ">⟪HEARTBEAT⟫</h1>
+        <h1 class="title QQQ">⟪HEARTBEAT⟫</h1>
+        <h1 class="title QQQ">⟪HEARTBEAT⟫</h1>
+        <h1 class="title QQQ">⟪HEARTBEAT⟫</h1>
+    </div>
+    <div class="container Q" id="container14">
+        <h1 class="title">⟪EU SENTO GABU⟫</h1>
+        <h1 class="title">⟪EU SENTO GABU⟫</h1>
+        <h1 class="title">⟪EU SENTO GABU⟫</h1>
+        <h1 class="title">⟪EU SENTO GABU⟫</h1>
+        <h1 class="title">⟪EU SENTO GABU⟫</h1>
+        <h1 class="title">⟪EU SENTO GABU⟫</h1>
+    </div>
+    <div class="container R" id="container15">
+        <h1 class="title EEE">⟪蜘蛛糸モノポリー⟫</h1>
+        <h1 class="title EEE">⟪蜘蛛糸モノポリー⟫</h1>
+        <h1 class="title EEE">⟪蜘蛛糸モノポリー⟫</h1>
+        <h1 class="title EEE">⟪蜘蛛糸モノポリー⟫</h1>
+        <h1 class="title EEE">⟪蜘蛛糸モノポリー⟫</h1>
+        <h1 class="title EEE">⟪蜘蛛糸モノポリー⟫</h1>
+    </div>
+    <div class="container S" id="container16">
+        <h1 class="title">⟪ECLIPSE!⟫</h1>
+        <h1 class="title">⟪ECLIPSE!⟫</h1>
+        <h1 class="title">⟪ECLIPSE!⟫</h1>
+        <h1 class="title">⟪ECLIPSE!⟫</h1>
+        <h1 class="title">⟪ECLIPSE!⟫</h1>
+        <h1 class="title">⟪ECLIPSE!⟫</h1>
+    </div>
+    <div class="container T" id="container17">
+        <h1 class="title">⟪GIGACHAD FUNK⟫</h1>
+        <h1 class="title">⟪GIGACHAD FUNK⟫</h1>
+        <h1 class="title">⟪GIGACHAD FUNK⟫</h1>
+        <h1 class="title">⟪GIGACHAD FUNK⟫</h1>
+        <h1 class="title">⟪GIGACHAD FUNK⟫</h1>
+        <h1 class="title">⟪GIGACHAD FUNK⟫</h1>
+    </div>
+    <div class="container U" id="container18">
+        <h1 class="title">⟪BRODYAGA FUNK⟫</h1>
+        <h1 class="title">⟪BRODYAGA FUNK⟫</h1>
+        <h1 class="title">⟪BRODYAGA FUNK⟫</h1>
+        <h1 class="title">⟪BRODYAGA FUNK⟫</h1>
+        <h1 class="title">⟪BRODYAGA FUNK⟫</h1>
+        <h1 class="title">⟪BRODYAGA FUNK⟫</h1>
+    </div>
+    <div class="container V" id="container19">
+        <h1 class="title">⟪SIMPSON WAVE 1995⟫</h1>
+        <h1 class="title">SIMPSON WAVE 1995⟫</h1>
+        <h1 class="title">⟪SIMPSON WAVE 1995⟫</h1>
+        <h1 class="title">⟪SIMPSON WAVE 1995⟫</h1>
+        <h1 class="title">⟪SIMPSON WAVE 1995⟫</h1>
+        <h1 class="title">⟪SIMPSON WAVE 1995⟫</h1>
+    </div>
+    <div class="container W" id="container20">
+        <h1 class="title">⟪WE NEVER⟫</h1>
+        <h1 class="title">⟪WE NEVER⟫</h1>
+        <h1 class="title">⟪WE NEVER⟫</h1>
+        <h1 class="title">⟪WE NEVER⟫</h1>
+        <h1 class="title">⟪WE NEVER⟫</h1>
+        <h1 class="title">⟪WE NEVER⟫</h1>
+    </div>
+    <div class="container X" id="container21">
+        <h1 class="title">⟪親愛なるあなたは火葬⟫</h1>
+        <h1 class="title">⟪親愛なるあなたは火葬⟫</h1>
+        <h1 class="title">⟪親愛なるあなたは火葬⟫</h1>
+        <h1 class="title">⟪親愛なるあなたは火葬⟫</h1>
+        <h1 class="title">⟪親愛なるあなたは火葬⟫</h1>
+        <h1 class="title">⟪親愛なるあなたは火葬⟫</h1>
+    </div>
+    <div class="container Y" id="container22">
+        <h1 class="title">⟪BLUE HORIZON FUNK⟫</h1>
+        <h1 class="title">⟪BLUE HORIZON FUNK⟫</h1>
+        <h1 class="title">⟪BLUE HORIZON FUNK⟫</h1>
+        <h1 class="title">⟪BLUE HORIZON FUNK⟫</h1>
+        <h1 class="title">⟪BLUE HORIZON FUNK⟫</h1>
+        <h1 class="title">⟪BLUE HORIZON FUNK⟫</h1>
+    </div>
+    <div class="container Z" id="container23">
+        <h1 class="title">⟪BLUE HORIZON FUNK REMIX⟫</h1>
+        <h1 class="title">⟪BLUE HORIZON FUNK REMIX⟫</h1>
+        <h1 class="title">⟪BLUE HORIZON FUNK REMIX⟫</h1>
+        <h1 class="title">⟪BLUE HORIZON FUNK REMIX⟫</h1>
+        <h1 class="title">⟪BLUE HORIZON FUNK REMIX⟫</h1>
+        <h1 class="title">⟪BLUE HORIZON FUNK REMIX⟫</h1>
+    </div>
+    <div class="container ZZ" id="container24">
+        <h1 class="title">⟪HYPNOTIC⟫</h1>
+        <h1 class="title">⟪HYPNOTIC⟫</h1>
+        <h1 class="title">⟪HYPNOTIC⟫</h1>
+        <h1 class="title">⟪HYPNOTIC⟫</h1>
+        <h1 class="title">⟪HYPNOTIC⟫</h1>
+        <h1 class="title">⟪HYPNOTIC⟫</h1>
+
+    </div>
+    <div class="container ZZZ" id="container25">
+        <h1 class="title">⟪MONTAGEM WTF⟫</h1>
+        <h1 class="title">⟪MONTAGEM WTF⟫</h1>
+        <h1 class="title">⟪MONTAGEM WTF⟫</h1>
+        <h1 class="title">⟪MONTAGEM WTF⟫</h1>
+        <h1 class="title">⟪MONTAGEM WTF⟫</h1>
+        <h1 class="title">⟪MONTAGEM WTF⟫</h1>
+    </div>
+    <div class="container ZZZZ" id="container26">
+        <h1 class="title">⟪VAPO NO SETOR⟫</h1>
+        <h1 class="title">⟪VAPO NO SETOR⟫</h1>
+        <h1 class="title">⟪VAPO NO SETOR⟫</h1>
+        <h1 class="title">⟪VAPO NO SETOR⟫</h1>
+        <h1 class="title">⟪VAPO NO SETOR⟫</h1>
+        <h1 class="title">⟪VAPO NO SETOR⟫</h1>
+    </div>
+    <div class="container ZZZZZ" id="container27">
+        <h1 class="title">⟪Two Different Worlds⟫</h1>
+        <h1 class="title">⟪Two Different Worlds⟫</h1>
+        <h1 class="title">⟪Two Different Worlds⟫</h1>
+        <h1 class="title">⟪Two Different Worlds⟫</h1>
+        <h1 class="title">⟪Two Different Worlds⟫</h1>
+        <h1 class="title">⟪Two Different Worlds⟫</h1>
+    </div>
 
 
-        
-        <div id="audioVisualizationContainer">
-            <div class="ripple"></div>
-            <div class="ripple"></div>
-            <div class="ripple"></div>
-          </div>
-        
-          
-        
-        
-        
 
-        <div id="audioVisualizationContainer">
-            <canvas id="audioVisualization" width="100%" height="100px"></canvas>
-        </div>
-        <div class="container g"><canvas id="audio" width="100%" height="100%"></canvas></div>
 
-        
-        
-        <canvas id="visualization"></canvas>
-        <script type="module" src="JS/script.js"></script>
-        <script src="JS/PBomb.js"></script>
-        <script src="JS/Mouse.js"></script>
-        <script src="JS/index.min.js"></script>
-        
-        <div class="container NO">
-            <h1>   </h1>
-        </div>
-        <div class="container NOV">
-            <h1>   </h1>
-        </div>
-        
-        
-        
-        
-        </body>
+
+    <div class="acrylic-gray"></div>
+    <div class="acrylic-lightblue"></div>
+    
+
+
+
+
+    <div id="audioVisualizationContainer">
+        <div class="ripple"></div>
+        <div class="ripple"></div>
+        <div class="ripple"></div>
+    </div>
+
+
+
+
+
+
+    <div id="audioVisualizationContainer">
+        <canvas id="audioVisualization" width="100%" height="100px"></canvas>
+    </div>
+    <div class="container g"><canvas id="audio" width="100%" height="100%"></canvas></div>
+
+
+
+    <canvas id="visualization"></canvas>
+    <script type="module" src="JS/script.js"></script>
+    <script src="JS/PBomb.js"></script>
+    <script src="JS/Mouse.js"></script>
+    <script src="JS/index.min.js"></script>
+
+    <div class="container NO">
+        <h1> </h1>
+    </div>
+    <div class="container NOV">
+        <h1> </h1>
+    </div>
+
+
+
+
+</body>
+
 </html>

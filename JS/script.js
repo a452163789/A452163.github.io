@@ -1,36 +1,155 @@
-// 创建音频上下文和分析器
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-const analyser = audioContext.createAnalyser();
-analyser.fftSize = 32768; // 提高FFT大小以获取更多频率数据
-const frequencyData = new Uint8Array(analyser.frequencyBinCount);
+// 将 AudioContext 声明为 let,方便后续赋值
+let audioContext;
+let analyser;
+let audioInitialized = false;
 
-// 异步创建媒体元素源并连接到分析器和音频上下文
-const createMediaElementSource = async (mediaElement) => {
+// 添加全局状态追踪当前播放的音频
+let currentlyPlaying = null;
+let isPlayingLocked = false;
+
+// 添加循环播放状态
+let isLooping = false;
+
+// 定义音频文件列表
+const audioFiles = [
+    { file: '../AUTOMOTIVO BAYSIDE.mp3', containerId: 'container1' },
+    { file: '../ONCE UPON A TIME.mp3', containerId: 'container2' },
+    { file: '../AUTOMOTIVO BAYSIDE 2.0.mp3', containerId: 'container3' },
+    { file: '../AUTOMOTIVO BAYSIDE 3.0.mp3', containerId: 'container4' },
+    { file: '../ROMANCE GARBAGE.mp3', containerId: 'container5' },
+    { file: '../I BELIEVE.mp3', containerId: 'container6' },
+    { file: '../SWEET RALLY.mp3', containerId: 'container7' },
+    { file: '../MY WAY.mp3', containerId: 'container8' },
+    { file: '../EU SENTO GABU.mp3', containerId: 'container14' },
+    { file: '../蜘蛛糸モノポリー.mp3', containerId: 'container15' },
+    { file: '../ECLIPSE!.mp3', containerId: 'container16' },
+    { file: '../GIGACHAD FUNK.mp3', containerId: 'container17' },
+    { file: '../BRODYAGA FUNK.mp3', containerId: 'container18' },
+    { file: '../SimpsonWave1995.mp3', containerId: 'container19' },
+    { file: '../WE NEVER.mp3', containerId: 'container20' },
+    { file: '../親愛なるあなたは火葬.mp3', containerId: 'container21' },
+    { file: '../BLUE HORIZON FUNK.mp3', containerId: 'container22' },
+    { file: '../BLUE HORIZON FUNK REMIX!.mp3', containerId: 'container23' },
+    { file: '../HYPNOTIC.mp3', containerId: 'container24' },
+    { file: '../MONTAGEM-WTF.mp3', containerId: 'container25' },
+    { file: '../VAPO-NO-SETOR.mp3', containerId: 'container26' },
+    { file: '../Two Different Worlds.mp3', containerId: 'container27' }
+
+    
+];
+
+// 添加调试日志
+const initAudioContext = async () => {
+    if (!audioContext) {
+        try {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioContext.createAnalyser();
+            analyser.fftSize = 32768;
+            console.log('AudioContext 状态:', audioContext.state);
+            return true;
+        } catch (error) {
+            console.error('初始化 AudioContext 失败:', error);
+            return false;
+        }
+    }
+    return audioContext.state === 'running';
+};
+
+// 修改音频初始化流程
+const initAudioSystem = async () => {
+    if (audioInitialized) {
+        console.log('Audio system already initialized');
+        return;
+    }
+
     try {
-        await audioContext.resume();
-        const source = audioContext.createMediaElementSource(mediaElement);
-        source.connect(analyser).connect(audioContext.destination);
-        return source;
+        if (await initAudioContext()) {
+            console.log('AudioContext initialized after user gesture');
+            
+            // 确保 AudioContext 处于运行状态
+            await audioContext.resume();
+            console.log('AudioContext state:', audioContext.state);
+            
+            audioInitialized = true;
+            
+            // 加载音频文件
+            const containers = await loadAudioFiles(audioFiles);
+            console.log(`Loaded ${containers.length} audio files`);
+            
+            // 添加事件监听器
+            addEventListeners(containers);
+            
+            return containers;
+        }
     } catch (error) {
-        console.error("创建媒体元素源时出错:", error);
-        throw error; // 抛出错误以便调用处处理
+        console.error('初始化音频系统失败:', error);
+        audioInitialized = false;
+        throw error;
     }
 };
 
+// 音频初始化检查
+const checkAudioInit = () => !audioInitialized ? 
+    Promise.reject(new Error('请等待音频系统初始化完成')) : 
+    Promise.resolve();
 
-// 异步加载音频文件并返回音频对象和容器元素
-const loadAudioFiles = async (audioFiles) => {
+// 修改音频加载函数
+const loadAudioFiles = async (files) => {
     try {
-        const audioPromises = audioFiles.map(async ({ file, containerId }) => {
-            const audio = new Audio(file);
-            audio.loop = true;
-            await createMediaElementSource(audio);
-            return { audio, container: document.getElementById(containerId) };
+        await checkAudioInit();
+        
+        const audioElements = await Promise.all(files.map(async (file) => {
+            const audio = new Audio(file.file);
+            
+            // 使用三元运算符处理音频结束事件
+            audio.addEventListener('ended', () => 
+                isLooping && currentlyPlaying === audio ? 
+                    (audio.currentTime = 0, audio.play()) : 
+                    (currentlyPlaying = null)
+            );
+
+            await new Promise((resolve, reject) => {
+                audio.addEventListener('canplaythrough', resolve, { once: true });
+                audio.addEventListener('error', reject);
+                audio.load();
+            });
+
+            const source = audioContext.createMediaElementSource(audio);
+            source.connect(analyser);
+            analyser.connect(audioContext.destination);
+
+            return { audio, source };
+        }));
+
+        // 使用三元运算符处理点击事件
+        const containers = audioElements.map((el, index) => {
+            const container = document.getElementById(files[index].containerId);
+            container.addEventListener('click', async () => {
+                if(isPlayingLocked) return;
+                isPlayingLocked = true;
+
+                try {
+                    const audio = el.audio;
+                    audio === currentlyPlaying ?
+                        (audio.pause(), audio.currentTime = 0, currentlyPlaying = null, isLooping = false) :
+                        (currentlyPlaying?.pause(), currentlyPlaying = audio, audio.currentTime = 0, 
+                         await audio.play(), isLooping = true);
+                } catch (error) {
+                    console.error('播放音频时出错:', error);
+                    currentlyPlaying?.pause();
+                    currentlyPlaying = null;
+                    isLooping = false;
+                } finally {
+                    isPlayingLocked = false;
+                }
+            });
+            return container;
         });
-        return await Promise.all(audioPromises);
+
+        return containers;
     } catch (error) {
-        console.error("加载音频文件时出错:", error);
-        return []; // 确保总是返回一个数组以避免后续错误
+        console.error('加载音频文件失败:', error);
+        throw error;
     }
 };
 
@@ -101,88 +220,71 @@ const loadSavedContent = () => {
 
 
 // 页面加载完成后执行初始化
-document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        // 确保在加载完后进行初始化
-        graphicElement.style.width = '0px'; // 初始宽度
-        graphicElement.style.height = '0px'; // 初始高度
-        graphicElement.style.opacity = '0'; // 初始为透明
+document.addEventListener('DOMContentLoaded', () => {
+    const commentInput = document.getElementById('commentInput');
+    commentInput.style.resize = window.innerWidth < 768 ? 'vertical' : 'none';
 
-        const audioContainers = await loadAudioFiles([
-            { file: 'AUTOMOTIVO BAYSIDE.mp3', containerId: 'container1' },
-            { file: 'ONCE UPON A TIME.mp3', containerId: 'container2' },
-            { file: 'AUTOMOTIVO BAYSIDE 2.0.mp3', containerId: 'container3' },
-            { file: 'AUTOMOTIVO BAYSIDE 3.0.mp3', containerId: 'container4' },
-            { file: 'ROMANCE GARBAGE.mp3', containerId: 'container5' },
-            { file: 'I BELIEVE.mp3', containerId: 'container6' },
-            { file: 'SWEET RALLY.mp3', containerId: 'container7' },
-            { file: 'MY WAY.mp3', containerId: 'container8' },
-            { file: 'CUTE.mp3', containerId: 'container9' },
-            { file: 'ITS OKAY NOW.mp3', containerId: 'container10' },
-            { file: 'III.mp3', containerId: 'container11' },
-            { file: 'RASA SAYANG.mp3', containerId: 'container12' },
-            { file: 'HEARTBEAT.mp3', containerId: 'container13' },
-            { file: 'EU SENTO GABU.mp3', containerId: 'container14' },
-            { file: '蜘蛛糸モノポリー.mp3', containerId: 'container15' },
-            { file: 'ECLIPSE!.mp3', containerId: 'container16' },
-            { file: 'GIGACHAD FUNK.mp3', containerId: 'container17' },
-            { file: 'BRODYAGA FUNK.mp3', containerId: 'container18' },
-            { file: 'SimpsonWave1995.mp3', containerId: 'container19' },
-            { file: 'WE NEVER.mp3', containerId: 'container20' },
-            { file: '親愛なるあなたは火葬.mp3', containerId: 'container21' },
-        ]);
-        
-        if (audioContainers.length > 0) {
-            addEventListeners(audioContainers);
-            animate(); // 启动动画
-        } else {
-            throw new Error("音频容器加载失败");
+    // 等待用户交互来初始化音频系统
+    document.addEventListener('click', async () => {
+        if (!audioInitialized) {
+            await initAudioSystem();
         }
-
-    } catch (error) {
-        console.error("初始化时出错:", error);
-    }
+    }, { once: true });
 });
 
 
-// 为每个音器添加点击事监听器
+// 修改事件监听器添加函数
 const addEventListeners = (audioContainers) => {
     audioContainers.forEach(({ audio, container }) => {
         container?.addEventListener('click', async () => {
+            if (isPlayingLocked) return;
+            
             try {
-                await audioContext.resume(); // 确保音频上下文已经恢复
+                isPlayingLocked = true;
+                await audioContext.resume();
 
-                // 暂停其他音频
-                audioContainers.forEach(item => {
-                    if (item.audio !== audio) {
-                        item.audio.pause();
-                        item.audio.currentTime = 0; // 重置其他音频播放时间
-                        graphicElement.style.opacity = '0'; // 设为透明
+                // 如果点击的是当前正在播放的音频
+                if (currentlyPlaying === audio) {
+                    if (isLooping) {
+                        // 如果正在循环播放，停止循环
+                        isLooping = false;
+                        audio.pause();
+                        audio.currentTime = 0;
+                        currentlyPlaying = null;
+                    } else {
+                        // 如果没有循环播放，开始循环
+                        isLooping = true;
+                        if (audio.currentTime === 0 || audio.ended) {
+                            await audio.play();
+                        }
                     }
-                });
-
-                // 切换播放状态
-                if (audio.paused) {
-                    audio.currentTime = 0; // 重置播放时间
-                    audio.play().then(() => {
-                        graphicElement.style.opacity = '1'; // 播放音频时显示
-                    }).catch(error => console.error("播放音频时出错:", error));
                 } else {
-                    audio.pause(); // 暂停当前音频
-                    // 只设置透明度
-                    graphicElement.style.opacity = '0'; // 隐藏元素
+                    // 如果有其他音频在播放，先停止它
+                    if (currentlyPlaying) {
+                        currentlyPlaying.pause();
+                        currentlyPlaying.currentTime = 0;
+                        isLooping = false;
+                    }
+                    
+                    // 播放新的音频并开启循环
+                    audio.currentTime = 0;
+                    await audio.play();
+                    currentlyPlaying = audio;
+                    isLooping = true;
                 }
+                
+                console.log('Playing:', audio.src, 'Looping:', isLooping);
             } catch (error) {
-                console.error("播放:", error);
+                console.error('播放音频时出错:', error);
+                if (currentlyPlaying) {
+                    currentlyPlaying.pause();
+                    currentlyPlaying.currentTime = 0;
+                }
+                currentlyPlaying = null;
+                isLooping = false;
+            } finally {
+                isPlayingLocked = false;
             }
-        });
-        
-        // 音频结束时重置并重新播放
-        audio.addEventListener('ended', () => {
-            audio.currentTime = 0; // 重置播放时间
-            audio.play().then(() => {
-                graphicElement.style.opacity = '1'; // 时显示
-            }).catch(error => console.error("重播音频时出错:", error));
         });
     });
 };
@@ -190,7 +292,7 @@ const addEventListeners = (audioContainers) => {
 
 import { GIST_ID, GITHUB_TOKEN } from './config.js';
 
-window.onload = function() {
+window.onload = function () {
     const introPopup = document.getElementById('introPopup');
     const closePopupButton = document.getElementById('closePopup');
     const commentInput = document.getElementById('commentInput');
@@ -202,7 +304,7 @@ window.onload = function() {
     document.body.classList.add('no-scroll');
 
     // 关闭弹出框并重新启用滚动
-    closePopupButton.addEventListener('click', function() {
+    closePopupButton.addEventListener('click', function () {
         introPopup.classList.remove('show');
         document.body.classList.remove('no-scroll');
 
@@ -212,11 +314,11 @@ window.onload = function() {
     });
 
     // 修改这里：将 addCommentToGist 改为 addComment
-    submitCommentButton.addEventListener('click', function() {
+    submitCommentButton.addEventListener('click', function () {
         const comment = commentInput.value.trim();
         const imageInput = document.getElementById('imageInput');
         const imageFile = imageInput.files[0];
-        
+
         if (comment || imageFile) {
             addComment(comment, imageFile); // 使用正确的函数名
             commentInput.value = ''; // 清空输入框
@@ -232,7 +334,7 @@ window.onload = function() {
     document.getElementById('overlayContainer').classList.add('show');
 
     // 在关闭按钮的点击事件中隐藏 overlayContainer
-    document.getElementById('closePopup').addEventListener('click', function() {
+    document.getElementById('closePopup').addEventListener('click', function () {
         document.getElementById('overlayContainer').classList.remove('show');
     });
 };
@@ -246,7 +348,7 @@ async function loadCommentsFromGist() {
             }
         });
         const data = await response.json();
-        
+
         let comments = [];
         try {
             comments = JSON.parse(data.files['comments.json'].content);
@@ -255,7 +357,7 @@ async function loadCommentsFromGist() {
             comments = [];
             await updateGist([]);
         }
-        
+
         displayComments(comments);
     } catch (error) {
         console.error('加载评论时出错:', error);
@@ -270,13 +372,13 @@ function displayComments(comments) {
     comments.forEach((comment, index) => {
         const commentElement = document.createElement('div');
         commentElement.className = 'comment-item';
-        
+
         // 只使用简单的文本显示,不指定字体
         const textHtml = comment.text ? `<div class="comment-text">${comment.text}</div>` : '';
-        
+
         commentElement.innerHTML = `
             <div class="comment-content">
-                ${comment.image ? `<img src="${comment.image}" class="comment-image" alt="评论���片">` : ''}
+                ${comment.image ? `<img src="${comment.image}" class="comment-image" alt="评论片">` : ''}
                 ${textHtml}
                 <button class="delete-comment" data-index="${index}">删除</button>
             </div>
@@ -284,11 +386,11 @@ function displayComments(comments) {
         commentElement.style.opacity = '0';
         commentElement.style.transform = 'rotateX(-90deg) translateY(30px)';
         commentDisplay.appendChild(commentElement);
-        
+
         requestAnimationFrame(() => {
             commentElement.classList.add('comment-new');
         });
-        
+
         commentElement.addEventListener('mousemove', (e) => {
             const rect = commentElement.getBoundingClientRect();
             const x = e.clientX - rect.left;
@@ -297,24 +399,24 @@ function displayComments(comments) {
             const centerY = rect.height / 2;
             const rotateX = (y - centerY) / 10;
             const rotateY = (centerX - x) / 10;
-            
+
             commentElement.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
-            
+
             const content = commentElement.querySelector('.comment-content');
             content.style.transform = `rotateX(${-rotateX}deg) rotateY(${-rotateY}deg)`;
-            
+
             // 只在存在文本元素时添加3D效果
             const text = commentElement.querySelector('.comment-text');
             if (text) {
                 text.style.transform = `translateZ(20px) rotateX(${-rotateX * 1.5}deg) rotateY(${-rotateY * 1.5}deg)`;
             }
         });
-        
+
         commentElement.addEventListener('mouseleave', () => {
             commentElement.style.transform = 'rotateX(0) rotateY(0) scale(1)';
             const content = commentElement.querySelector('.comment-content');
             content.style.transform = 'rotateX(0) rotateY(0)';
-            
+
             // 同样检查文本元素是否存在
             const text = commentElement.querySelector('.comment-text');
             if (text) {
@@ -334,7 +436,7 @@ async function compressImage(file) {
                 const canvas = document.createElement('canvas');
                 let width = img.width;
                 let height = img.height;
-                
+
                 // 计算压缩比例
                 const maxSize = 800; // 最大尺寸
                 if (width > height && width > maxSize) {
@@ -349,7 +451,7 @@ async function compressImage(file) {
                 canvas.height = height;
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, width, height);
-                
+
                 // 压缩图片质量
                 const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
                 resolve(compressedDataUrl);
@@ -396,12 +498,12 @@ async function addComment(comment, imageFile) {
         });
 
         await updateGist(comments);
-        
+
         // 清空入
         document.getElementById('commentInput').value = '';
         document.getElementById('imageInput').value = '';
         document.getElementById('imagePreview').innerHTML = '';
-        
+
         await loadCommentsFromGist();
     } catch (error) {
         console.error('添加评论时出错:', error);
@@ -419,7 +521,7 @@ async function updateGist(comments) {
         }));
 
         const content = JSON.stringify(sanitizedComments, null, 2);
-        
+
         // 检查内容大小
         if (content.length > 900000) { // GitHub Gist 有大小限制
             throw new Error('评论内容太大，请删除一些旧评论');
@@ -453,7 +555,7 @@ async function updateGist(comments) {
 function deleteComment(index) {
     const commentElement = document.querySelector(`[data-index="${index}"]`).parentNode;
     commentElement.classList.add('comment-delete');
-    
+
     setTimeout(() => {
         fetch(`https://api.github.com/gists/${GIST_ID}`, {
             method: 'GET',
@@ -461,20 +563,20 @@ function deleteComment(index) {
                 'Authorization': `token ${GITHUB_TOKEN}`
             }
         })
-        .then(response => response.json())
-        .then(data => {
-            const comments = JSON.parse(data.files['comments.json'].content);
-            comments.splice(index, 1);
-            return updateGist(comments);
-        })
-        .then(() => loadCommentsFromGist())
-        .catch(error => console.error('删除评论时出错:', error));
+            .then(response => response.json())
+            .then(data => {
+                const comments = JSON.parse(data.files['comments.json'].content);
+                comments.splice(index, 1);
+                return updateGist(comments);
+            })
+            .then(() => loadCommentsFromGist())
+            .catch(error => console.error('删除评论时出错:', error));
     }, 600); // 匹配动画持续时间
 }
 
 
 // 为评论显示区域添加事件委托
-document.getElementById('commentDisplay').addEventListener('click', function(event) {
+document.getElementById('commentDisplay').addEventListener('click', function (event) {
     if (event.target.classList.contains('delete-comment')) {
         deleteComment(parseInt(event.target.getAttribute('data-index')));
     }
@@ -546,11 +648,11 @@ setInterval(() => {
 }, 1000);
 
 // 添加图片预览功能
-document.getElementById('imageInput').addEventListener('change', function(event) {
+document.getElementById('imageInput').addEventListener('change', function (event) {
     const file = event.target.files[0];
     if (file && file.type.startsWith('image/')) {
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             const preview = document.getElementById('imagePreview');
             preview.innerHTML = `<img src="${e.target.result}" alt="预图片">`;
         }
@@ -566,28 +668,28 @@ function setupImageModal() {
     document.body.appendChild(modal);
 
     // 为所有评论图片添加点击事件
-    document.addEventListener('click', async function(e) {
+    document.addEventListener('click', async function (e) {
         if (e.target.classList.contains('comment-image')) {
             const img = e.target;
-            
+
             modal.innerHTML = `
                 <div class="modal-content">
                     <img src="${img.src}" alt="放大图片">
                     <span class="close-modal">&times;</span>
                 </div>
             `;
-            
+
             // 重置任何可能的定位样式
             const modalContent = modal.querySelector('.modal-content');
             modalContent.style.transform = 'scale(0.8)';
-            
+
             // 显示模态框
             modal.style.visibility = 'visible';
             requestAnimationFrame(() => {
                 modal.classList.add('show');
                 modalContent.classList.add('show');
             });
-            
+
             document.body.style.overflow = 'hidden';
         }
     });
@@ -597,7 +699,7 @@ function setupImageModal() {
         const modalContent = modal.querySelector('.modal-content');
         modal.classList.remove('show');
         modalContent?.classList.remove('show');
-        
+
         // 等待动画完成后隐藏
         setTimeout(() => {
             modal.style.visibility = 'hidden';
@@ -606,15 +708,15 @@ function setupImageModal() {
     }
 
     // 点击模态框关闭
-    modal.addEventListener('click', function(e) {
-        if (e.target.classList.contains('image-modal') || 
+    modal.addEventListener('click', function (e) {
+        if (e.target.classList.contains('image-modal') ||
             e.target.classList.contains('close-modal')) {
             closeModal();
         }
     });
 
     // ESC键关闭模态框
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && modal.classList.contains('show')) {
             closeModal();
         }
@@ -630,61 +732,55 @@ const createKeySound = () => {
     const sampleRate = audioContext.sampleRate;
     const buffer = audioContext.createBuffer(1, sampleRate * duration, sampleRate);
     const data = buffer.getChannelData(0);
-    
+
     for (let i = 0; i < buffer.length; i++) {
         const t = i / sampleRate;
-        
+
         // 主要的击键声 - 降低频率，增加厚重感
         const mainStrike = Math.sin(2 * Math.PI * 1200 * t) * Math.exp(-25 * t) * 0.8;
-        
+
         // 键帽回弹声音
         const bounce = Math.sin(2 * Math.PI * 800 * t) * Math.exp(-20 * t) * 0.4;
-        
+
         // 底部缓冲声音
         const cushion = (
             Math.sin(2 * Math.PI * 600 * t) * Math.exp(-15 * t) * 0.5 +   // 低频缓冲
             Math.sin(2 * Math.PI * 400 * t) * Math.exp(-10 * t) * 0.3     // 更低的频率
         );
-        
+
         // 轻微的塑料外壳共振
         const case_resonance = Math.sin(2 * Math.PI * 300 * t) * Math.exp(-8 * t) * 0.2;
-        
+
         // 非常轻微的机械噪声
         const noise = (Math.random() * 2 - 1) * Math.exp(-50 * t) * 0.05;
-        
+
         // 组合所有声音成分
         data[i] = (mainStrike + bounce + cushion + case_resonance + noise) * 0.15;
     }
-    
+
     const source = audioContext.createBufferSource();
     const gainNode = audioContext.createGain();
     const filterNode = audioContext.createBiquadFilter();
-    
+
     // 添加低通滤波器使声音更圆润
     filterNode.type = 'lowpass';
     filterNode.frequency.value = 2000;
     filterNode.Q.value = 0.7;
-    
+
     source.buffer = buffer;
     source.connect(filterNode);
     filterNode.connect(gainNode);
     gainNode.connect(audioContext.destination);
-    
+
     // 更自然的音量包络
     gainNode.gain.setValueAtTime(0.08, audioContext.currentTime);
     gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-    
+
     source.start();
 };
 
-// 为输入框添加音效
-document.getElementById('commentInput').addEventListener('input', () => {
-    createKeySound();
-});
-
 // 在页面加载完成后添加样式
 document.addEventListener('DOMContentLoaded', () => {
-    // 添加样式到 commentInput
     const commentInput = document.getElementById('commentInput');
-    commentInput.style.resize = 'none'; // 禁用调整大小功能
+    commentInput.style.resize = window.innerWidth < 768 ? 'vertical' : 'none';
 });

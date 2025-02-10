@@ -45,7 +45,18 @@ function init() {
                 pointerEvents: 'none'
             };
 
+            // 添加物理属性
+            this.velocity = { x: 0, y: 0 };  // 速度
+            this.target = { x: 0, y: 0 };    // 目标位置
+            this.springStrength = 0.1;        // 弹簧强度
+            this.damping = 0.7;              // 阻尼系数
+            this.mass = 1;                   // 质量
+
             this.init();
+
+            // 启动动画循环
+            this.animate = this.animate.bind(this);
+            requestAnimationFrame(this.animate);
         }
 
         init() {
@@ -54,28 +65,51 @@ function init() {
                 this.cursor.removeAttribute("hidden");
             }, 500);  // 500ms后显示游标
             this.cursor.style.opacity = 1;  // 设置透明度为1显示游标
-            
+
             // 隐藏默认鼠标指针
             this.root.style.cursor = 'none';  // 隐藏真实的鼠标指针
         }
 
         move(event) {
+            // 更新目标位置
+            this.target.x = event.clientX;
+            this.target.y = event.clientY;
+            
+            // 计算实际位置和目标位置的距离
+            const dx = this.target.x - this.position.pointerX;
+            const dy = this.target.y - this.position.pointerY;
+            
+            // 应用弹簧力
+            const ax = dx * this.springStrength / this.mass;
+            const ay = dy * this.springStrength / this.mass;
+            
+            // 更新速度
+            this.velocity.x = this.velocity.x * this.damping + ax;
+            this.velocity.y = this.velocity.y * this.damping + ay;
+            
+            // 更新位置
             this.previousPointerX = this.position.pointerX;
             this.previousPointerY = this.position.pointerY;
-            this.position.pointerX = event.clientX;
-            this.position.pointerY = event.clientY;
+            this.position.pointerX += this.velocity.x;
+            this.position.pointerY += this.velocity.y;
+            
+            // 计算移动距离用于旋转
             this.position.distanceX = this.previousPointerX - this.position.pointerX;
             this.position.distanceY = this.previousPointerY - this.position.pointerY;
             this.position.distance = Math.sqrt(this.position.distanceY ** 2 + this.position.distanceX ** 2);
+        }
 
-            this.cursor.style.transform = `translate3d(${this.position.pointerX - this.cursorSize / 2}px, ${this.position.pointerY - this.cursorSize / 2}px, 0)`;
-
-            // 判断游标是否移动，需旋转
-            if (this.position.distance > 1) {
-                this.rotate();
-            } else {
-                this.cursor.style.transform += ` rotate(${this.angleDisplace}deg)`;  // 跟随之前的角度
+        animate() {
+            // 应用变换
+            if (this.cursor) {
+                this.cursor.style.transform = 
+                    `translate3d(${this.position.pointerX - this.cursorSize / 2}px, 
+                                ${this.position.pointerY - this.cursorSize / 2}px, 0)` +
+                    (this.position.distance > 0.1 ? this.rotate() : ` rotate(${this.angleDisplace}deg)`);
             }
+            
+            // 继续动画循环
+            requestAnimationFrame(this.animate);
         }
 
         rotate() {
@@ -97,20 +131,18 @@ function init() {
             if (isNaN(this.angle)) {
                 this.angle = this.previousAngle;
             } else {
-                // 计算角度位移
-                if (this.angle - this.previousAngle <= -270) {
-                    this.angleDisplace += 360 + this.angle - this.previousAngle;
-                } else if (this.angle - this.previousAngle >= 270) {
-                    this.angleDisplace += this.angle - this.previousAngle - 360;
+                // 平滑角度变化
+                const angleDiff = this.angle - this.previousAngle;
+                if (Math.abs(angleDiff) > 180) {
+                    // 处理角度跨越 360 度的情况
+                    this.angleDisplace += angleDiff > 0 ? angleDiff - 360 : angleDiff + 360;
                 } else {
-                    this.angleDisplace += this.angle - this.previousAngle;
+                    // 应用平滑插值
+                    this.angleDisplace += angleDiff * 0.15;
                 }
             }
 
-            // 更新 cursor 的位置
-            this.cursor.style.left = `${-this.cursorSize / 2}px`;
-            this.cursor.style.top = '0px';
-            this.cursor.style.transform += ` rotate(${this.angleDisplace}deg)`;
+            return ` rotate(${this.angleDisplace}deg)`;
         }
 
         hidden() {
@@ -153,7 +185,7 @@ if (document.readyState === 'loading') {
 function hideRealCursor() {
     document.body.style.cursor = 'none';
     document.documentElement.style.cursor = 'none';
-    
+
     // 为所有元素添加 'cursor: none' 样式
     const allElements = document.getElementsByTagName('*');
     for (let i = 0; i < allElements.length; i++) {
