@@ -45,7 +45,9 @@
 .ZZ,
 .ZZZ,
 .ZZZZ,
-.ZZZZZ {
+.ZZZZZ,
+.ZZZZZZ,
+.ZZZZZZZ {
     position: absolute;
 
     box-shadow: inset 0 0 0 0.05px #000;
@@ -86,8 +88,10 @@
 .ZZ:hover,
 .ZZZ:hover,
 .ZZZZ:hover,
-.ZZZZZ:hover {
-    width: 311px;
+.ZZZZZ:hover,
+.ZZZZZZ:hover,
+.ZZZZZZZ:hover {
+    width: 378px;
     height: 250px;
 
     background-color: #fff;
@@ -130,23 +134,41 @@
     font-family: 'O', sans-serif;
 }
 
-.g {
+.container.g {
     position: fixed;
-    /* 固定定位，保持在视口中的位置 */
     top: 50%;
-    /* 视口高度的50% */
     left: 50%;
-    /* 视口宽度的50% */
     transform: translate(-50%, -50%);
-    /* 将元素居中对齐 */
-    width: 10vw;
-    /* 宽度为视口宽度的10% */
-    height: 10vh;
-    /* 高度为视口高度的10% */
-    opacity: 0;
-    /* 初始状态透明 */
-    transition: width 0.1s ease-out, height 0.1s ease-out, background-color 0.1s ease-out, opacity 0.5s ease;
-    /* 添加过渡效果 */
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 100%);
+    box-shadow: 
+        0 0 30px rgba(255,255,255,0.1),
+        inset 0 0 50px rgba(255,255,255,0.1);
+    z-index: 999;
+    transition: width 0.1s ease-out, height 0.1s ease-out, background-color 0.1s ease-out;
+    will-change: transform;
+    touch-action: none;
+    /* 添加容器约束 */
+    max-width: calc(100vw - 100px);
+    max-height: calc(100vh - 100px);
+    margin: 0 auto;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+#audio {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    mix-blend-mode: screen;
+    pointer-events: none; /* 确保canvas不影响拖动 */
 }
 
 .H {
@@ -276,6 +298,18 @@
     font-family: 'R', sans-serif;
 }
 
+.ZZZZZZ {
+    left: 8px;
+    top: 4568px;
+    font-family: 'EACH', sans-serif;
+}
+
+.ZZZZZZZ {
+    left: 8px;
+    top: 4872px;
+    font-family: 'EACH', sans-serif;
+}
+
 .NOV {
     width: 0px;
     height: 716px;
@@ -339,14 +373,20 @@
     left: 878.5px;
 }
 
-#audioVisualization {
+#audioVisualizationContainer {
     position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
     bottom: 0;
-    left: 8px;
+    pointer-events: none; /* 允许点击穿透 */
+    overflow: hidden; /* 防止内容溢出 */
+}
+
+#audioVisualization {
     width: 100%;
-    height: 837px;
-    z-index: -0;
-    pointer-events: none;
+    height: 100px;
+    background: rgba(0, 0, 0, 0.5);
 }
 
 @font-face {
@@ -573,7 +613,7 @@ button:hover {
     /* 确保介绍弹窗在较高层 */
 }
 
-/* 确保鼠相关元素在介绍弹窗上层，但在音��可视化下层 */
+/* 确保鼠相关元素在介绍弹窗上层，但在音频可视化下层 */
 .curzr-arrow-pointer {
     z-index: 20;
 }
@@ -601,18 +641,8 @@ button:hover {
 /* 当音频播放时，稍微增强亚克力效果 */
 #audioVisualizationContainer.active,
 .g.active {
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
-}
-
-/* ... 现有代码 ... */
-
-#audioVisualizationContainer {
-    position: relative;
-    overflow: hidden;
-    /* 保留之前的亚克力效果样式 */
+    background: rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* 评论部分样式 */
@@ -1257,7 +1287,7 @@ html {
 
 .comment-item:hover .comment-content {
     transform: translateZ(30px) scale(1.1) rotateY(10deg);
-    /* 增��深度和旋转 */
+    /* 增加深度和旋转 */
     box-shadow: 0 12px 18px rgba(0, 0, 0, 0.3);
 }
 
@@ -1727,4 +1757,196 @@ html {
 .comment-image:hover {
     transform: scale(1.02);
     filter: brightness(1.1);
+}
+
+/* 添加移动按钮的样式 */
+.comment-controls {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.move-up,
+.move-down {
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.move-up:hover:not([disabled]),
+.move-down:hover:not([disabled]) {
+    background: #f0f0f0;
+    transform: scale(1.1);
+}
+
+.move-up[disabled],
+.move-down[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.arrow-up,
+.arrow-down {
+    display: inline-block;
+    font-size: 14px;
+    line-height: 1;
+}
+
+/* 确保控制按钮在同一行 */
+.comment-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.comment-controls {
+    align-self: flex-end;
+}
+
+/* 评论控制按钮组样式 */
+.comment-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 4px;
+}
+
+/* 基础按钮样式 */
+.move-up,
+.move-down,
+.delete-comment {
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: linear-gradient(145deg, #2a2a2a, #323232);
+    color: #fff;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2),
+                -2px -2px 5px rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 移动按钮特殊样式 */
+.move-up,
+.move-down {
+    padding: 8px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 箭头图标样式 */
+.arrow-up::before,
+.arrow-down::before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    border: 2px solid currentColor;
+    border-left: 0;
+    border-bottom: 0;
+    transition: transform 0.2s;
+}
+
+.arrow-up::before {
+    transform: rotate(-45deg);
+}
+
+.arrow-down::before {
+    transform: rotate(135deg);
+}
+
+/* Hover效果 */
+.move-up:hover:not([disabled]),
+.move-down:hover:not([disabled]),
+.delete-comment:hover {
+    transform: translateY(-2px);
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3),
+                -3px -3px 8px rgba(255, 255, 255, 0.1);
+    background: linear-gradient(145deg, #323232, #3a3a3a);
+}
+
+/* Active效果 */
+.move-up:active:not([disabled]),
+.move-down:active:not([disabled]),
+.delete-comment:active {
+    transform: translateY(1px);
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2),
+                -1px -1px 3px rgba(255, 255, 255, 0.05);
+}
+
+/* 删除按钮特殊样式 */
+.delete-comment {
+    background: linear-gradient(145deg, #ff4d4d, #e60000);
+    margin-right: 4px;
+}
+
+.delete-comment:hover {
+    background: linear-gradient(145deg, #ff6666, #ff0000);
+}
+
+/* 禁用状态 */
+.move-up[disabled],
+.move-down[disabled] {
+    background: linear-gradient(145deg, #252525, #2d2d2d);
+    color: #666;
+    cursor: not-allowed;
+    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+                inset -2px -2px 5px rgba(255, 255, 255, 0.05);
+    transform: none;
+}
+
+/* 按钮内部涟漪效果 */
+.move-up::after,
+.move-down::after,
+.delete-comment::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+}
+
+.move-up:focus::after,
+.move-down:focus::after,
+.delete-comment:focus::after {
+    animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(20, 20);
+        opacity: 0;
+    }
+}
+
+/* 确保评论内容布局正确 */
+.comment-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    background: rgba(40, 40, 40, 0.6);
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }

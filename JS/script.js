@@ -10,6 +10,97 @@ let isPlayingLocked = false;
 // 添加循环播放状态
 let isLooping = false;
 
+// 添加可视化相关变量
+let canvas;
+let canvasCtx;
+let animationId;
+
+// 添加全局变量声明
+let time = 0; // 添加 time 变量并初始化
+
+// 添加新的变量来跟踪拖动位置
+let dragTransformX = 0;
+let dragTransformY = 0;
+
+// 添加全局渐变值
+let globalOpacity = 1;
+let fadeStartTime = 0;
+
+// 修改可视化配置对象
+const VISUALIZATION_CONFIG = {
+    fadeOutDuration: 1,  // 新增：统一的淡出时间（秒）
+    particle: {
+        rings: [
+            {
+                count: 60,             // 更多粒子
+                direction: 1,          
+                speedMultiplier: 1.2,  // 加快速度
+                radiusMultiplier: 1,   
+                hueOffset: 0,
+                sizeMultiplier: 1.2,   // 新增:大小倍数
+                opacityMultiplier: 1   // 新增:透明度倍数
+            },
+            {
+                count: 48,            
+                direction: -1,         
+                speedMultiplier: 0.9,  
+                radiusMultiplier: 0.8,
+                hueOffset: 60,
+                sizeMultiplier: 1,
+                opacityMultiplier: 0.9
+            },
+            {
+                count: 36,            
+                direction: 1,         
+                speedMultiplier: 1.4, 
+                radiusMultiplier: 0.6,
+                hueOffset: 120,
+                sizeMultiplier: 0.8,
+                opacityMultiplier: 0.8
+            },
+            {   // 新增第四环
+                count: 72,            
+                direction: -1,        
+                speedMultiplier: 0.7, 
+                radiusMultiplier: 1.2,
+                hueOffset: 180,
+                sizeMultiplier: 1.4,
+                opacityMultiplier: 0.7
+            },
+            {   // 新增第五环
+                count: 24,           
+                direction: 1,        
+                speedMultiplier: 1.6,
+                radiusMultiplier: 0.4,
+                hueOffset: 240,
+                sizeMultiplier: 0.6,
+                opacityMultiplier: 1
+            }
+        ],
+        minSize: 2,             
+        maxSize: 12,            // 粒子最大尺寸
+        opacity: 0.9,           // 基础透明度
+        hueSpeed: 150,          // 色相变化速度
+        colorSaturation: 80,    // 饱和度
+        colorLightness: 60,     // 亮度
+    },
+    animation: {
+        timeStep: 0.015,
+        maxDistanceRatio: 0.85,    // 减小最大范围
+        baseDistance: 0.45,        // 减小基础距离
+        distanceScale: 0.8,        // 减小缩放因子
+        frequencyInfluence: 0.8    // 减小频率影响
+    },
+    container: {
+        minScale: 1,            // 修改：保持最小缩放为1
+        baseScale: 1,           
+        scaleRange: 0.2,        
+        maxScaleIncrease: 0.3,  
+        rotationFactor: 120,    
+        pulseEnabled: true,     
+    }
+};
+
 // 定义音频文件列表
 const audioFiles = [
     { file: '../AUTOMOTIVO BAYSIDE.mp3', containerId: 'container1' },
@@ -33,9 +124,10 @@ const audioFiles = [
     { file: '../HYPNOTIC.mp3', containerId: 'container24' },
     { file: '../MONTAGEM-WTF.mp3', containerId: 'container25' },
     { file: '../VAPO-NO-SETOR.mp3', containerId: 'container26' },
-    { file: '../Two Different Worlds.mp3', containerId: 'container27' }
+    { file: '../Two Different Worlds.mp3', containerId: 'container27' },
+    { file: '../PROTECTION CHARM.mp3', containerId: 'container28' },
+    { file: '../PROTECTION CHARM (Slowed+Reverb).mp3', containerId: 'container29' },
 
-    
 ];
 
 // 添加调试日志
@@ -55,6 +147,153 @@ const initAudioContext = async () => {
     return audioContext.state === 'running';
 };
 
+// 修改可视化初始化
+const initVisualization = () => {
+    canvas = document.getElementById('audio');
+    if (!canvas) {
+        console.error('找不到 audio canvas 元素');
+        return;
+    }
+
+    canvasCtx = canvas.getContext('2d');
+
+    // 设置 canvas 尺寸
+    const resizeCanvas = () => {
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+    };
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // 配置分析器
+    analyser.fftSize = 32768;
+    const bufferLength = analyser.frequencyBinCount;
+    const frequencyData = new Uint8Array(bufferLength); // 声明并初始化 frequencyData
+
+    // 开始可视化
+    const draw = () => {
+        // 获取 canvas 尺寸
+        const canvasWidth = canvas.width;
+        const canvasHeight = canvas.height;
+        const centerX = canvasWidth / 2;
+        const centerY = canvasHeight / 2;
+        const size = Math.min(canvasWidth, canvasHeight) * 0.45;
+
+        // 清除画布
+        canvasCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+        // 初始化音频数据
+        let averageFrequency = 0;
+        
+        // 只在音频系统初始化后才获取频率数据
+        if (audioInitialized && analyser) {
+            const bufferLength = analyser.frequencyBinCount;
+            const frequencyData = new Uint8Array(bufferLength);
+            analyser.getByteFrequencyData(frequencyData);
+            averageFrequency = frequencyData.reduce((sum, value) => sum + value, 0) / frequencyData.length / 255;
+        }
+
+        // 计算脉冲效果
+        const pulse = Math.sin(time * 0.8) * 0.5;
+        
+        // 更新全局透明度
+        if (!currentlyPlaying && globalOpacity > 0) {
+            if (fadeStartTime === 0) {
+                fadeStartTime = time;
+            }
+            const fadeProgress = (time - fadeStartTime) / VISUALIZATION_CONFIG.fadeOutDuration;
+            globalOpacity = Math.max(0, 1 - fadeProgress);
+        } else if (currentlyPlaying) {
+            globalOpacity = 1;
+            fadeStartTime = 0;
+        }
+
+        // 修改粒子绘制逻辑
+        VISUALIZATION_CONFIG.particle.rings.forEach((ring, index) => {
+            for (let i = 0; i < ring.count; i++) {
+                // 如果正在播放，使用音频数据；如果已停止，使用最后的状态
+                const frequency = currentlyPlaying ? 
+                    averageFrequency : 
+                    (canvasCtx.lastFrequency || 0);
+                
+                // 保存最后的频率值
+                canvasCtx.lastFrequency = currentlyPlaying ? averageFrequency : canvasCtx.lastFrequency;
+
+                const distance = (VISUALIZATION_CONFIG.animation.baseDistance + 
+                    frequency * VISUALIZATION_CONFIG.animation.distanceScale) * 
+                    Math.min(canvasWidth, canvasHeight) * 
+                    VISUALIZATION_CONFIG.animation.maxDistanceRatio * 
+                    ring.radiusMultiplier;
+
+                const angle = (i * (Math.PI * 2) / ring.count) + 
+                    (time * ring.direction * ring.speedMultiplier);
+
+                const x = centerX + Math.cos(angle) * distance;
+                const y = centerY + Math.sin(angle) * distance;
+
+                // 计算粒子大小
+                const size = (VISUALIZATION_CONFIG.particle.minSize + 
+                    frequency * (VISUALIZATION_CONFIG.particle.maxSize - VISUALIZATION_CONFIG.particle.minSize)) * 
+                    ring.sizeMultiplier;
+
+                // 计算颜色和透明度
+                const hue = (time * VISUALIZATION_CONFIG.particle.hueSpeed + ring.hueOffset) % 360;
+                const opacity = VISUALIZATION_CONFIG.particle.opacity * 
+                    ring.opacityMultiplier * 
+                    globalOpacity;
+
+                canvasCtx.fillStyle = `hsla(${hue}, ${VISUALIZATION_CONFIG.particle.colorSaturation}%, ${VISUALIZATION_CONFIG.particle.colorLightness}%, ${opacity})`;
+                canvasCtx.beginPath();
+                canvasCtx.arc(x, y, size, 0, Math.PI * 2);
+                canvasCtx.fill();
+            }
+        });
+
+        // 更新容器动画
+        const container = canvas.parentElement;
+        if (container) {
+            const containerPulse = Math.sin(time * 2) * 0.03;
+            
+            // 计算动画scale - 停止时保持最后的状态
+            const lastScale = parseFloat(container.getAttribute('data-animation-scale')) || 1;
+            const targetScale = currentlyPlaying ? 
+                VISUALIZATION_CONFIG.container.baseScale + 
+                (averageFrequency * VISUALIZATION_CONFIG.container.scaleRange) :
+                lastScale;
+
+            // 计算旋转 - 停止时保持最后的状态
+            const lastRotation = parseFloat(container.getAttribute('data-animation-rotation')) || 0;
+            const rotation = currentlyPlaying ? 
+                (time * VISUALIZATION_CONFIG.container.rotationFactor * 
+                (1 + averageFrequency * 0.005)) % 360 : 
+                lastRotation;
+
+            // 保存动画值
+            container.setAttribute('data-animation-scale', targetScale);
+            container.setAttribute('data-animation-rotation', rotation);
+            
+            // 更新transform
+            updateContainerTransform();
+            
+            // 只更新opacity
+            container.style.opacity = currentlyPlaying ? '1' : '0';
+            container.style.transition = `opacity ${VISUALIZATION_CONFIG.fadeOutDuration}s ease-out`;
+        }
+
+        // 添加canvas的transition样式
+        canvasCtx.canvas.style.transition = `opacity ${VISUALIZATION_CONFIG.fadeOutDuration}s ease-out`;
+
+        // 更新时间
+        time += VISUALIZATION_CONFIG.animation.timeStep;
+        
+        // 请求下一帧
+        animationId = requestAnimationFrame(draw);
+    };
+
+    draw();
+};
+
 // 修改音频初始化流程
 const initAudioSystem = async () => {
     if (audioInitialized) {
@@ -65,20 +304,15 @@ const initAudioSystem = async () => {
     try {
         if (await initAudioContext()) {
             console.log('AudioContext initialized after user gesture');
-            
-            // 确保 AudioContext 处于运行状态
-            await audioContext.resume();
-            console.log('AudioContext state:', audioContext.state);
-            
+            analyser = audioContext.createAnalyser();
+            initVisualization();
             audioInitialized = true;
-            
-            // 加载音频文件
+
             const containers = await loadAudioFiles(audioFiles);
             console.log(`Loaded ${containers.length} audio files`);
-            
-            // 添加事件监听器
+
             addEventListeners(containers);
-            
+
             return containers;
         }
     } catch (error) {
@@ -89,22 +323,22 @@ const initAudioSystem = async () => {
 };
 
 // 音频初始化检查
-const checkAudioInit = () => !audioInitialized ? 
-    Promise.reject(new Error('请等待音频系统初始化完成')) : 
+const checkAudioInit = () => !audioInitialized ?
+    Promise.reject(new Error('请等待音频系统初始化完成')) :
     Promise.resolve();
 
 // 修改音频加载函数
 const loadAudioFiles = async (files) => {
     try {
         await checkAudioInit();
-        
+
         const audioElements = await Promise.all(files.map(async (file) => {
             const audio = new Audio(file.file);
-            
+
             // 使用三元运算符处理音频结束事件
-            audio.addEventListener('ended', () => 
-                isLooping && currentlyPlaying === audio ? 
-                    (audio.currentTime = 0, audio.play()) : 
+            audio.addEventListener('ended', () =>
+                isLooping && currentlyPlaying === audio ?
+                    (audio.currentTime = 0, audio.play()) :
                     (currentlyPlaying = null)
             );
 
@@ -125,15 +359,15 @@ const loadAudioFiles = async (files) => {
         const containers = audioElements.map((el, index) => {
             const container = document.getElementById(files[index].containerId);
             container.addEventListener('click', async () => {
-                if(isPlayingLocked) return;
+                if (isPlayingLocked) return;
                 isPlayingLocked = true;
 
                 try {
                     const audio = el.audio;
                     audio === currentlyPlaying ?
                         (audio.pause(), audio.currentTime = 0, currentlyPlaying = null, isLooping = false) :
-                        (currentlyPlaying?.pause(), currentlyPlaying = audio, audio.currentTime = 0, 
-                         await audio.play(), isLooping = true);
+                        (currentlyPlaying?.pause(), currentlyPlaying = audio, audio.currentTime = 0,
+                            await audio.play(), isLooping = true);
                 } catch (error) {
                     console.error('播放音频时出错:', error);
                     currentlyPlaying?.pause();
@@ -238,7 +472,7 @@ const addEventListeners = (audioContainers) => {
     audioContainers.forEach(({ audio, container }) => {
         container?.addEventListener('click', async () => {
             if (isPlayingLocked) return;
-            
+
             try {
                 isPlayingLocked = true;
                 await audioContext.resume();
@@ -265,14 +499,14 @@ const addEventListeners = (audioContainers) => {
                         currentlyPlaying.currentTime = 0;
                         isLooping = false;
                     }
-                    
+
                     // 播放新的音频并开启循环
                     audio.currentTime = 0;
                     await audio.play();
                     currentlyPlaying = audio;
                     isLooping = true;
                 }
-                
+
                 console.log('Playing:', audio.src, 'Looping:', isLooping);
             } catch (error) {
                 console.error('播放音频时出错:', error);
@@ -365,7 +599,7 @@ async function loadCommentsFromGist() {
 }
 
 
-// 修改显示评论的函数
+// 修改显示评论的函数，添加上下箭头按钮
 function displayComments(comments) {
     const commentDisplay = document.getElementById('commentDisplay');
     commentDisplay.innerHTML = '';
@@ -373,16 +607,29 @@ function displayComments(comments) {
         const commentElement = document.createElement('div');
         commentElement.className = 'comment-item';
 
-        // 只使用简单的文本显示,不指定字体
         const textHtml = comment.text ? `<div class="comment-text">${comment.text}</div>` : '';
+        
+        // 添加上下箭头按钮
+        const moveButtons = `
+            <div class="comment-controls">
+                <button class="delete-comment" data-index="${index}">删除</button>
+                <button class="move-up" data-index="${index}" ${index === 0 ? 'disabled' : ''}>
+                    <span class="arrow-up">↑</span>
+                </button>
+                <button class="move-down" data-index="${index}" ${index === comments.length - 1 ? 'disabled' : ''}>
+                    <span class="arrow-down">↓</span>
+                </button>
+            </div>
+        `;
 
         commentElement.innerHTML = `
             <div class="comment-content">
-                ${comment.image ? `<img src="${comment.image}" class="comment-image" alt="评论片">` : ''}
+                ${comment.image ? `<img src="${comment.image}" class="comment-image" alt="评论图片">` : ''}
                 ${textHtml}
-                <button class="delete-comment" data-index="${index}">删除</button>
+                ${moveButtons}
             </div>
         `;
+
         commentElement.style.opacity = '0';
         commentElement.style.transform = 'rotateX(-90deg) translateY(30px)';
         commentDisplay.appendChild(commentElement);
@@ -577,8 +824,20 @@ function deleteComment(index) {
 
 // 为评论显示区域添加事件委托
 document.getElementById('commentDisplay').addEventListener('click', function (event) {
-    if (event.target.classList.contains('delete-comment')) {
-        deleteComment(parseInt(event.target.getAttribute('data-index')));
+    const target = event.target;
+    
+    // 获取最近的带有data-index的按钮
+    const button = target.closest('button[data-index]');
+    if (!button) return;
+
+    const index = parseInt(button.getAttribute('data-index'));
+
+    if (button.classList.contains('delete-comment')) {
+        deleteComment(index);
+    } else if (button.classList.contains('move-up')) {
+        moveComment(index, 'up');
+    } else if (button.classList.contains('move-down')) {
+        moveComment(index, 'down');
     }
 });
 
@@ -784,3 +1043,157 @@ document.addEventListener('DOMContentLoaded', () => {
     const commentInput = document.getElementById('commentInput');
     commentInput.style.resize = window.innerWidth < 768 ? 'vertical' : 'none';
 });
+
+// 添加 canvas 尺寸调整函数
+const resizeCanvas = () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight / 3;
+};
+
+// 添加可视化函数
+const visualize = () => {
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    const draw = () => {
+        animationId = requestAnimationFrame(draw);
+
+        analyser.getByteFrequencyData(dataArray);
+
+        canvasCtx.fillStyle = 'rgb(0, 0, 0)';
+        canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const barWidth = (canvas.width / bufferLength) * 2.5;
+        let barHeight;
+        let x = 0;
+
+        for (let i = 0; i < bufferLength; i++) {
+            barHeight = dataArray[i] / 2;
+
+            canvasCtx.fillStyle = `rgb(${barHeight + 100},50,50)`;
+            canvasCtx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+
+            x += barWidth + 1;
+        }
+    };
+
+    draw();
+};
+
+// 在停止播放时停止可视化
+const stopVisualization = () => {
+    if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+    }
+};
+
+// 分离拖动状态
+let isDragging = false;
+let dragStartX = 0;
+let dragStartY = 0;
+let elementStartX = 0;
+let elementStartY = 0;
+
+const container = document.querySelector('.container.g');
+
+container.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+
+    // 获取当前transform中的translate值
+    const transform = window.getComputedStyle(container).transform;
+    const matrix = new DOMMatrix(transform);
+    // 跳过前两个translate(-50%, -50%)的影响
+    dragTransformX = matrix.m41;
+    dragTransformY = matrix.m42;
+
+    e.preventDefault();
+});
+
+// 添加边界限制
+const BOUNDARY_MARGIN = 50; // 安全边距
+
+window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+
+    const dx = e.clientX - dragStartX;
+    const dy = e.clientY - dragStartY;
+
+    // 计算新位置
+    let newX = dragTransformX + dx;
+    let newY = dragTransformY + dy;
+
+    // 获取视口和容器尺寸
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const containerRect = container.getBoundingClientRect();
+    const containerWidth = containerRect.width;
+    const containerHeight = containerRect.height;
+
+    // 计算边界
+    const maxX = viewportWidth - containerWidth / 2 - BOUNDARY_MARGIN;
+    const minX = containerWidth / 2 + BOUNDARY_MARGIN;
+    const maxY = viewportHeight - containerHeight / 2 - BOUNDARY_MARGIN;
+    const minY = containerHeight / 2 + BOUNDARY_MARGIN;
+
+    // 限制在边界内
+    newX = Math.min(Math.max(newX, minX), maxX);
+    newY = Math.min(Math.max(newY, minY), maxY);
+
+    // 更新拖动位置
+    dragTransformX = newX;
+    dragTransformY = newY;
+
+    // 应用组合transform
+    updateContainerTransform();
+});
+
+// 新增：更新容器transform的函数
+const updateContainerTransform = () => {
+    if (!container) return;
+    
+    // 获取当前的动画transform值
+    const animationScale = container.getAttribute('data-animation-scale') || 1;
+    const animationRotation = container.getAttribute('data-animation-rotation') || 0;
+    
+    // 组合transform，添加居中定位
+    container.style.transform = `translate(-50%, -50%) translate(${dragTransformX}px, ${dragTransformY}px) scale(${animationScale}) rotate(${animationRotation}deg)`;
+};
+
+window.addEventListener('mouseup', () => {
+    isDragging = false;
+});
+
+// 添加移动评论的函数
+async function moveComment(index, direction) {
+    try {
+        const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+            headers: {
+                'Authorization': `token ${GITHUB_TOKEN}`
+            }
+        });
+        const data = await response.json();
+        let comments = JSON.parse(data.files['comments.json'].content);
+
+        // 计算目标位置
+        const newIndex = direction === 'up' ? index - 1 : index + 1;
+
+        // 检查边界
+        if (newIndex < 0 || newIndex >= comments.length) {
+            return;
+        }
+
+        // 交换位置
+        [comments[index], comments[newIndex]] = [comments[newIndex], comments[index]];
+
+        // 更新GIST
+        await updateGist(comments);
+
+        // 重新加载评论
+        await loadCommentsFromGist();
+    } catch (error) {
+        console.error('移动评论时出错:', error);
+    }
+}
